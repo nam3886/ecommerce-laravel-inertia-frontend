@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
 
 /*
  |--------------------------------------------------------------------------
@@ -10,14 +10,21 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
+mix.autoload({
+    jquery: ["$", "jQuery", "window.jQuery"],
+});
 
-mix.js('resources/js/app.js', 'public/js').vue()
-    .postCss('resources/css/app.css', 'public/css', [
-        require('postcss-import'),
-        require('tailwindcss'),
+mix.js("resources/js/app.js", "public/js")
+    .vue()
+    .postCss("resources/css/app.css", "public/css", [
+        require("postcss-import"),
+        require("postcss-import"),
+        require("autoprefixer"),
+        // require("tailwindcss"),
     ])
-    .webpackConfig(require('./webpack.config'));
+    .webpackConfig(require("./webpack.config"))
+    .disableSuccessNotifications();
 
 if (mix.inProduction()) {
-    mix.version();
+    mix.version().sourceMaps();
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\VariantController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +18,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::as('api.')->group(function () {
+    Route::get('/variant/{variant:combination}', [VariantController::class, 'show'])->name('variant.show');
+
+    Route::get('/attributes/{productId}', [ProductController::class, 'showAttributes'])->name('attribute.show');
 });

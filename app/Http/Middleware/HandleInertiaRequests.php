@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Contracts\CartContract;
+use App\Repositories\CartRepository;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -37,7 +39,27 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         return array_merge(parent::share($request), [
-            //
+            'auth' => function () use ($request) {
+                return [
+                    'user' => $request->user() ? [
+                        'id' => $request->user()->id,
+                        'name' => $request->user()->name,
+                    ] : null,
+                ];
+            },
+
+            'flash' => function () use ($request) {
+                return [
+                    'error' => $request->session()->get('error', []),
+                    'info' => $request->session()->get('info', []),
+                    'success' => $request->session()->get('success', []),
+                    'warning' => $request->session()->get('warning', []),
+                ];
+            },
+
+            'cart' => function (CartContract $cartRepository) {
+                return $cartRepository->listCarts();
+            },
         ]);
     }
 }

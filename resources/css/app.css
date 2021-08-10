@@ -1,3 +1,16 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import url(../../public/vendor/fontawesome-free/all.min.css);
+@import url(../../public/vendor/animate/animate.min.css);
+@import url(../../public/vendor/magnific-popup/magnific-popup.min.css);
+@import url(../../public/vendor/owl-carousel/owl.carousel.min.css);
+
+.loaded .page-wrapper {
+    opacity: 1;
+}
+.cart-added-alert.show {
+    display: block !important;
+}
+.product-single .product-variations > a:not(.size-guide) {
+    height: 3rem !important;
+    min-width: 3rem !important;
+    width: auto !important;
+}
