@@ -68,7 +68,7 @@ export default {
     this.initRiode();
 
     Inertia.on("finish", (event) => {
-      this.$root.$emit("inertia-finish", event);
+      this.emitter.emit("inertia-finish", event);
       this.initRiode();
     });
 

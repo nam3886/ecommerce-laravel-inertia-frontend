@@ -1,5 +1,5 @@
 <template>
-  <header class="header">
+  <header :class="{ 'header-border': !isHome }" class="header">
     <header-top />
     <header-middle />
     <header-bottom />
@@ -13,5 +13,17 @@ import HeaderBottom from "@/Shared/Layout/Header/Bottom.vue";
 
 export default {
   components: { HeaderTop, HeaderMiddle, HeaderBottom },
+
+  data() {
+    return { isHome: true };
+  },
+
+  mounted() {
+    this.isHome = route().current("home");
+
+    this.emitter.on("inertia-finish", () => {
+      this.isHome = route().current("home");
+    });
+  },
 };
 </script>

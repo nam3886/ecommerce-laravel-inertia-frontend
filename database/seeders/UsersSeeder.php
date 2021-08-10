@@ -18,7 +18,7 @@ class UsersSeeder extends Seeder
         User::create([
             'name'      =>  'Nguyễn Văn An',
             'email'     =>  'nphuongnam8@gmail.com',
-            'password'  =>  '123456',
+            'password'  =>  bcrypt('123456'),
             'phone'     =>  '0987654324',
             'birthday'  =>  now(),
         ]);
@@ -26,7 +26,7 @@ class UsersSeeder extends Seeder
         User::create([
             'name'      =>  'Nguyễn Văn B',
             'email'     =>  'test1@truemark.cus',
-            'password'  =>  '123456',
+            'password'  =>  bcrypt('123456'),
             'phone'     =>  '0909594444',
             'birthday'  =>  now(),
         ]);
@@ -34,7 +34,7 @@ class UsersSeeder extends Seeder
         User::create([
             'name'      =>  'Nguyễn Văn C',
             'email'     =>  'test2@truemark.cus',
-            'password'  =>  '123456',
+            'password'  =>  bcrypt('123456'),
             'phone'     =>  '0909495555',
             'birthday'  =>  now(),
         ]);

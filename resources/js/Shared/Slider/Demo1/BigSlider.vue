@@ -38,8 +38,9 @@
             <span
               class="d-inline-block slide-animate"
               data-animation-options="{'name': 'fadeInRightShorter', 'duration': '1s', 'delay': '.2s'}"
-              >Buy 2 Get</span
             >
+              Buy 2 Get&nbsp;
+            </span>
             <span
               class="
                 d-inline-block

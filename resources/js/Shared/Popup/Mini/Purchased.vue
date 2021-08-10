@@ -5,7 +5,7 @@
       <figure class="product-media">
         <a href="#">
           <img
-            src="images/cart/product-1.jpg"
+            :src="`${$baseUrl}/images/cart/product-1.jpg`"
             alt="product"
             width="90"
             height="90"

@@ -34,7 +34,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 Route::redirect('/', '/home', 301);
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/login', [HomeController::class, 'login'])->name('login');
+// Route::get('/login', [HomeController::class, 'login'])->name('login');
 Route::get('/wishlist', [HomeController::class, 'wishlist']);
 Route::get('/checkout', [HomeController::class, 'checkout'])->name('checkout');
 Route::get('/order', [HomeController::class, 'order']);
