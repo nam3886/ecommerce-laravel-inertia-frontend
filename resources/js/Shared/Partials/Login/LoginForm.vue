@@ -6,54 +6,50 @@
     >
       {{ $page.props.status }}
     </div>
-    <div class="form-group mb-3">
+    <group :errorMessage="form.errors.email" class="mb-3">
       <input
+        id="singin-email"
         v-model="form.email"
         type="text"
         class="form-control"
-        id="singin-email"
         name="singin-email"
         placeholder="Username or Email Address *"
         autofocus
       />
-      <div
-        v-if="form.errors.email"
-        class="alert-danger alert-simple border-no font-weight-normal"
-        style="font-size: 13px"
-      >
-        {{ form.errors.email }}
-      </div>
-    </div>
-    <div class="form-group">
+    </group>
+    <group :errorMessage="form.errors.password">
       <input
+        id="singin-password"
         v-model="form.password"
         type="password"
         class="form-control"
-        id="singin-password"
         name="singin-password"
         placeholder="Password *"
         autocomplete="current-password"
       />
-      <div
-        v-if="form.errors.password"
-        class="alert-danger alert-simple border-no font-weight-normal"
-        style="font-size: 13px"
-      >
-        {{ form.errors.password }}
-      </div>
-    </div>
+    </group>
     <div class="form-footer">
-      <div class="form-checkbox">
+      <div
+        :class="{ 'is-invalid': form.errors.remember }"
+        class="form-checkbox"
+      >
         <input
+          id="signin-remember"
+          v-model="form.remember"
           type="checkbox"
           class="custom-checkbox"
-          id="signin-remember"
           name="signin-remember"
-          v-model="form.remember"
         />
         <label class="form-control-label" for="signin-remember">
           Remember me
         </label>
+      </div>
+      <div
+        v-if="form.errors.remember"
+        class="alert-danger alert-simple border-no font-weight-normal mt-1"
+        style="font-size: 13px"
+      >
+        {{ form.errors.remember }}
       </div>
       <a v-if="$page.props.canResetPassword" href="#" class="lost-link">
         Lost your password?
@@ -61,6 +57,7 @@
     </div>
     <button
       :disabled="form.processing"
+      :class="{ 'opacity-65': form.processing }"
       class="btn btn-dark btn-block btn-rounded"
       type="submit"
     >
@@ -70,7 +67,11 @@
 </template>
 
 <script>
+import Group from "@/Shared/Inputs/Group.vue";
+
 export default {
+  components: { Group },
+
   data() {
     return {
       form: this.$inertia.form({
@@ -96,3 +97,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+form > button[type="submit"]:disabled {
+  cursor: not-allowed;
+}
+</style>

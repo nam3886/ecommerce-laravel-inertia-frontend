@@ -8,4 +8,7 @@ module.exports = {
             "@p": path.resolve("public"),
         },
     },
+    output: {
+        chunkFilename: "js/[name].js?id=[chunkhash]",
+    },
 };

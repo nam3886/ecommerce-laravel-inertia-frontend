@@ -14,3 +14,6 @@
     min-width: 3rem !important;
     width: auto !important;
 }
+.opacity-65 {
+    opacity: 0.65;
+}

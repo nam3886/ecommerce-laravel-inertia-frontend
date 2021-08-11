@@ -55,3 +55,4 @@ export default {
   components: { LoginForm, LoginSocial, RegisterForm },
 };
 </script>
+

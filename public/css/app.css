@@ -1839,4 +1839,7 @@ img.mfp-img{width:auto;max-width:100%;height:auto;display:block;line-height:0;bo
     min-width: 3rem !important;
     width: auto !important;
 }
+.opacity-65 {
+    opacity: 0.65;
+}
 

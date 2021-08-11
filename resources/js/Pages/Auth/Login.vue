@@ -24,3 +24,4 @@ export default {
   components: { Head, Breadcrumb, LoginPopup },
 };
 </script>
+
