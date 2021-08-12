@@ -28,10 +28,12 @@
             </div>
             <div class="col-md-6">
               <quickview-detail
-                :product="product"
+                :attributesAfterValidation="attributesAfterValidation"
+                :selectedAllVariants="selectedAllVariants"
                 :availableQuantity="availableQuantity"
+                :selectVariants="selectVariants"
+                :product="product"
                 :_price="_price"
-                :attributes="attributes"
                 @update:variant="toggleVariations"
                 @clear:variant="clearVariations"
                 @add-cart="preAddCart"
@@ -53,7 +55,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import { wait } from "@/helpers.js";
 import isEmpty from "lodash-es/isEmpty";
 import InteractsWithProduct from "@/Mixins/InteractsWithProduct.vue";
@@ -70,15 +71,6 @@ export default {
     return {
       show: false,
     };
-  },
-
-  watch: {
-    product: {
-      deep: true,
-      handler(product) {
-        product.has_variants && this.getAttributesByProductId(product.id);
-      },
-    },
   },
 
   mounted() {
@@ -98,16 +90,6 @@ export default {
       }
     },
 
-    async getAttributesByProductId(id) {
-      const url = this.route("api.attribute.show", id);
-
-      const response = await axios.get(url);
-
-      const attributes = await response.data.data.attributes;
-
-      return new Promise((resolve) => resolve(attributes));
-    },
-
     showNewProduct(product) {
       // empty product để template re render và mất đi gallery cũ
       this.product = {};
@@ -120,12 +102,18 @@ export default {
         this.attributes = attributes;
         this.product = product;
       });
+
+      this.getVariantsByProductId(product.id).then((variants) => {
+        this.variants = variants;
+      });
     },
 
     preAddCart(quantity) {
       this.addCart(quantity, () => {
         // on added cart
-        const cart = this.getBySku(this.product.sku);
+        this.show = false;
+
+        const cart = this.getBySku(this.variant.sku || this.product.sku);
 
         this.showMiniPopupAddedCart(cart, quantity);
       });

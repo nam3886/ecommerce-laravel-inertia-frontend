@@ -34,7 +34,6 @@ class ProductController extends BaseController
         });
 
         return Inertia::render('Product')
-            ->with('attributes', $this->getAttributesByProductId($product->id))
             ->with('product', new ShowProductResource($product))
             ->with('related', ProductResource::collection($related));
     }
@@ -45,9 +44,9 @@ class ProductController extends BaseController
      */
     public function showAttributes(int $productId)
     {
-        return $this->responseJson(error: false, data: [
-            'attributes' => $this->getAttributesByProductId($productId),
-        ]);
+        $attributes = $this->getAttributesByProductId($productId);
+
+        return $this->responseJson(error: false, data: $attributes);
     }
 
     /**

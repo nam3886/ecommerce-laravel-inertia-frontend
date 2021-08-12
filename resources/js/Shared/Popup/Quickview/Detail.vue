@@ -23,7 +23,9 @@
 
     <variants
       v-if="product.has_variants"
-      :attributes="attributes"
+      :selectedAllVariants="selectedAllVariants"
+      :attributes="attributesAfterValidation"
+      :selected="selectVariants"
       :price="_price"
       @update:variant="$emit('update:variant', $event)"
       @clear:variant="$emit('clear:variant', $event)"
@@ -32,6 +34,7 @@
     <hr class="product-divider" />
 
     <quantity
+      :selectedAllVariants="selectedAllVariants"
       :availableQuantity="availableQuantity"
       @add-cart="$emit('add-cart', $event)"
     />
@@ -50,7 +53,14 @@ import Quantity from "@/Shared/Partials/Product/Quantity.vue";
 import Action from "@/Shared/Partials/Product/Action.vue";
 
 export default {
-  props: ["product", "attributes", "_price", "availableQuantity"],
+  props: [
+    "attributesAfterValidation",
+    "selectedAllVariants",
+    "availableQuantity",
+    "selectVariants",
+    "product",
+    "_price",
+  ],
 
   emits: ["add-cart", "clear:variant", "update:variant"],
 

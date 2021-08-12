@@ -31,7 +31,9 @@
 
     <variants
       v-if="product.has_variants"
-      :attributes="attributes"
+      :selectedAllVariants="selectedAllVariants"
+      :attributes="attributesAfterValidation"
+      :selected="selectVariants"
       :price="_price"
       @update:variant="toggleVariations"
       @clear:variant="clearVariations"
@@ -39,7 +41,11 @@
 
     <hr class="product-divider" />
 
-    <quantity :availableQuantity="availableQuantity" @add-cart="preAddCart" />
+    <quantity
+      :selectedAllVariants="selectedAllVariants"
+      :availableQuantity="availableQuantity"
+      @add-cart="preAddCart"
+    />
 
     <hr class="product-divider mb-3" />
 
@@ -77,7 +83,16 @@ export default {
 
   created() {
     this.product = this.$page.props.product.data;
-    this.attributes = this.$page.props.attributes;
+
+    if (!this.product.has_variants) return;
+
+    this.getAttributesByProductId(this.product.id).then((attributes) => {
+      this.attributes = attributes;
+    });
+
+    this.getVariantsByProductId(this.product.id).then((variants) => {
+      this.variants = variants;
+    });
   },
 
   mounted() {

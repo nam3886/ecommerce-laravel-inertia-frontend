@@ -11,6 +11,7 @@
       />
       <button
         @click="$emit('add-cart', quantity)"
+        :disabled="!selectedAllVariants"
         type="button"
         class="btn-product btn-cart text-normal ls-normal font-weight-semi-bold"
       >
@@ -30,7 +31,7 @@
 <script>
 import InputNumber from "@/Shared/Inputs/Number.vue";
 export default {
-  props: ["availableQuantity"],
+  props: ["availableQuantity", "selectedAllVariants"],
 
   emits: ["add-cart"],
 

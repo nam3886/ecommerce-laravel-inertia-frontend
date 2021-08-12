@@ -43,9 +43,10 @@
 
 <script>
 import LinkSlug from "@/Shared/ProductElement/LinkSlug.vue";
+import { Link } from "@inertiajs/inertia-vue3";
 
 export default {
-  components: { LinkSlug },
+  components: { LinkSlug, Link },
 
   props: ["cart", "quantity"],
 };

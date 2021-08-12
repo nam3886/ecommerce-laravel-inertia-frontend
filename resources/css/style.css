@@ -6740,7 +6740,7 @@ input[type="radio"]:checked ~ label::after {
 }
 .minipopup-box {
     position: absolute;
-    left: -8rem;
+    left: -25em;
     width: 303px;
     padding: 2rem;
     background-color: #fff;
@@ -7689,9 +7689,6 @@ button.mfp-arrow {
 }
 .product-label.label-stock {
     background: #999;
-}
-.product-label.label-hot {
-    background: #b10001;
 }
 .btn-product-icon {
     display: flex;
@@ -8715,8 +8712,8 @@ aside + div .product-single .product-details {
     color: #fff;
 }
 .product-single .product-variations > a:not(.size-guide) {
-  width: 3rem;
-  height: 3rem;
+    width: 3rem;
+    height: 3rem;
 }
 .product-single .color {
     border: 0;

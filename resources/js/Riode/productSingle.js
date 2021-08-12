@@ -1,6 +1,6 @@
 import Riode from "@/Riode/";
 
-const moduleProductSingle = (function() {
+const moduleProductSingle = (function () {
     /**
      * @class ProductSingle
      */
@@ -8,7 +8,7 @@ const moduleProductSingle = (function() {
         return this.init($el);
     }
 
-    var thumbsInit = function(self) {
+    var thumbsInit = function (self) {
         // members for thumbnails
         self.$thumbs = self.$wrapper.find(".product-thumbs");
         self.$thumbsWrap = self.$thumbs.parent();
@@ -22,19 +22,20 @@ const moduleProductSingle = (function() {
             self._isPgvertical && window.innerWidth >= Riode.minDesktopWidth;
 
         // register events
-        self.$thumbDown.on("click", function(e) {
+        self.$thumbDown.on("click", function (e) {
             self.thumbsIsVertical && thumbsDown(self);
         });
 
-        self.$thumbUp.on("click", function(e) {
+        self.$thumbUp.on("click", function (e) {
             self.thumbsIsVertical && thumbsUp(self);
         });
 
-        self.$thumbsDots.on("click", function() {
+        self.$thumbsDots.on("click", function () {
             var $this = $(this),
-                index = ($this.parent().filter(self.$thumbs).length
-                    ? $this
-                    : $this.parent()
+                index = (
+                    $this.parent().filter(self.$thumbs).length
+                        ? $this
+                        : $this.parent()
                 ).index();
             self.$wrapper
                 .find(".product-single-carousel")
@@ -43,12 +44,12 @@ const moduleProductSingle = (function() {
 
         // refresh thumbs
         thumbsRefresh(self);
-        Riode.$window.on("resize", function() {
+        Riode.$window.on("resize", function () {
             thumbsRefresh(self);
         });
     };
 
-    var thumbsDown = function(self) {
+    var thumbsDown = function (self) {
         var maxBottom =
                 self.$thumbsWrap.offset().top +
                 self.$thumbsWrap[0].offsetHeight,
@@ -74,7 +75,7 @@ const moduleProductSingle = (function() {
         }
     };
 
-    var thumbsUp = function(self) {
+    var thumbsUp = function (self) {
         var maxTop = self.$thumbsWrap.offset().top,
             curTop = self.$thumbs.offset().top;
 
@@ -97,7 +98,7 @@ const moduleProductSingle = (function() {
         }
     };
 
-    var thumbsRefresh = function(self) {
+    var thumbsRefresh = function (self) {
         if (typeof self.$thumbs == "undefined") {
             return;
         }
@@ -140,7 +141,7 @@ const moduleProductSingle = (function() {
                         self.isQuickview
                             ? {
                                   onInitialized: recalcDetailsHeight,
-                                  onResized: recalcDetailsHeight
+                                  onResized: recalcDetailsHeight,
                               }
                             : {},
                         Riode.defaults.sliderThumbs
@@ -149,36 +150,8 @@ const moduleProductSingle = (function() {
         }
     };
 
-    var initVariation = function(self) {
-        self.$selects = self.$wrapper.find(".product-variations select");
-        self.$items = self.$wrapper.find(".product-variations");
-        self.$priceWrap = self.$wrapper.find(".product-variation-price");
-        (self.$clean = self.$wrapper.find(".product-variation-clean")),
-            (self.$btnCart = self.$wrapper.find(".btn-cart"));
-
-        // check
-        self.variationCheck();
-        self.$selects.on("change", function(e) {
-            self.variationCheck();
-        });
-        self.$items.children("a").on("click", function(e) {
-            $(this)
-                .toggleClass("active")
-                .siblings()
-                .removeClass("active");
-            e.preventDefault();
-            self.variationCheck();
-        });
-
-        // clean
-        self.$clean.on("click", function(e) {
-            e.preventDefault();
-            self.variationClean(true);
-        });
-    };
-
     // For only Quickview
-    var recalcDetailsHeight = function() {
+    var recalcDetailsHeight = function () {
         var self = this;
         self.$wrapper
             .find(".product-details")
@@ -192,7 +165,7 @@ const moduleProductSingle = (function() {
 
     // Public Properties
 
-    ProductSingle.prototype.init = function($el) {
+    ProductSingle.prototype.init = function ($el) {
         var self = this,
             $slider = $el.find(".product-single-carousel");
 
@@ -209,11 +182,11 @@ const moduleProductSingle = (function() {
 
         // init thumbs
         $slider
-            .on("initialized.owl.carousel", function(e) {
+            .on("initialized.owl.carousel", function (e) {
                 // init thumbnails
                 thumbsInit(self);
             })
-            .on("translate.owl.carousel", function(e) {
+            .on("translate.owl.carousel", function (e) {
                 var currentIndex =
                     (e.item.index -
                         $(e.currentTarget).find(".cloned").length / 2 +
@@ -230,11 +203,9 @@ const moduleProductSingle = (function() {
         // if ( $slider.length == 0 ) {
         //     Riode.zoomImage( this.$wrapper );
         // }
-
-        initVariation(this);
     };
 
-    ProductSingle.prototype.thumbsSetActive = function(index) {
+    ProductSingle.prototype.thumbsSetActive = function (index) {
         var self = this,
             $curThumb = self.$thumbsDots.eq(index);
 
@@ -274,44 +245,7 @@ const moduleProductSingle = (function() {
         }
     };
 
-    ProductSingle.prototype.variationCheck = function() {
-        var self = this,
-            isAllSelected = true;
-
-        // check all select variations are selected
-        self.$selects.each(function() {
-            return this.value || (isAllSelected = false);
-        });
-
-        // check all item variations are selected
-        self.$items.each(function() {
-            var $this = $(this);
-            if ($this.children("a:not(.size-guide)").length) {
-                return (
-                    $this.children(".active").length || (isAllSelected = false)
-                );
-            }
-        });
-
-        isAllSelected ? self.variationMatch() : self.variationClean();
-    };
-
-    ProductSingle.prototype.variationMatch = function() {
-        var self = this;
-        self.$priceWrap.slideDown();
-        self.$clean.slideDown();
-        self.$btnCart.removeAttr("disabled");
-    };
-
-    ProductSingle.prototype.variationClean = function(reset) {
-        reset && this.$selects.val("");
-        reset && this.$items.children(".active").removeClass("active");
-        this.$priceWrap.slideUp();
-        this.$clean.css("display", "none");
-        this.$btnCart.attr("disabled", "disabled");
-    };
-
-    return function($el, options) {
+    return function ($el, options) {
         if ($el) {
             return new ProductSingle($el.eq(0), options);
         }

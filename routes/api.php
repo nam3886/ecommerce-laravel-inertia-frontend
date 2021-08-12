@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::as('api.')->group(function () {
+    Route::get('/variant/list/{productId}', [VariantController::class, 'index'])->name('variant.index');
     Route::get('/variant/{variant:combination}', [VariantController::class, 'show'])->name('variant.show');
 
     Route::get('/attributes/{productId}', [ProductController::class, 'showAttributes'])->name('attribute.show');

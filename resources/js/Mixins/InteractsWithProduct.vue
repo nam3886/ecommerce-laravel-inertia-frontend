@@ -1,6 +1,5 @@
 <script>
 import axios from "axios";
-import has from "lodash-es/has";
 import isEmpty from "lodash-es/isEmpty";
 import InteractsWithCart from "@/Mixins/InteractsWithCart.vue";
 import { scrollToAlert } from "@/helpers.js";
@@ -14,7 +13,9 @@ export default {
       selectVariants: {},
       // get on $page props
       product: {},
+      // get by call api
       attributes: [],
+      variants: [],
     };
   },
 
@@ -33,6 +34,30 @@ export default {
       return cart ? stock - cart.qty : stock;
     },
 
+    selectedAllVariants() {
+      return Object.keys(this.selectVariants).length === this.attributes.length;
+    },
+
+    attributesAfterValidation() {
+      return this.attributes.map((attribute) => {
+        const values = attribute.values.map((value) => {
+          let selectted = Object.values(this.selectVariants);
+
+          selectted = selectted.includes(value.code)
+            ? selectted
+            : [...selectted, value.code];
+
+          const combination = selectted.sort().join("");
+
+          const isValid = this.variants.find((v) => v.includes(combination));
+
+          return { ...value, isValid: typeof isValid !== "undefined" };
+        });
+
+        return { ...attribute, values };
+      });
+    },
+
     allInCart() {
       const cart = this.getBySku(this.variant?.sku || this.product.sku);
 
@@ -43,16 +68,58 @@ export default {
   },
 
   methods: {
-    async getVariant(combination) {
-      combination = this.product.id + combination;
-      // variant already exists
-      if (combination === this.variant.combination) return;
+    async getAttributesByProductId(id) {
+      const url = this.route("api.attribute.show", id);
 
+      try {
+        const response = await axios.get(url);
+
+        const attributes = await response.data.data;
+
+        return new Promise((resolve) => resolve(attributes));
+      } catch (error) {
+        alert("getAttributesByProductId: " + error.message);
+      }
+    },
+
+    async getVariantsByProductId(id) {
+      const url = this.route("api.variant.index", id);
+
+      try {
+        const response = await axios.get(url);
+
+        const variants = await response.data.data;
+
+        return new Promise((resolve) => resolve(variants));
+      } catch (error) {
+        alert("getVariantsByProductId: " + error.message);
+      }
+    },
+
+    async getVariantByCombination(combination) {
       const url = this.route("api.variant.show", combination);
 
-      const response = await axios.get(url);
+      try {
+        const response = await axios.get(url);
 
-      this.variant = await response.data.data;
+        const variant = await response.data.data;
+
+        return new Promise((resolve) => resolve(variant));
+      } catch (error) {
+        alert("getVariantByCombination: " + error.message);
+      }
+    },
+
+    toggleVariations({ id, code }) {
+      const selected = { ...this.selectVariants };
+
+      if (selected[id] == code) delete selected[id];
+      // toggle item in variants
+      else selected[id] = code;
+
+      this.selectVariants = selected;
+
+      this.variationCheck();
     },
 
     variationCheck() {
@@ -60,22 +127,18 @@ export default {
       // check all item selectVariants are selected
       if (selectVariants.length !== this.attributes.length) return;
 
-      selectVariants.sort();
+      const combination =
+        this.product.id +
+        selectVariants.sort().join("") +
+        ":" +
+        selectVariants.length;
 
-      const combination = selectVariants.join("") + ":" + selectVariants.length;
-      // call api get variant
-      this.getVariant(combination);
-    },
+      // variant already exists
+      if (combination === this.variant.combination) return;
 
-    toggleVariations({ id, code }) {
-      // toggle item in variants
-      if (has(this.selectVariants, id) && this.selectVariants[id] == code) {
-        delete this.selectVariants[id];
-      } else {
-        this.selectVariants[id] = code;
-      }
-
-      this.variationCheck();
+      this.getVariantByCombination(combination).then((variant) => {
+        this.variant = variant;
+      });
     },
 
     clearVariations() {

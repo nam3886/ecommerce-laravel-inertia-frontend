@@ -11,9 +11,8 @@
           <a
             v-for="value in attribute.values"
             :key="value.id"
-            @click="
-              $emit('update:variant', { id: attribute.id, code: value.code })
-            "
+            @click.prevent="selectOption(attribute.id, value)"
+            :class="classCalculation(value)"
             href="#"
           >
             {{ value.name }}
@@ -24,16 +23,20 @@
         </a> -->
         <a
           v-if="index === attributes.length - 1"
-          href="#"
-          class="product-variation-clean"
           @click.prevent="$emit('clear:variant')"
+          href="#"
+          :class="{ 'd-none': !selectedAllVariants }"
+          class="product-variation-clean"
         >
           Clean All
         </a>
       </div>
     </div>
 
-    <div class="product-variation-price">
+    <div
+      :class="{ 'd-block': selectedAllVariants }"
+      class="product-variation-price"
+    >
       <span>{{ price }}</span>
     </div>
   </div>
@@ -43,17 +46,31 @@
 export default {
   emits: ["clear:variant", "update:variant"],
 
-  props: {
-    attributes: {
-      type: Array,
-      require: true,
+  props: ["attributes", "selected", "price", "selectedAllVariants"],
+
+  methods: {
+    classCalculation(value) {
+      return {
+        disabled: !value.isValid,
+        active: Object.values(this.selected).includes(value.code),
+      };
     },
 
-    price: {
-      type: String,
-      require: true,
+    selectOption(attributeId, value) {
+      value.isValid &&
+        this.$emit("update:variant", { id: attributeId, code: value.code });
     },
   },
 };
 </script>
 
+<style scoped>
+.product-variations > a:not(.size-guide).disabled {
+  cursor: not-allowed;
+  color: #d1d5db;
+}
+.product-variations > a:not(.size-guide).disabled:hover {
+  border: 1px solid #e1e1e1;
+  box-shadow: unset;
+}
+</style>

@@ -16,11 +16,11 @@ class CreateVariantsTable extends Migration
         Schema::create('variants', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('name');
             $table->string('sku')->index()->unique();
-            $table->string('combination')->index()->unique()->nullable();
-            $table->unsignedBigInteger('price');
-            $table->unsignedInteger('quantity');
+            $table->string('combination')->index()->unique();
+            $table->string('name');
+            $table->unsignedInteger('quantity')->default(0);
+            $table->unsignedBigInteger('price')->nullable();
             $table->unsignedInteger('weight')->nullable();
             $table->unsignedInteger('length')->nullable();
             $table->unsignedInteger('width')->nullable();

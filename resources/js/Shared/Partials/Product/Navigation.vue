@@ -1,5 +1,5 @@
 <template>
-  <ul class="product-nav">
+  <ul v-if="!isEmpty(products)" class="product-nav">
     <li class="product-nav-prev">
       <link-slug :slug="products[0].slug">
         <i class="d-icon-arrow-left"></i> Prev
@@ -32,12 +32,17 @@
 </template>
 
 <script>
+import isEmpty from "lodash-es/isEmpty";
 import LinkSlug from "@/Shared/ProductElement/LinkSlug.vue";
 
 export default {
   props: ["products"],
 
   components: { LinkSlug },
+
+  methods: {
+    isEmpty,
+  },
 };
 </script>
 
