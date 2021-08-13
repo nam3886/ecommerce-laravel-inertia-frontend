@@ -37,21 +37,25 @@ export default {
     selectedAllVariants() {
       return Object.keys(this.selectVariants).length === this.attributes.length;
     },
-
+    /**
+     * lọc ra các lựa chọn có thể có của 1 sản phẩm
+     */
     attributesAfterValidation() {
       return this.attributes.map((attribute) => {
         const values = attribute.values.map((value) => {
+          // lấy ra các lựa chọn của user
           let selectted = Object.values(this.selectVariants);
-
+          // nếu có 1 lựa chọn trùng với value.code
+          // => không cần thêm lựa chọn đó vào để validate
           selectted = selectted.includes(value.code)
             ? selectted
             : [...selectted, value.code];
+          // các variants valid khi có chứa tất cả các lựa chọn
+          const isValid = this.variants.find((variant) => {
+            return selectted.every((code) => variant.includes(code));
+          });
 
-          const combination = selectted.sort().join("");
-
-          const isValid = this.variants.find((v) => v.includes(combination));
-
-          return { ...value, isValid: typeof isValid !== "undefined" };
+          return { ...value, isValid: isValid !== undefined };
         });
 
         return { ...attribute, values };

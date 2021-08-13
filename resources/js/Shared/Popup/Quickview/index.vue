@@ -93,6 +93,8 @@ export default {
     showNewProduct(product) {
       // empty product để template re render và mất đi gallery cũ
       this.product = {};
+      this.attributes = [];
+      this.variants = [];
 
       if (!product.has_variants) {
         return wait().then(() => (this.product = product));
