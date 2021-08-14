@@ -14,22 +14,22 @@
           cols-lg-3 cols-sm-2 cols-1
         "
         data-owl-options="{
-                            'nav': false,
-                            'dots': true,
-                            'margin': 20,
-                            'responsive': {
-                                '0': {
-                                    'items': 1
-                                },
-                                '576': {
-                                    'items': 2
-                                },
-                                '992': {
-                                    'items': 3,
-                                    'dots': false
-                                }
-                            }
-                        }"
+            'nav': false,
+            'dots': true,
+            'margin': 20,
+            'responsive': {
+                '0': {
+                    'items': 1
+                },
+                '576': {
+                    'items': 2
+                },
+                '992': {
+                    'items': 3,
+                    'dots': false
+                }
+            }
+        }"
       >
         <div class="blog-post mb-4">
           <article class="post post-frame overlay-zoom">

@@ -11,13 +11,13 @@
       gutter-no
     "
     data-owl-options="{
-                        'nav': false,
-                        'dots': true,
-                        'loop': false,
-                        'items': 1,
-                        'autoplay': false,
-                        'autoplayTimeout': 8000
-                    }"
+        'nav': false,
+        'dots': true,
+        'loop': false,
+        'items': 1,
+        'autoplay': false,
+        'autoplayTimeout': 8000
+    }"
   >
     <div
       class="banner banner-fixed intro-slide1"

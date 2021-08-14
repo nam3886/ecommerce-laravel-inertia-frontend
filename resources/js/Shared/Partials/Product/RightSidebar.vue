@@ -1,235 +1,100 @@
 <template>
-  <aside>
-    <div class="sidebar-overlay">
-      <a class="sidebar-close" href="#"><i class="d-icon-times"></i></a>
-    </div>
+  <aside
+    class="
+      col-xl-3 col-lg-4
+      sidebar
+      right-sidebar
+      sidebar-fixed
+      sticky-sidebar-wrapper
+    "
+  >
+    <div class="sidebar-overlay"></div>
+    <a class="sidebar-close" href="#"><i class="d-icon-times"></i></a>
     <a href="#" class="sidebar-toggle"><i class="fas fa-chevron-left"></i></a>
     <div class="sidebar-content">
       <div class="sticky-sidebar">
-        <div class="service-list mb-4">
-          <div class="icon-box icon-box-side icon-box3">
-            <span class="icon-box-icon">
-              <i class="d-icon-secure"></i>
-            </span>
-            <div class="icon-box-content">
-              <h4 class="icon-box-title text-capitalize">Secured Payment</h4>
-              <p>We secure payment!</p>
-            </div>
-          </div>
-          <div class="icon-box icon-box-side icon-box1">
-            <span class="icon-box-icon">
-              <i class="d-icon-truck"></i>
-            </span>
-            <div class="icon-box-content">
-              <h4 class="icon-box-title text-capitalize">Free Shipping</h4>
-              <p>For all orders over $99</p>
-            </div>
-          </div>
-          <div class="icon-box icon-box-side icon-box2">
-            <span class="icon-box-icon">
-              <i class="d-icon-money"></i>
-            </span>
-            <div class="icon-box-content">
-              <h4 class="icon-box-title text-capitalize">Money Back</h4>
-              <p>Any back within 30 days</p>
-            </div>
-          </div>
+        <div class="widget widget-collapsible widget-vendor-info">
+          <h3 class="widget-title">Vendor Info</h3>
+          <ul class="widget-body filter-items">
+            <li class="store-name">
+              <span>Store Name:</span>
+              <span class="details">{{ shop.name }}</span>
+            </li>
+            <!-- <li class="seller-name">
+              <span>Vendor:</span><span class="details">John Doe</span>
+            </li> -->
+            <li class="store-address">
+              <span>Address:</span>
+              <span class="details">{{ shop.address }}</span>
+            </li>
+            <li class="clearfix">
+              <span class="ratings-container">
+                <span class="ratings-full" title="Rated 4.65 out of 5">
+                  <span class="ratings" style="width: 90%"></span>
+                  <span class="tooltiptext tooltip-top"></span>
+                </span>
+              </span>
+              <span class="details">4.65 rating from 31 reviews</span>
+            </li>
+          </ul>
         </div>
-        <div class="banner banner-fixed mb-7">
-          <figure>
-            <img
-              :src="`${$baseUrl}/images/product/product-banner.jpg`"
-              alt="banner"
-              width="280"
-              height="320"
+        <div class="widget widget-collapsible widget-contact-vendor">
+          <h3 class="widget-title">Contact Vendor</h3>
+          <div class="widget-body">
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              name="name"
+              placeholder="Your Name"
+              required=""
             />
-          </figure>
-          <div class="banner-content text-center">
-            <h5 class="banner-subtitle ls-l text-uppercase mb-0">
-              Gucci Shoes
-            </h5>
-            <h3 class="banner-title ls-s text-uppercase mb-0">
-              New Trend 2021
-            </h3>
+            <input
+              type="text"
+              class="form-control"
+              id="address"
+              name="address"
+              placeholder="you@example.com"
+              required=""
+            />
+            <textarea
+              id="message"
+              cols="30"
+              rows="6"
+              class="form-control"
+              placeholder="Type your message..."
+              required=""
+            ></textarea>
+            <a href="#" class="btn btn-dark btn-rounded">Send Message</a>
           </div>
         </div>
-
         <div class="widget widget-products">
-          <h4 class="widget-title mb-3 lh-1 border-no text-capitalize">
-            Related Products
+          <h4 class="widget-title lh-1 border-no text-capitalize">
+            Vendor's Products
           </h4>
           <div class="widget-body">
             <div
               ref="owlCarousel"
               class="owl-carousel owl-nav-top"
               data-owl-options="{
-												'items': 1,
-												'loop': true,
-												'nav': true,
-												'dots': false,
-												'margin': 20
-											}"
+                  'items': 1,
+                  'loop': true,
+                  'nav': true,
+                  'dots': false,
+                  'margin': 20
+              }"
             >
-              <div class="products-col">
-                <div class="product product-list-sm">
-                  <figure class="product-media">
-                    <a href="product.html">
-                      <img
-                        :src="`${$baseUrl}/images/shop/product-widget1.jpg`"
-                        alt="product"
-                        width="100"
-                        height="114"
-                      />
-                    </a>
-                  </figure>
-                  <div class="product-details">
-                    <h3 class="product-name">
-                      <a href="product.html">Fashionable Orginal Trucker</a>
-                    </h3>
-                    <div class="product-price">
-                      <span class="price">$78.64</span>
-                    </div>
-                    <div class="ratings-container">
-                      <div class="ratings-full">
-                        <span class="ratings" style="width: 40%"></span>
-                        <span class="tooltiptext tooltip-top"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="product product-list-sm">
-                  <figure class="product-media">
-                    <a href="product.html">
-                      <img
-                        :src="`${$baseUrl}/images/shop/product-widget2.jpg`"
-                        alt="product"
-                        width="100"
-                        height="100"
-                      />
-                    </a>
-                  </figure>
-                  <div class="product-details">
-                    <h3 class="product-name">
-                      <a href="product.html">Men Summer Sneaker</a>
-                    </h3>
-                    <div class="product-price">
-                      <span class="price">$79.45</span>
-                    </div>
-                    <div class="ratings-container">
-                      <div class="ratings-full">
-                        <span class="ratings" style="width: 60%"></span>
-                        <span class="tooltiptext tooltip-top"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="product product-list-sm">
-                  <figure class="product-media">
-                    <a href="product.html">
-                      <img
-                        :src="`${$baseUrl}/images/shop/product-widget3.jpg`"
-                        alt="product"
-                        width="100"
-                        height="100"
-                      />
-                    </a>
-                  </figure>
-                  <div class="product-details">
-                    <h3 class="product-name">
-                      <a href="product.html">Season Sports Cap</a>
-                    </h3>
-                    <div class="product-price">
-                      <span class="price">$64.27</span>
-                    </div>
-                    <div class="ratings-container">
-                      <div class="ratings-full">
-                        <span class="ratings" style="width: 20%"></span>
-                        <span class="tooltiptext tooltip-top"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- End Products Col -->
-              <div class="products-col">
-                <div class="product product-list-sm">
-                  <figure class="product-media">
-                    <a href="product.html">
-                      <img
-                        :src="`${$baseUrl}/images/shop/product-widget1.jpg`"
-                        alt="product"
-                        width="100"
-                        height="114"
-                      />
-                    </a>
-                  </figure>
-                  <div class="product-details">
-                    <h3 class="product-name">
-                      <a href="product.html">Fashionable Orginal Trucker</a>
-                    </h3>
-                    <div class="product-price">
-                      <span class="price">$78.64</span>
-                    </div>
-                    <div class="ratings-container">
-                      <div class="ratings-full">
-                        <span class="ratings" style="width: 40%"></span>
-                        <span class="tooltiptext tooltip-top"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="product product-list-sm">
-                  <figure class="product-media">
-                    <a href="product.html">
-                      <img
-                        :src="`${$baseUrl}/images/shop/product-widget2.jpg`"
-                        alt="product"
-                        width="100"
-                        height="100"
-                      />
-                    </a>
-                  </figure>
-                  <div class="product-details">
-                    <h3 class="product-name">
-                      <a href="product.html">Men Summer Sneaker</a>
-                    </h3>
-                    <div class="product-price">
-                      <span class="price">$79.45</span>
-                    </div>
-                    <div class="ratings-container">
-                      <div class="ratings-full">
-                        <span class="ratings" style="width: 60%"></span>
-                        <span class="tooltiptext tooltip-top"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="product product-list-sm">
-                  <figure class="product-media">
-                    <a href="product.html">
-                      <img
-                        :src="`${$baseUrl}/images/shop/product-widget3.jpg`"
-                        alt="product"
-                        width="100"
-                        height="100"
-                      />
-                    </a>
-                  </figure>
-                  <div class="product-details">
-                    <h3 class="product-name">
-                      <a href="product.html">Season Sports Cap</a>
-                    </h3>
-                    <div class="product-price">
-                      <span class="price">$64.27</span>
-                    </div>
-                    <div class="ratings-container">
-                      <div class="ratings-full">
-                        <span class="ratings" style="width: 20%"></span>
-                        <span class="tooltiptext tooltip-top"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div
+                v-for="(products, index) in ownProductCarousel"
+                :key="index"
+                class="products-col"
+              >
+                <product
+                  v-for="(product, index) in products"
+                  :key="index"
+                  :product="product"
+                  :class="{ 'mb-0': index == products.length - 1 }"
+                />
               </div>
               <!-- End Products Col -->
             </div>
@@ -242,9 +107,33 @@
 </template>
 
 <script>
+import isArray from "lodash-es/isArray";
 import Riode from "@/Riode/";
+import Product from "@/Shared/ProductElement/MiniCenter.vue";
 
 export default {
+  components: { Product },
+
+  props: ["shop", "ownProducts"],
+
+  computed: {
+    ownProductCarousel() {
+      const itemInOneSlide = 3;
+
+      return this.ownProducts.reduce(function (carry, product, index) {
+        index = Math.floor(index / itemInOneSlide);
+
+        if (!isArray(carry[index])) {
+          carry[index] = [];
+        }
+
+        carry[index].push(product);
+
+        return carry;
+      }, {});
+    },
+  },
+
   mounted() {
     // Initialize owl carousel
     Riode.slider(this.$refs.owlCarousel);

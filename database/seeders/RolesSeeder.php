@@ -33,6 +33,6 @@ class RolesSeeder extends Seeder
         ]);
 
         $admin->users()->attach([1]);
-        $user->users()->attach([2, 3]);
+        $user->users()->attach([2, 3, 4]);
     }
 }

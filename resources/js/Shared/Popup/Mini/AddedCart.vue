@@ -32,7 +32,7 @@
         View Cart
       </Link>
       <Link
-        :href="route('checkout')"
+        :href="route('checkout.index')"
         class="btn btn-sm btn-primary btn-rounded"
       >
         Check Out

@@ -16,10 +16,8 @@ class CreateUserShippingAddressesTable extends Migration
         Schema::create('user_shipping_addresses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->json('api');
-            $table->string('fullAddress');
-            $table->string('phone');
-            $table->string('name');
+            $table->json('ghn_address');
+            $table->string('address');
             $table->timestamps();
             $table->softDeletes();
         });

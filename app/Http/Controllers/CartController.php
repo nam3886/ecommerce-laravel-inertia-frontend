@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Contracts\CartContract;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\CartRequest;
+use App\Models\Delivery;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -27,7 +28,11 @@ class CartController extends BaseController
      */
     public function index()
     {
-        return Inertia::render('Cart');
+        $deliveries = Delivery::select('id', 'code', 'name', 'price', 'description')
+            ->whereActive(1)
+            ->get();
+
+        return Inertia::render('Cart', compact('deliveries'));
     }
 
     /**

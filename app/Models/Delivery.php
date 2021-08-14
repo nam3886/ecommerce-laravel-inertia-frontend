@@ -11,8 +11,6 @@ class Delivery extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'client_id',
-        'secret_id',
         'name',
         'price',
         'description',

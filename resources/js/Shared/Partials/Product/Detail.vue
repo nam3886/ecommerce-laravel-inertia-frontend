@@ -1,15 +1,5 @@
 <template>
   <div ref="wrapper" class="product-details">
-    <div class="product-navigation">
-      <ul class="breadcrumb breadcrumb-lg">
-        <li>
-          <a href="demo1.html"><i class="d-icon-home"></i></a>
-        </li>
-        <li><a href="#" class="active">Products</a></li>
-        <li>Right Sidebar</li>
-      </ul>
-      <navigation :products="related" />
-    </div>
     <h1 class="product-name">{{ product.name }}</h1>
     <div class="product-meta">
       SKU: <span class="product-sku">{{ product.sku }}</span> BRAND:
@@ -56,7 +46,6 @@
 <script>
 import Riode from "@/Riode/";
 import InteractsWithProduct from "@/Mixins/InteractsWithProduct.vue";
-import Navigation from "@/Shared/Partials/Product/Navigation.vue";
 import Variants from "@/Shared/Partials/Product/Variants.vue";
 import Price from "@/Shared/Partials/Product/Price.vue";
 import Quantity from "@/Shared/Partials/Product/Quantity.vue";
@@ -68,9 +57,7 @@ export default {
 
   emits: ["update:sku"],
 
-  components: { Navigation, Variants, Price, Quantity, Action },
-
-  props: ["related"],
+  components: { Variants, Price, Quantity, Action },
 
   watch: {
     variant: {

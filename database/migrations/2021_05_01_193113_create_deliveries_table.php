@@ -16,8 +16,6 @@ class CreateDeliveriesTable extends Migration
         Schema::create('deliveries', function (Blueprint $table) {
             $table->id();
             $table->string('code')->index()->unique();
-            $table->string('client_id')->nullable();
-            $table->string('secret_id')->nullable();
             $table->string('name');
             $table->unsignedBigInteger('price')->nullable();
             $table->string('description');

@@ -6,25 +6,25 @@
       ref="owlCarousel"
       class="owl-carousel owl-theme owl-nav-full row cols-2 cols-md-3 cols-lg-4"
       data-owl-options="{
-									'items': 5,
-									'nav': false,
-									'loop': false,
-									'dots': true,
-									'margin': 20,
-									'responsive': {
-										'0': {
-											'items': 2
-										},
-										'768': {
-											'items': 3
-										},
-										'992': {
-											'items': 4,
-											'dots': false,
-											'nav': true
-										}
-									}
-								}"
+        'items': 5,
+        'nav': false,
+        'loop': false,
+        'dots': true,
+        'margin': 20,
+        'responsive': {
+          '0': {
+            'items': 2
+          },
+          '768': {
+            'items': 3
+          },
+          '992': {
+            'items': 4,
+            'dots': false,
+            'nav': true
+          }
+        }
+      }"
     >
       <product
         v-for="(product, index) in products"

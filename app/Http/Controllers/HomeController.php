@@ -21,19 +21,9 @@ class HomeController extends BaseController
             ->with('bestSellProduct', ProductResource::collection($bestSellProduct));
     }
 
-    public function login()
-    {
-        return Inertia::render('Login');
-    }
-
     public function wishlist()
     {
         return Inertia::render('Wishlist');
-    }
-
-    public function checkout()
-    {
-        return Inertia::render('Checkout');
     }
 
     public function order()

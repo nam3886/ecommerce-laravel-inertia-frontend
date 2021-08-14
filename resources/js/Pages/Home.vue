@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import Layout from "@/Shared/Layout/";
+import Layout from "@/Layouts/AppLayout/index.vue";
 import { Head } from "@inertiajs/inertia-vue3";
 import BigSlider from "@/Shared/Slider/Demo1/BigSlider.vue";
 import ServiceSlider from "@/Shared/Slider/Demo1/Service.vue";

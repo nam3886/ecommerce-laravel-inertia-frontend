@@ -16,29 +16,29 @@
           cols-xl-6 cols-lg-5 cols-md-4 cols-sm-3 cols-2
         "
         data-owl-options="{
-                            'nav': false,
-                            'dots': false,
-                            'autoplay': true,
-                            'margin': 20,
-                            'loop': true,
-                            'responsive': {
-                                '0': {
-                                    'items': 2
-                                },
-                                '576': {
-                                    'items': 3
-                                },
-                                '768': {
-                                    'items': 4
-                                },
-                                '992': {
-                                    'items': 5
-                                },
-                                '1200': {
-                                    'items': 6
-                                }
-                            }
-                        }"
+          'nav': false,
+          'dots': false,
+          'autoplay': true,
+          'margin': 20,
+          'loop': true,
+          'responsive': {
+              '0': {
+                  'items': 2
+              },
+              '576': {
+                  'items': 3
+              },
+              '768': {
+                  'items': 4
+              },
+              '992': {
+                  'items': 5
+              },
+              '1200': {
+                  'items': 6
+              }
+          }
+      }"
       >
         <figure>
           <img src="images/brands/1.png" alt="brand" width="180" height="100" />

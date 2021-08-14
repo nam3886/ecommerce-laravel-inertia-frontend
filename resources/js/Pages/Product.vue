@@ -2,9 +2,11 @@
   <main class="main single-product">
     <div class="page-content mb-10 pb-6">
       <div class="container">
-        <div class="row mt-8 gutter-lg">
+        <breadcrumb :products="related.data" />
+        <div class="row gutter-lg">
           <right-sidebar
-            class="col-lg-3 right-sidebar sidebar-fixed sticky-sidebar-wrapper"
+            :shop="product.data.shop"
+            :ownProducts="ownProducts.data"
           />
           <div class="col-lg-9">
             <alert-added-cart :sku="sku || product.data.sku" />
@@ -19,7 +21,7 @@
                 </gallery>
               </div>
               <div class="col-md-6">
-                <detail :related="related.data" @update:sku="sku = $event" />
+                <detail @update:sku="sku = $event" />
               </div>
             </div>
 
@@ -36,11 +38,12 @@
 </template>
 
 <script>
-import Layout from "@/Shared/Layout/";
+import Layout from "@/Layouts/AppLayout/index.vue";
 import { Head } from "@inertiajs/inertia-vue3";
 import RightSidebar from "@/Shared/Partials/Product/RightSidebar.vue";
 import Gallery from "@/Shared/Slider/Gallery.vue";
 import Detail from "@/Shared/Partials/Product/Detail.vue";
+import Breadcrumb from "@/Shared/Partials/Product/Breadcrumb.vue";
 import ProductRelated from "@/Shared/Slider/ProductRelated.vue";
 import Tab from "@/Shared/Partials/Product/Tab.vue";
 import ProductLabel from "@/Shared/ProductElement/Label.vue";
@@ -57,6 +60,7 @@ export default {
     Head,
     RightSidebar,
     Gallery,
+    Breadcrumb,
     Detail,
     ProductRelated,
     Tab,
@@ -72,6 +76,11 @@ export default {
     },
 
     related: {
+      type: Object,
+      require: true,
+    },
+
+    ownProducts: {
       type: Object,
       require: true,
     },

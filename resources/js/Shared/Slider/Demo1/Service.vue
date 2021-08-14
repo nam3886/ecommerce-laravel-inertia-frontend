@@ -5,25 +5,25 @@
         ref="owlCarousel"
         class="owl-carousel owl-theme row cols-lg-3 cols-sm-2 cols-1"
         data-owl-options="{
-                                    'items': 3,
-                                    'nav': false,
-                                    'dots': false,
-                                    'loop': true,
-                                    'autoplay': false,
-                                    'autoplayTimeout': 5000,
-                                    'responsive': {
-                                        '0': {
-                                            'items': 1
-                                        },
-                                        '576': {
-                                            'items': 2
-                                        },
-                                        '768': {
-                                            'items': 3,
-                                            'loop': false
-                                        }
-                                    }
-                                }"
+          'items': 3,
+          'nav': false,
+          'dots': false,
+          'loop': true,
+          'autoplay': false,
+          'autoplayTimeout': 5000,
+          'responsive': {
+              '0': {
+                  'items': 1
+              },
+              '576': {
+                  'items': 2
+              },
+              '768': {
+                  'items': 3,
+                  'loop': false
+              }
+          }
+      }"
       >
         <div
           class="icon-box icon-box-side icon-box1 appear-animate"

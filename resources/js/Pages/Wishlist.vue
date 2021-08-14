@@ -174,7 +174,7 @@
 </template>
 
 <script>
-import Layout from "@/Shared/Layout/";
+import Layout from "@/Layouts/AppLayout/index.vue";
 import { Head } from "@inertiajs/inertia-vue3";
 import Breadcrumb from "@/Shared/Breadcrumb.vue";
 import "@r/css/style.css";

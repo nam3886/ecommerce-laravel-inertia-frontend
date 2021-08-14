@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TagsSeeder::class);
         $this->call(ArticleSeeder::class);
         $this->call(DeliveriesSeeder::class);
+        $this->call(ShopsSeeder::class);
         $this->call(ProductsSeeder::class);
         cache()->flush();
         session()->flush();

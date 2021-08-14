@@ -23,7 +23,7 @@ class ProductController extends BaseController
 
             $tags = $product->tags->pluck('id');
 
-            return Product::with('categories', 'discount', 'gallery', 'brand')->withCount('variants')
+            return Product::with('discount', 'gallery', 'brand', 'categories')->withCount('variants')
                 ->whereBrandId($product->brand_id)
                 ->orWhereHas('tags', fn ($query) => $query->whereIn('tags.id', $tags))
                 ->orWhereHas('categories', fn ($query) => $query->whereIn('categories.id', $categories))
@@ -33,9 +33,19 @@ class ProductController extends BaseController
                 ->except($product->id);
         });
 
+        $ownProduct = cache()->rememberForever("own_product{$product->id}", function () use ($product) {
+            return Product::with('discount', 'gallery', 'brand')
+                ->whereShopId($product->shop_id)
+                ->inRandomOrder()
+                ->take(4)
+                ->get()
+                ->except($product->id);
+        });
+
         return Inertia::render('Product')
             ->with('product', new ShowProductResource($product))
-            ->with('related', ProductResource::collection($related));
+            ->with('related', ProductResource::collection($related))
+            ->with('ownProducts', ProductResource::collection($ownProduct));
     }
 
     /**

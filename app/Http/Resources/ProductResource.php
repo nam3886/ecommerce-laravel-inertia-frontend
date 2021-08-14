@@ -18,19 +18,19 @@ class ProductResource extends JsonResource
         return [
             'id'                            =>  $this->id,
             'slug'                          =>  $this->slug,
+            'sku'                           =>  $this->sku,
             'name'                          =>  $this->name,
             'price_format'                  =>  easy_format_price($this->price),
             'price_after_discount_format'   =>  easy_format_price($this->price_after_discount),
             'quantity'                      =>  $this->quantity,
+            'sub_description'               =>  $this->sub_description,
             'is_featured'                   =>  $this->is_featured,
             'flag'                          =>  $this->flag,
-            'sub_description'               =>  $this->sub_description,
             'view'                          =>  $this->view,
-            'sku'                           =>  $this->sku,
             // relations
             'gallery'                       =>  new GalleryResource($this->gallery),
             'discount'                      =>  new DiscountResource($this->discount),
-            'categories'                    =>  CategoryResource::collection($this->categories),
+            // 'categories'                    =>  CategoryResource::collection($this->categories),
             'brand'                         =>  new BrandResource($this->brand),
             'has_variants'                  =>  boolval($this->variants_count),
         ];

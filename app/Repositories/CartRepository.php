@@ -42,11 +42,13 @@ class CartRepository extends BaseRepository implements CartContract
         return collect([
             'items'                 =>  $items,
             'count'                 =>  $this->cart->count(),
+
             'tax'                   =>  $this->cart->taxFloat(),
             'total_price'           =>  $this->cart->priceTotalFloat(),
             'discount'              =>  $this->cart->discountFloat(),
             'subtotal'              =>  $this->cart->subtotalFloat(),
             'grand_total'           =>  $this->cart->totalFloat(),
+
             'tax_format'            =>  easy_format_price($this->cart->taxFloat()),
             'total_price_format'    =>  easy_format_price($this->cart->priceTotalFloat()),
             'discount_format'       =>  easy_format_price($this->cart->discountFloat()),
@@ -258,5 +260,14 @@ class CartRepository extends BaseRepository implements CartContract
         throw_if($quantity > $max, ValidationException::withMessages([
             'qty' => "The qty must not be greater than {$max}.",
         ]));
+    }
+
+    /**
+     * when cart changed call api get shipping fee
+     * @return void
+     */
+    public function cartChanged()
+    {
+        # code...
     }
 }

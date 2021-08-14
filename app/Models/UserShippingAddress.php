@@ -13,14 +13,12 @@ class UserShippingAddress extends Model
 
     protected $fillable = [
         'user_id',
-        'api',
-        'fullAddress',
-        'phone',
-        'name',
+        'ghn_address',
+        'address',
     ];
 
     protected $casts = [
-        'api' => 'object',
+        'ghn_address' => 'object',
     ];
 
     public function user(): BelongsTo

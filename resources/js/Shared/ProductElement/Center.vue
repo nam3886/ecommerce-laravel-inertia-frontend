@@ -35,22 +35,9 @@
           {{ product.name }}
         </link-slug>
       </h3>
-      <div class="product-price">
-        <ins v-if="product.discount" class="new-price">
-          {{ product.price_after_discount_format }}
-        </ins>
-        <del v-if="product.discount" class="old-price">
-          {{ product.price_format }}
-        </del>
-        <span v-else class="price">
-          {{ product.price_after_discount_format }}
-        </span>
-      </div>
+      <price :product="product" />
       <div class="ratings-container">
-        <div class="ratings-full">
-          <span class="ratings" style="width: 60%"></span>
-          <span class="tooltiptext tooltip-top"></span>
-        </div>
+        <rating width="60%" />
         <link-slug :slug="product.slug" class="rating-reviews">
           ( 16 reviews )
         </link-slug>
@@ -64,10 +51,19 @@ import LinkSlug from "@/Shared/ProductElement/LinkSlug.vue";
 import ProductLabel from "@/Shared/ProductElement/Label.vue";
 import ButtonQuickview from "@/Shared/ProductElement/ButtonQuickview.vue";
 import ButtonAddCart from "@/Shared/ProductElement/ButtonAddCart.vue";
+import Price from "@/Shared/ProductElement/Price.vue";
+import Rating from "@/Shared/ProductElement/Rating.vue";
 
 export default {
   props: ["product"],
 
-  components: { LinkSlug, ProductLabel, ButtonQuickview, ButtonAddCart },
+  components: {
+    LinkSlug,
+    ProductLabel,
+    ButtonQuickview,
+    ButtonAddCart,
+    Price,
+    Rating,
+  },
 };
 </script>

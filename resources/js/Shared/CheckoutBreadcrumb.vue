@@ -6,7 +6,7 @@
       class="title title-simple title-step"
       :class="{ active: item.id == indexActive }"
     >
-      <Link href="route(item.route)">{{ item.id }}. {{ item.text }}</Link>
+      <Link :href="route(item.route)">{{ item.id }}. {{ item.text }}</Link>
     </h3>
   </div>
 </template>
@@ -22,9 +22,9 @@ export default {
   data() {
     return {
       list: [
-        { id: 1, text: "Shopping Cart", route: "cart" },
-        { id: 2, text: "Checkout", route: "checkout" },
-        { id: 3, text: "Order Complete", route: "order" },
+        { id: 1, text: "Shopping Cart", route: "cart.index" },
+        { id: 2, text: "Checkout", route: "checkout.index" },
+        { id: 3, text: "Order Complete", route: "checkout.index" },
       ],
     };
   },

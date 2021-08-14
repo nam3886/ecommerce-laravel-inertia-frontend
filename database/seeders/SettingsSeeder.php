@@ -10,7 +10,7 @@ class SettingsSeeder extends Seeder
     protected $settings = [
         [
             'key' => 'site_name',
-            'value' => 'TrueMark E-Commerce',
+            'value' => 'Skinest E-Commerce',
         ],
         [
             'key' => 'site_title',
@@ -30,7 +30,7 @@ class SettingsSeeder extends Seeder
         ],
         [
             'key' => 'currency_code',
-            'value' => 'USD',
+            'value' => 'VND',
         ],
         [
             'key' => 'currency_symbol',
@@ -38,11 +38,11 @@ class SettingsSeeder extends Seeder
         ],
         [
             'key' => 'site_logo',
-            'value' => '{"link":{"204w":"https:\/\/drive.google.com\/uc?id=1Fg7M-NzZ-LyERACybfJ8ASKEv5d7Nbhk&export=media"},"path":{"204w":"1hfIZRrjkaRLP_tzGqV8tBIWiUTqcwR0f\/1Fg7M-NzZ-LyERACybfJ8ASKEv5d7Nbhk"}}',
+            'value' => '',
         ],
         [
             'key' => 'site_favicon',
-            'value' => '{"link":{"204w":"https:\/\/drive.google.com\/uc?id=183aMFZl3FRVcdeHNA57R7RM16FYFogHF&export=media"},"path":{"204w":"1hfIZRrjkaRLP_tzGqV8tBIWiUTqcwR0f\/183aMFZl3FRVcdeHNA57R7RM16FYFogHF"}}',
+            'value' => '',
         ],
         [
             'key' => 'footer_copyright_text',
@@ -111,15 +111,7 @@ class SettingsSeeder extends Seeder
         ],
         [
             'key' => 'get_search_result',
-            'value' => 5
-        ],
-        [
-            'key' => 'facebook_page_id',
-            'value' => '106661111629251'
-        ],
-        [
-            'key' => 'facebook_app_id',
-            'value' => '2986319748312354'
+            'value' => 10
         ],
         [
             'key' => 'google_drive_refresh_token',

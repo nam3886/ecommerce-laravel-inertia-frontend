@@ -13,12 +13,9 @@ class Payment extends Model
     use HasFactory, SoftDeletes, WithStandardPrice;
 
     protected $fillable = [
-        'client_id',
-        'secret_id',
         'name',
         'code',
         'price',
-        'icon',
         'description',
         'updated_by',
         'active',
