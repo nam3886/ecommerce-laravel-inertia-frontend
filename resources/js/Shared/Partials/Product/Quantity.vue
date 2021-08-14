@@ -11,7 +11,7 @@
       />
       <button
         @click="$emit('add-cart', quantity)"
-        :disabled="!selectedAllVariants"
+        :disabled="!selectedAllVariants || isProcessing"
         type="button"
         class="btn-product btn-cart text-normal ls-normal font-weight-semi-bold"
       >
@@ -35,10 +35,13 @@ export default {
 
   emits: ["add-cart"],
 
+  components: { InputNumber },
+
   data() {
     return {
       quantity: 1,
       show: false,
+      isProcessing: false,
     };
   },
 
@@ -48,7 +51,11 @@ export default {
     },
   },
 
-  components: { InputNumber },
+  mounted() {
+    this.emitter.on("processing:cart", () => (this.isProcessing = true));
+
+    this.emitter.on("processed:cart", () => (this.isProcessing = false));
+  },
 };
 </script>
 
