@@ -82,40 +82,24 @@ class SettingsSeeder extends Seeder
             'value' => null,
         ],
         [
-            'key' => 'get_new_products',
-            'value' => 10
+            'key' => 'google_drive_refresh_token',
+            'value' => ''
         ],
         [
-            'key' => 'get_best_products',
-            'value' => 6
-        ],
-        [
-            'key' => 'get_related_products',
+            'key' => 'get_featured_products',
             'value' => 5
         ],
         [
-            'key' => 'get_image_slides',
-            'value' => 3
-        ],
-        [
-            'key' => 'get_banner_brands',
+            'key' => 'get_best_sell_products',
             'value' => 4
         ],
         [
-            'key' => 'get_categories',
+            'key' => 'get_related_products',
             'value' => 4
         ],
         [
-            'key' => 'pagination',
-            'value' => 9
-        ],
-        [
-            'key' => 'get_search_result',
-            'value' => 10
-        ],
-        [
-            'key' => 'google_drive_refresh_token',
-            'value' => ''
+            'key' => 'get_own_products',
+            'value' => 6
         ],
     ];
 

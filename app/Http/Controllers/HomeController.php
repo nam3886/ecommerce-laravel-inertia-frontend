@@ -12,9 +12,16 @@ class HomeController extends BaseController
 {
     public function index()
     {
-        $product = Product::with('categories', 'discount', 'gallery', 'brand')->withCount('variants');
-        $featuredProduct = $product->whereIsFeatured(1)->take(5)->get();
-        $bestSellProduct = $product->whereFlag('deal')->take(5)->get();
+        // load categories ???
+        $product = Product::with('discount', 'gallery', 'brand')->withCount('variants');
+
+        $featuredProduct = $product->whereIsFeatured(1)
+            ->take(config('settings.get_featured_products', 5))
+            ->get();
+
+        $bestSellProduct = $product->whereFlag('deal')
+            ->take(config('settings.get_best_sell_products', 4))
+            ->get();
 
         return Inertia::render('Home')
             ->with('featuredProduct', ProductResource::collection($featuredProduct))

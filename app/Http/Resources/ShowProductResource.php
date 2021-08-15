@@ -35,7 +35,8 @@ class ShowProductResource extends JsonResource
             'shop'                          =>  new ShopResource($this->shop),
             // 'categories'                    =>  CategoryResource::collection($this->categories),
             // 'tags'                          =>  CategoryResource::collection($this->tags),
-            'has_variants'                  =>  $this->hasVariants(),
+            'has_variants'                  =>  boolval($this->hasVariants()),
+            // 'has_variants'                  =>  boolval($this->variants_count),
             // 'variants'                      =>  VariantResource::collection($this->variants),
         ];
     }

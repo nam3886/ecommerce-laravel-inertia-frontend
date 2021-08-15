@@ -28,24 +28,22 @@ class ProductController extends BaseController
                 ->orWhereHas('tags', fn ($query) => $query->whereIn('tags.id', $tags))
                 ->orWhereHas('categories', fn ($query) => $query->whereIn('categories.id', $categories))
                 ->inRandomOrder()
-                ->take(4)
-                ->get()
-                ->except($product->id);
+                ->take(config('settings.get_related_products'))
+                ->get();
         });
 
-        $ownProduct = cache()->rememberForever("own_product{$product->id}", function () use ($product) {
+        $ownProduct = cache()->rememberForever("own_product{$product->shop_id}", function () use ($product) {
             return Product::with('discount', 'gallery', 'brand')
                 ->whereShopId($product->shop_id)
                 ->inRandomOrder()
-                ->take(4)
-                ->get()
-                ->except($product->id);
+                ->take(config('settings.get_own_products'))
+                ->get();
         });
 
         return Inertia::render('Product')
             ->with('product', new ShowProductResource($product))
-            ->with('related', ProductResource::collection($related))
-            ->with('ownProducts', ProductResource::collection($ownProduct));
+            ->with('related', ProductResource::collection($related->except($product->id)))
+            ->with('ownProducts', ProductResource::collection($ownProduct->except($product->id)));
     }
 
     /**
