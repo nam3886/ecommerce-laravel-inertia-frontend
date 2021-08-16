@@ -5,13 +5,12 @@
 <script>
 import isUndefined from "lodash-es/isUndefined";
 import isNull from "lodash-es/isNull";
-import isEqual from "lodash-es/isEqual";
 import isArray from "lodash-es/isArray";
 import isObject from "lodash-es/isObject";
 import "select2";
 
 export default {
-  props: ["value", "options"],
+  props: ["modelValue", "options"],
 
   computed: {
     isMultiple() {
@@ -22,27 +21,24 @@ export default {
   mounted() {
     const data = this.formatDataForPlaceholder(this.options);
 
-    this.initSelect2(data, this.value)
-      .on("change", () => this.$emit("input", this.getDataSelect2()))
+    this.initSelect2(data, this.modelValue)
+      .on("change", () =>
+        this.$emit("update:modelValue", this.getDataSelect2())
+      )
       .on("select2:unselect", (e) => this.$emit("unselect", e.params.data));
   },
 
   watch: {
-    value(value) {
-      // nothing change
-      // if (isEqual(value, this.getDataSelect2())) return;
-      // update value
-      // $(this.$el).val(this.formatValue(value)).trigger("change");
-
+    modelValue(modelValue) {
       // trigger change gay ra loi
-      $(this.$el).val(this.formatValue(value));
+      $(this.$el).val(this.formatValue(modelValue));
     },
 
     options(options) {
       // update options
       const data = this.formatDataForPlaceholder(options);
 
-      this.initSelect2(data, this.value);
+      this.initSelect2(data, this.modelValue);
 
       this.$emit("update:options", data);
     },

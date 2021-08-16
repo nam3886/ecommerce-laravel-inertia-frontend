@@ -41,7 +41,7 @@ class ProductsSeeder extends Seeder
 
             $newProduct->fill([
                 'brand_id'          =>  $product['brand_id'],
-                'shop_id'           =>  1,
+                'shop_id'           =>  $product['brand_id'] != 1 ? 1 : 2,
                 'slug'              =>  create_slug($product['name']),
                 'sku'               =>  get_uniqid_code(),
                 'name'              =>  $product['name'],

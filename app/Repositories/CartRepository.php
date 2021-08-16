@@ -47,13 +47,13 @@ class CartRepository extends BaseRepository implements CartContract
             'total_price'           =>  $this->cart->priceTotalFloat(),
             'discount'              =>  $this->cart->discountFloat(),
             'subtotal'              =>  $this->cart->subtotalFloat(),
-            'grand_total'           =>  $this->cart->totalFloat(),
+            'grandtotal'           =>  $this->cart->totalFloat(),
 
             'tax_format'            =>  easy_format_price($this->cart->taxFloat()),
             'total_price_format'    =>  easy_format_price($this->cart->priceTotalFloat()),
             'discount_format'       =>  easy_format_price($this->cart->discountFloat()),
             'subtotal_format'       =>  easy_format_price($this->cart->subtotalFloat()),
-            'grand_total_format'    =>  easy_format_price($this->cart->totalFloat()),
+            'grandtotal_format'    =>  easy_format_price($this->cart->totalFloat()),
         ]);
     }
 

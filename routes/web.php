@@ -34,12 +34,12 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 
 Route::redirect('/', '/home', 301);
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/wishlist', [HomeController::class, 'wishlist']);
-Route::get('/order', [HomeController::class, 'order']);
+Route::get('home', [HomeController::class, 'index'])->name('home');
+Route::get('wishlist', [HomeController::class, 'wishlist']);
+Route::get('order', [HomeController::class, 'order']);
 
-Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name('product.show');
+Route::get('product/{product:slug}', [ProductController::class, 'show'])->name('product.show');
 
-Route::resource('/cart', CartController::class);
+Route::resource('cart', CartController::class);
 
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout.index');

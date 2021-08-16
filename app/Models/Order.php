@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
@@ -13,39 +14,23 @@ class Order extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'user_id',
-        'payment_id',
-        'delivery_id',
-        'voucher_id',
-        'updated_by',   //-
         'order_code',
-        'delivery_order_code',  //++
+        'user_id',
+        'payment_method_id',
         'items_count',
         'total_price',
         'discount_price',
         'tax_price',
-        'sub_total',
-        'grand_total',
+        'subtotal',
+        'grandtotal',
         'order_total',
-        'exchange_rate',
-        'exchange_currency',
-        'order_success',    //++
-        'is_paid',  //++
+        'is_paid',
         'transaction_number',
-        'bank_tran_number', //++
-        'bank_code',    //++
-        'name',
-        'phone',
-        'delivery_fee',
-        'delivery_service_id',
-        'cod_amount',   //++
-        'person_pay_delivery_fee',  //-
-        'address',
-        'api_address',
-        'note',
-        'required_note',    //-
-        'status', //-
-        'active',   //-
+        'bank_tran_number',
+        'bank_code',
+        'create_order_success',
+        'active',
+        'updated_by',
     ];
 
     protected $casts = [
@@ -57,19 +42,24 @@ class Order extends Model
         'exchange_currency' => ['from' => 'VND', 'to' => 'VND'],
     ];
 
-    public function payment(): BelongsTo
+    public function setOrderCodeAttribute($value)
     {
-        return $this->belongsTo(Payment::class);
+        $this->attributes['order_code'] = strtoupper($value);
     }
 
-    public function voucher(): BelongsTo
+    public function paymentMethod(): BelongsTo
     {
-        return $this->belongsTo(Voucher::class);
+        return $this->belongsTo(PaymentMethod::class);
     }
 
-    public function customer(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
+    }
+
+    public function subOrders(): HasMany
+    {
+        return $this->hasMany(SubOrder::class);
     }
 
     public function items(): BelongsToMany
@@ -79,8 +69,13 @@ class Order extends Model
             ->withPivot('price', 'quantity', 'sku');
     }
 
-    public function setOrderCodeAttribute($value)
+    /*
+    |--------------------------------------------------------------------------
+    | Some methods
+    |--------------------------------------------------------------------------
+    */
+    public function generateSubOrders()
     {
-        $this->attributes['order_code'] = strtoupper($value);
+        $this->subOrders()->create();
     }
 }

@@ -69,27 +69,9 @@ class Product extends Model
         return $this->belongsToMany(Category::class);
     }
 
-    public function orders(): BelongsToMany
-    {
-        return $this->belongsToMany(Order::class, 'order_details')
-            ->using(OrderDetail::class)
-            ->withPivot('price', 'quantity', 'sku');
-    }
-
     public function gallery(): HasOne
     {
         return $this->hasOne(Gallery::class);
-    }
-
-    public function discount(): HasOne
-    {
-        return $this->hasOne(Discount::class);
-    }
-
-    // at least 1 variant ??????
-    public function variants(): hasMany
-    {
-        return $this->hasMany(Variant::class);
     }
 
     public function comments(): HasMany
@@ -102,6 +84,30 @@ class Product extends Model
         return $this->morphOne(Seo::class, 'seoable');
     }
 
+    public function variants(): hasMany
+    {
+        return $this->hasMany(Variant::class);
+    }
+
+    public function discount(): HasOne
+    {
+        return $this->hasOne(Discount::class);
+    }
+
+    public function orders(): BelongsToMany
+    {
+        return $this->belongsToMany(Order::class, 'order_details')
+            ->using(OrderDetail::class)
+            ->withPivot('price', 'quantity', 'sku');
+    }
+
+    public function subOrders(): BelongsToMany
+    {
+        return $this->belongsToMany(SubOrder::class, 'order_details')
+            ->using(OrderDetail::class)
+            ->withPivot('price', 'quantity', 'sku');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Scope
@@ -112,6 +118,11 @@ class Product extends Model
         return $query->whereActive(1);
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Some methods
+    |--------------------------------------------------------------------------
+    */
     public function hasVariants(): bool
     {
         return $this->variants()->count();

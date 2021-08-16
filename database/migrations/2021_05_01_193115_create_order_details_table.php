@@ -17,8 +17,9 @@ class CreateOrderDetailsTable extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('order_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('sub_order_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('discount_id')->nullable()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('sku');
-            $table->unsignedBigInteger('discount_id')->nullable();
             $table->unsignedInteger('quantity');
             $table->unsignedBigInteger('price');
             $table->timestamps();
