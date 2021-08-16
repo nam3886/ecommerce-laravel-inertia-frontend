@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Payment;
+use App\Models\PaymentMethod;
 use Illuminate\Database\Seeder;
 
 class PaymentsSeeder extends Seeder
@@ -14,21 +14,21 @@ class PaymentsSeeder extends Seeder
      */
     public function run()
     {
-        Payment::create([
+        PaymentMethod::create([
             'updated_by' => 1,
             'name' => 'stripe',
             'code' => 'stripe',
             'description' => 'Pay via Stripe; you can pay with your credit card if you don’t have a Stripe account.',
         ]);
 
-        Payment::create([
+        PaymentMethod::create([
             'updated_by' => 1,
             'name' => 'paypal',
             'code' => 'paypal',
             'description' => 'Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.',
         ]);
 
-        Payment::create([
+        PaymentMethod::create([
             'updated_by' => 1,
             'name' => 'vnpay',
             'code' => 'vnpay',

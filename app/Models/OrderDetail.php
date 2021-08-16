@@ -14,11 +14,22 @@ class OrderDetail extends Pivot
     protected $fillable = [
         'product_id',
         'order_id',
-        'sku',
+        'sub_order_id',
         'discount_id',
+        'sku',
         'quantity',
         'price',
     ];
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    public function subOrder(): BelongsTo
+    {
+        return $this->belongsTo(SubOrder::class);
+    }
 
     public function variant(): BelongsTo
     {

@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 use Intervention\Image\Facades\Image;
+use App\Services\GoogleStorageService;
 
 class ImageService
 {
@@ -13,13 +14,13 @@ class ImageService
      * @param int $height
      * @param int $width
      * @param string $encode
-     * @return \App\Services\GoogleStorage
+     * @return \App\Services\GoogleStorageService
      */
     public static function resizeImage($image, $height, $width, $encode = 'webp')
     {
         $fileName = $image->getClientOriginalName() . '.' . $encode;
 
-        $image = Image::make($image)->resize($width, $height)->encode($encode);
+        $image = Image::make($image)->fit($width, $height)->encode($encode);
 
         $path = "/intervention-tmp/{$fileName}";
 
@@ -27,6 +28,6 @@ class ImageService
 
         $image = new UploadedFile(storage_path('app') . $path, $fileName);
 
-        return new GoogleStorage($image);
+        return new GoogleStorageService($image);
     }
 }

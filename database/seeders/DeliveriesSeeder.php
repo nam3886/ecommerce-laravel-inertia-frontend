@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Delivery;
+use App\Models\DeliveryMethod;
 use Illuminate\Database\Seeder;
 
 class DeliveriesSeeder extends Seeder
@@ -14,7 +14,7 @@ class DeliveriesSeeder extends Seeder
      */
     public function run()
     {
-        Delivery::create([
+        DeliveryMethod::create([
             'code' => 'delivery_ghn',
             'name' => 'giao hàng nhanh',
             'description' => 'giao hàng nhanh',

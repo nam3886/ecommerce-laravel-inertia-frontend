@@ -1,7 +1,9 @@
+@import url(select2/dist/css/select2.css);
 @import url(../../public/vendor/fontawesome-free/all.min.css);
 @import url(../../public/vendor/animate/animate.min.css);
 @import url(../../public/vendor/magnific-popup/magnific-popup.min.css);
 @import url(../../public/vendor/owl-carousel/owl.carousel.min.css);
+@import url(select2.css);
 
 .loaded .page-wrapper {
     opacity: 1;
@@ -19,4 +21,7 @@
 }
 .product-label.label-hot {
     background: #b10001;
+}
+.shipping-address .select-box {
+    margin-bottom: 1.5rem;
 }

@@ -79,7 +79,7 @@ class User extends Authenticatable
 
     public function address(): HasOne
     {
-        return $this->hasOne(UserShippingAddress::class);
+        return $this->hasOne(UserAddress::class);
     }
 
     public function comments(): HasMany

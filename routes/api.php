@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ShippingController;
 use App\Http\Controllers\Api\VariantController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
@@ -21,8 +22,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::as('api.')->group(function () {
-    Route::get('/variant/list/{productId}', [VariantController::class, 'index'])->name('variant.index');
-    Route::get('/variant/{variant:combination}', [VariantController::class, 'show'])->name('variant.show');
+    Route::get('variant/list/{productId}', [VariantController::class, 'index'])->name('variant.index');
+    Route::get('variant/{variant:combination}', [VariantController::class, 'show'])->name('variant.show');
 
-    Route::get('/attributes/{productId}', [ProductController::class, 'showAttributes'])->name('attribute.show');
+    Route::get('attribute/{productId}', [ProductController::class, 'showAttributes'])->name('attribute.show');
+
+
+    Route::prefix('location')->as('location.')->group(function () {
+        Route::get('district', [ShippingController::class, 'getDistricts'])->name('district');
+        Route::get('ward/{districtId}', [ShippingController::class, 'getWards'])->name('ward');
+    });
 });

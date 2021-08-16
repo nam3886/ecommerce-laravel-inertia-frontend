@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\Services\GoogleStorage;
+use App\Services\GoogleStorageService;
 use App\Services\ImageService;
 use Illuminate\Http\UploadedFile;
 
@@ -34,7 +34,7 @@ trait UploadAble
      */
     public function uploadOne(UploadedFile $file, string $filename = null)
     {
-        return GoogleStorage::store($this->folder, $filename, $file);
+        return GoogleStorageService::store($this->folder, $filename, $file);
     }
 
     /**
@@ -46,7 +46,7 @@ trait UploadAble
      */
     public function uploadOneIf(bool $condition, mixed $file, string $filename = null)
     {
-        return $condition ? GoogleStorage::store($this->folder, $filename, $file) : $file;
+        return $condition ? GoogleStorageService::store($this->folder, $filename, $file) : $file;
     }
 
     /**
@@ -69,7 +69,7 @@ trait UploadAble
      */
     public function deleteFile(...$files)
     {
-        GoogleStorage::delete(...$files);
+        GoogleStorageService::delete(...$files);
     }
 
     /**
