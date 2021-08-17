@@ -1,60 +1,73 @@
 <template>
-  <table class="shop-table cart-table">
-    <thead>
-      <tr>
-        <th><span>Product</span></th>
-        <th></th>
-        <th><span>Price</span></th>
-        <th><span>quantity</span></th>
-        <th>Subtotal</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(cart, rowId) in carts" :key="rowId">
-        <td class="product-thumbnail">
-          <figure>
-            <link-slug :slug="cart.options.slug">
-              <img
-                :src="cart.options.avatar.url"
-                :alt="cart.options.avatar.name"
-                width="100"
-                height="100"
-              />
-            </link-slug>
-          </figure>
-        </td>
-        <td class="product-name">
-          <div class="product-name-section">
-            <link-slug :slug="cart.options.slug">{{ cart.name }}</link-slug>
-          </div>
-        </td>
-        <td class="product-subtotal">
-          <span class="amount">{{ cart.options.price_format }}</span>
-        </td>
-        <td class="product-quantity">
-          <input-number
-            v-model.number="cartQuantities[rowId]"
-            @update:modelValue="updateQuantity($event, rowId)"
-            :max="cart.options.max"
-            min="1"
-          />
-        </td>
-        <td class="product-price">
-          <span class="amount">{{ cart.options.subtotal_format }}</span>
-        </td>
-        <td class="product-close">
-          <a
-            @click.prevent="destroy(rowId)"
-            href="#"
-            class="product-remove"
-            title="Remove this product"
-          >
-            <i class="fas fa-times"></i>
-          </a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div v-for="(cart, index) in carts" :key="index" :class="{ 'mt-7': index }">
+    <h5>{{ cart.shop.name }}</h5>
+    <table class="shop-table cart-table">
+      <thead>
+        <tr>
+          <th><span>Product</span></th>
+          <th></th>
+          <th><span>Price</span></th>
+          <th><span>quantity</span></th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in cart.items" :key="item.rowId">
+          <td class="product-thumbnail">
+            <figure>
+              <link-slug :slug="item.options.slug">
+                <img
+                  :src="item.options.avatar.url"
+                  :alt="item.options.avatar.name"
+                  width="100"
+                  height="100"
+                />
+              </link-slug>
+            </figure>
+          </td>
+          <td class="product-name">
+            <div class="product-name-section">
+              <link-slug :slug="item.options.slug">{{ item.name }}</link-slug>
+            </div>
+          </td>
+          <td class="product-subtotal">
+            <span class="amount">{{ item.options.price_format }}</span>
+          </td>
+          <td class="product-quantity">
+            <input-number
+              v-model.number="item.qty"
+              @update:modelValue="updateQuantity($event, item)"
+              :max="item.options.max"
+              min="1"
+            />
+          </td>
+          <td class="product-price">
+            <span class="amount">{{ item.options.subtotal_format }}</span>
+          </td>
+          <td class="product-close">
+            <a
+              @click.prevent="destroy(item.rowId)"
+              href="#"
+              class="product-remove"
+              title="Remove this product"
+            >
+              <i class="fas fa-times"></i>
+            </a>
+          </td>
+        </tr>
+        <tr v-if="cart.shipping_fee">
+          <td colspan="4" class="product-name">Phí vận chuyển</td>
+          <td colspan="2" class="product-price">
+            {{ cart.shipping_fee_format }}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4" class="product-name">Tổng tiền</td>
+          <td colspan="2" class="product-price">{{ cart.total_format }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>
@@ -70,29 +83,10 @@ export default {
 
   components: { LinkSlug, InputNumber },
 
-  data() {
-    return {
-      cartQuantities: {},
-    };
-  },
-
-  mounted() {
-    this.getQuantities();
-  },
-
   methods: {
-    updateQuantity: debounce(function (newQuatity, rowId) {
-      if (newQuatity === this.carts[rowId].qty) return;
-
-      this.update(rowId, newQuatity, () => this.getQuantities());
+    updateQuantity: debounce(function (newQuatity, item) {
+      this.update(item.rowId, newQuatity);
     }, 500),
-
-    getQuantities() {
-      this.cartQuantities = Object.values(this.carts).reduce((carry, cart) => {
-        carry[cart.rowId] = cart.qty;
-        return carry;
-      }, {});
-    },
   },
 };
 </script>

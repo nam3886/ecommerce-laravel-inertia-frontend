@@ -1,6 +1,6 @@
 <template>
   <a
-    @click.prevent="emitter.emit('show-popup:quickview', product)"
+    @click.prevent="$EMITTER.emit('show-popup:quickview', product)"
     title="Quick View"
     href="#"
   >

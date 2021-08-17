@@ -22,8 +22,9 @@ class ShopsSeeder extends Seeder
             'name' => 'Master Shoes',
             'address' => '75b đường số 2, Phường Hiệp Bình Phước, Quận Thủ Đức - Hồ Chí Minh',
             'ghn_address' => [
-                'DistrictID' => 1463,
-                'WardCode' => 21804
+                'district_id' => 1463,
+                'ward_code' => 21804,
+                'address' => '75b đường số 2',
             ],
         ]);
 
@@ -35,8 +36,9 @@ class ShopsSeeder extends Seeder
             'name' => 'Adidas Shoes',
             'address' => '75 b đường 23, Phường Xuân Phương, Quận Nam Từ Liêm - Hà Nội',
             'ghn_address' => [
-                'DistrictID' => 3440,
-                'WardCode' => 13010
+                'district_id' => 3440,
+                'ward_code' => 13010,
+                'address' => '75 b đường 23',
             ],
         ]);
     }

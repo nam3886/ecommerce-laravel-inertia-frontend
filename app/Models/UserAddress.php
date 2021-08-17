@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserAddress extends Model
@@ -12,6 +13,7 @@ class UserAddress extends Model
 
     protected $fillable = [
         'user_id',
+        'delivery_method_id',
         'ghn_address',
         'address',
     ];
@@ -19,4 +21,9 @@ class UserAddress extends Model
     protected $casts = [
         'ghn_address' => 'object',
     ];
+
+    public function deliveryMethod(): BelongsTo
+    {
+        return $this->belongsTo(DeliveryMethod::class);
+    }
 }

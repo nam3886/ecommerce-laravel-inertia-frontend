@@ -2,7 +2,9 @@
   <div
     class="newsletter-popup mfp-hide"
     id="newsletter-popup"
-    :style="{ backgroundImage: `url(${$baseUrl}/images/newsletter-popup.jpg)` }"
+    :style="{
+      backgroundImage: `url(${$BASE_URL}/images/newsletter-popup.jpg)`,
+    }"
   >
     <div class="newsletter-content">
       <h4 class="text-uppercase text-dark">

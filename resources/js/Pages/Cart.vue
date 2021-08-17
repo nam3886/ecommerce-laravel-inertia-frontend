@@ -7,7 +7,7 @@
         <flash-message class="mb-2" />
         <div class="row">
           <div class="col-lg-8 col-md-12 pr-lg-4">
-            <cart-list :carts="cart.items" />
+            <cart-list :carts="cartGroupByShop.items" />
 
             <div class="cart-actions mb-6 pt-4">
               <a
@@ -26,7 +26,7 @@
             <cart-coupon />
           </div>
 
-          <cart-shipping :cart="cart" :deliveries="deliveries" />
+          <cart-shipping :cart="cart" :deliveryMethods="deliveryMethods" />
         </div>
       </div>
     </div>
@@ -58,6 +58,6 @@ export default {
     CartShipping,
   },
 
-  props: ["cart", "deliveries"],
+  props: ["cart", "cartGroupByShop", "deliveryMethods"],
 };
 </script>

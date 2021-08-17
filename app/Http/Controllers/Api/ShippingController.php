@@ -48,7 +48,7 @@ class ShippingController extends BaseController
 
     /**
      * Display a listing of the resource.
-     *
+     * @param int $districtId
      * @return \Illuminate\Http\Response
      */
     public function getWards(int $districtId)

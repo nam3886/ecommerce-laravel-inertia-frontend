@@ -7,7 +7,7 @@
         </a>
         <Link :href="route('home')" class="logo">
           <img
-            :src="`${$baseUrl}/images/logo.png`"
+            :src="`${$BASE_URL}/images/logo.png`"
             alt="logo"
             width="153"
             height="44"

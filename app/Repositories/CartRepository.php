@@ -3,7 +3,10 @@
 namespace App\Repositories;
 
 use App\Contracts\CartContract;
+use App\Http\Resources\ShopResource;
 use App\Models\Product;
+use App\Models\Shop;
+use App\Services\GHN\GHNService;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
@@ -29,32 +32,80 @@ class CartRepository extends BaseRepository implements CartContract
      */
     public function listCarts()
     {
-        $items = $this->cart->content()->map(function ($item) {
-            $subtotal = $item->price * $item->qty;
-
-            $options = collect($item->options)
-                ->put('subtotal', $subtotal)
-                ->put('subtotal_format', easy_format_price($subtotal));
-
-            return collect($item)->put('options', $options);
-        });
-
         return collect([
-            'items'                 =>  $items,
+            'items'                 =>  $this->cart->content(),
             'count'                 =>  $this->cart->count(),
 
             'tax'                   =>  $this->cart->taxFloat(),
-            'total_price'           =>  $this->cart->priceTotalFloat(),
-            'discount'              =>  $this->cart->discountFloat(),
             'subtotal'              =>  $this->cart->subtotalFloat(),
-            'grandtotal'           =>  $this->cart->totalFloat(),
+            'discount'              =>  $this->cart->discountFloat(),
+            'grandtotal'            =>  $this->cart->totalFloat(),
 
             'tax_format'            =>  easy_format_price($this->cart->taxFloat()),
-            'total_price_format'    =>  easy_format_price($this->cart->priceTotalFloat()),
-            'discount_format'       =>  easy_format_price($this->cart->discountFloat()),
             'subtotal_format'       =>  easy_format_price($this->cart->subtotalFloat()),
-            'grandtotal_format'    =>  easy_format_price($this->cart->totalFloat()),
+            'discount_format'       =>  easy_format_price($this->cart->discountFloat()),
+            'grandtotal_format'     =>  easy_format_price($this->cart->totalFloat()),
         ]);
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function listCartsGroupByShop()
+    {
+        $listCarts = $this->listCarts();
+
+        $itemsGroupByShop = $listCarts->get('items')->groupBy('options.shop_id');
+
+        $shops = Shop::findMany($itemsGroupByShop->keys());
+
+        $userAddress = auth()->user()->address;
+
+        // calculate subtotal for each item and add shop information
+        $itemsGroupByShop = $itemsGroupByShop->reduce(function ($carry, $items) use ($shops, $userAddress) {
+            $totalOfShop = 0;
+
+            $shop = $shops->where('id', $items->first()->options->shop_id)->first();
+
+            $items = $items->map(function ($item) use (&$totalOfShop) {
+                $subtotal = $item->price * $item->qty;
+
+                $totalOfShop += $subtotal;
+
+                $options = collect($item->options)->put('subtotal', $subtotal)
+                    ->put('subtotal_format', easy_format_price($subtotal));
+
+                return collect($item)->put('options', $options);
+            });
+
+            if (
+                $userAddress->delivery_method_id == 1 &&
+                (!session()->has("shipping_{$shop->id}_fee") || session("cart_{$shop->id}_changed"))
+            ) {
+
+                $shippingFee = $this->calculateShippingFee($shop, $userAddress->ghn_address, $items->sum('weight'));
+
+                session(["shipping_{$shop->id}_fee" => $shippingFee]);
+
+                session(["cart_{$shop->id}_changed" => false]);
+            }
+
+            $shippingFee = session("shipping_{$shop->id}_fee");
+            $totalOfShop += $shippingFee;
+
+            return $carry->push([
+                'shop' => new ShopResource($shop),
+                'items' => $items,
+                'shipping_fee' => $shippingFee,
+                'shipping_fee_format' => easy_format_price($shippingFee),
+                'total' => $totalOfShop,
+                'total_format' => easy_format_price($totalOfShop)
+            ]);
+        }, collect());
+
+        $listCarts->put('items', $itemsGroupByShop);
+
+        return $listCarts;
     }
 
     /**
@@ -123,6 +174,8 @@ class CartRepository extends BaseRepository implements CartContract
 
         $cart = $this->cart->add($params->all())->associate($this->model);
 
+        $this->cartChanged($cart->options->shop_id);
+
         return collect($cart);
     }
 
@@ -148,6 +201,8 @@ class CartRepository extends BaseRepository implements CartContract
 
         $cart = $this->cart->update($id, collect($params)->except('rowId', 'id', 'sku')->all());
 
+        $this->cartChanged($cart->options->shop_id);
+
         return collect($cart);
     }
 
@@ -157,7 +212,9 @@ class CartRepository extends BaseRepository implements CartContract
      */
     public function deleteCart(string $id)
     {
-        $this->findCartByRowIdOrFail($id);
+        $cart = $this->findCartByRowIdOrFail($id);
+
+        $this->cartChanged($cart->options->shop_id);
 
         return collect($this->cart->remove($id));
     }
@@ -210,6 +267,7 @@ class CartRepository extends BaseRepository implements CartContract
             'price'                 => $product->price_after_discount,
             'qty'                   => $params->get('qty'),
             'options'               => [
+                'shop_id'           => $product->shop_id,
                 'sku'               => $product->sku,
                 'slug'              => $product->slug,
                 'max'               => $max,
@@ -263,11 +321,29 @@ class CartRepository extends BaseRepository implements CartContract
     }
 
     /**
-     * when cart changed call api get shipping fee
+     * trigger session cart change
+     * @param int $shopId
      * @return void
      */
-    public function cartChanged()
+    private function cartChanged(int $shopId)
     {
-        # code...
+        session(["cart_{$shopId}_changed" => true]);
+    }
+
+    /**
+     * calculate shipping fee
+     * @param \App\Models\Shop $shop
+     * @return int
+     */
+    private function calculateShippingFee(Shop $shop, $userAddress, $weight)
+    {
+        return (new GHNService($shop->ghn_shop_id))->calculateShippingFee([
+            // 1: Express , 2: Standard or 3: Saving
+            "service_type_id" => 2,
+            "from_district_id" => intval($shop->ghn_address->district_id),
+            "to_district_id" => intval($userAddress->district_id),
+            "to_ward_code" => $userAddress->ward_code,
+            "weight" => $weight,
+        ])->get('service_fee');
     }
 }

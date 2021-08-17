@@ -22,7 +22,7 @@
         class="text-secondary"
         style="font-size: 13px"
       >
-        Đã đạt đến số lượng mua tối đa cho phép của sản phẩm này.
+        {{ $MESSAGES.REACH_MAX }}
       </span>
     </div>
   </div>
@@ -52,9 +52,9 @@ export default {
   },
 
   mounted() {
-    this.emitter.on("processing:cart", () => (this.isProcessing = true));
+    this.$EMITTER.on("processing:cart", () => (this.isProcessing = true));
 
-    this.emitter.on("processed:cart", () => (this.isProcessing = false));
+    this.$EMITTER.on("processed:cart", () => (this.isProcessing = false));
   },
 };
 </script>

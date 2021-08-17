@@ -41,20 +41,6 @@ export default {
     return { interval: false, time: 100 };
   },
 
-  watch: {
-    valueNumber(valueNumber) {
-      if (valueNumber >= this.max) {
-        this.stop();
-        this.valueNumber = this.max;
-      }
-
-      if (valueNumber <= this.min) {
-        this.stop();
-        this.valueNumber = this.min;
-      }
-    },
-  },
-
   computed: {
     valueNumber: {
       get() {
@@ -62,11 +48,11 @@ export default {
       },
 
       set(valueNumber) {
-        this.$emit("update:modelValue", valueNumber);
+        valueNumber = this.makeNumberCorrect(valueNumber);
 
-        if (valueNumber <= this.min) this.$emit("reach:minimum");
-
-        if (valueNumber >= this.max) this.$emit("reach:max");
+        if (valueNumber != this.modelValue) {
+          this.$emit("update:modelValue", valueNumber);
+        }
       },
     },
   },
@@ -87,6 +73,30 @@ export default {
     stop() {
       clearInterval(this.interval);
       this.interval = false;
+    },
+
+    isMax(value) {
+      return value >= this.max;
+    },
+
+    isMin(value) {
+      return value <= this.min;
+    },
+
+    makeNumberCorrect(value) {
+      if (this.isMax(value) || this.isMin(value)) {
+        const event = this.isMax(value) ? "reach:max" : "reach:minimum";
+
+        value = this.isMax(value) ? this.max : this.min;
+
+        this.stop();
+
+        this.$forceUpdate();
+
+        this.$emit(event);
+      }
+
+      return value;
     },
   },
 };

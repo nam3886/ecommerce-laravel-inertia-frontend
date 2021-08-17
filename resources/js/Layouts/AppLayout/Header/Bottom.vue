@@ -85,7 +85,7 @@
                   >
                     <figure>
                       <img
-                        :src="`${$baseUrl}/images/menu/banner-1.jpg`"
+                        :src="`${$BASE_URL}/images/menu/banner-1.jpg`"
                         alt="Menu banner"
                         width="221"
                         height="330"
@@ -195,7 +195,7 @@
                   >
                     <figure>
                       <img
-                        :src="`${$baseUrl}/images/menu/banner-2.jpg`"
+                        :src="`${$BASE_URL}/images/menu/banner-2.jpg`"
                         alt="Menu banner"
                         width="221"
                         height="330"

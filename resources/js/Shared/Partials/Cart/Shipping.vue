@@ -15,46 +15,31 @@
           <tr class="sumnary-shipping shipping-row-last">
             <td colspan="2">
               <h4 class="summary-subtitle">Tính phí vận chuyển</h4>
-              <ul>
-                <li v-for="delivery in deliveries" :key="delivery.id">
-                  <div class="custom-radio">
-                    <input
-                      type="radio"
-                      :id="`delivery${delivery.id}`"
-                      name="shipping"
-                      class="custom-control-input"
-                    />
-                    <label
-                      :for="`delivery${delivery.id}`"
-                      class="custom-control-label"
-                      style="text-transform: capitalize"
-                    >
-                      {{ delivery.name }}
-                    </label>
-                  </div>
-                </li>
-              </ul>
+              <delivery-method
+                v-model="form.delivery_method_id"
+                :deliveryMethods="deliveryMethods"
+              />
             </td>
           </tr>
         </table>
-        <form @submit.prevent="" class="shipping-address">
+        <form @submit.prevent="calculateShippingFee" class="shipping-address">
           <label>Chuyển đến <strong>VN.</strong></label>
           <div class="select-box">
             <select2
-              v-model="districtId"
+              v-model.number="form.ghn_address.district_id"
               :options="districts"
               data-placeholder="Vui lòng chọn khu vực"
             />
           </div>
           <div class="select-box">
             <select2
-              v-model="wardCode"
+              v-model="form.ghn_address.ward_code"
               :options="wards"
               data-placeholder="Vui lòng chọn phường - xã"
             />
           </div>
           <input
-            v-model.trim="adrress"
+            v-model.trim="form.ghn_address.address"
             type="text"
             class="form-control"
             name="code"
@@ -94,28 +79,31 @@
 import axios from "axios";
 import { Link } from "@inertiajs/inertia-vue3";
 import Select2 from "@/Shared/Inputs/Select/Select2.vue";
+import DeliveryMethod from "@/Shared/Partials/Cart/DeliveryMethod.vue";
 
 export default {
-  components: { Link, Select2 },
+  components: { Link, Select2, DeliveryMethod },
 
-  props: ["cart", "deliveries"],
+  props: ["cart", "deliveryMethods"],
 
   data() {
     return {
       districts: [],
       wards: [],
-      districtId: null,
-      wardCode: null,
-      adrress: null,
+      form: this.$inertia.form({
+        delivery_method_id: null,
+        ghn_address: { address: null, district_id: null, ward_code: null },
+        address: null,
+      }),
     };
   },
 
   watch: {
-    districtId(districtId) {
+    "form.ghn_address.district_id": function (districtId) {
       if (!districtId) return;
 
-      this.wardCode = null;
       this.wards = [];
+      this.form.ghn_address.ward_code = null;
       this.getWards(districtId);
     },
   },
@@ -136,7 +124,20 @@ export default {
       this.wards = response.data.data;
     },
 
-    calculateShippingFee() {},
+    calculateShippingFee() {
+      // get full address
+      const district = this.districts.find((district) => {
+        return district.id == this.form.ghn_address.district_id;
+      }).text;
+
+      const ward = this.wards.find((ward) => {
+        return ward.id == this.form.ghn_address.ward_code;
+      }).text;
+
+      this.form.address = `${this.form.ghn_address.address}, ${ward}, ${district}`;
+      // call api to update user address
+      this.form.post(this.route("user.update_address"));
+    },
   },
 };
 </script>

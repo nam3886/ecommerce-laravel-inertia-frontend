@@ -11,19 +11,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'order_code',
         'user_id',
         'payment_method_id',
         'items_count',
-        'total_price',
         'discount_price',
         'tax_price',
         'subtotal',
         'grandtotal',
-        'order_total',
+        'total',
         'is_paid',
         'transaction_number',
         'bank_tran_number',

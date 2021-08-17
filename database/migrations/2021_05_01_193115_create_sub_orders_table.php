@@ -26,19 +26,17 @@ class CreateSubOrdersTable extends Migration
             $table->unsignedInteger('delivery_fee');
 
             $table->unsignedInteger('items_count');
-            $table->unsignedInteger('total_price');
             $table->unsignedInteger('discount_price');
             $table->unsignedInteger('tax_price');
             $table->unsignedInteger('subtotal');
             $table->unsignedInteger('grandtotal'); // exclude delivery fee
-            $table->unsignedInteger('order_total'); // include delivery fee
+            $table->unsignedInteger('total'); // include delivery fee
 
             $table->string('note')->nullable();
             $table->string('status')->nullable();
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();
-            $table->softDeletes();
 
             $table->foreign('updated_by')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
         });

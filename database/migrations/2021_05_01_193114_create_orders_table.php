@@ -20,12 +20,11 @@ class CreateOrdersTable extends Migration
             $table->foreignId('payment_method_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
 
             $table->unsignedInteger('items_count');
-            $table->unsignedInteger('total_price');
             $table->unsignedInteger('discount_price');
             $table->unsignedInteger('tax_price');
             $table->unsignedInteger('subtotal');
             $table->unsignedInteger('grandtotal'); // exclude delivery fee
-            $table->unsignedInteger('order_total'); // include delivery fee
+            $table->unsignedInteger('total'); // include delivery fee
 
             // $table->unsignedFloat('exchange_rate')->default(1);
             // $table->json('exchange_currency');
@@ -43,7 +42,6 @@ class CreateOrdersTable extends Migration
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();
-            $table->softDeletes();
 
             $table->foreign('updated_by')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
         });

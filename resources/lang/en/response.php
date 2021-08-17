@@ -104,4 +104,13 @@ return [
         ],
     ],
 
+    'user' => [
+        'error' => [
+            'update_address' => 'Error occurred while updating address.',
+        ],
+        'success' => [
+            'update_address' => 'Address updated successfully.',
+        ],
+    ],
+
 ];

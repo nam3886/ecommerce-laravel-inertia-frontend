@@ -74,7 +74,7 @@ export default {
   },
 
   mounted() {
-    this.emitter.on("show-popup:quickview", (product) => {
+    this.$EMITTER.on("show-popup:quickview", (product) => {
       this.show = true;
       // product changed
       product.id !== this.product.id && this.showNewProduct(product);
@@ -92,7 +92,10 @@ export default {
 
     showNewProduct(product) {
       // empty product để template re render và mất đi gallery cũ
+      // reset value
       this.product = {};
+      this.variant = {};
+      this.selectVariants = {};
       this.attributes = [];
       this.variants = [];
 

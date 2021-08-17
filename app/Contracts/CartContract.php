@@ -14,6 +14,11 @@ interface CartContract
     public function listCarts();
 
     /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function listCartsGroupByShop();
+
+    /**
      * @param string $id
      * @return mixed
      */

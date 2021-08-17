@@ -76,13 +76,13 @@
             </h5>
             <figure class="p-relative d-inline-block mb-3">
               <img
-                :src="`${$baseUrl}/images/product/product.jpg`"
+                :src="`${$BASE_URL}/images/product/product.jpg`"
                 width="559"
                 height="370"
                 alt="Product"
               />
               <a
-                :href="`${$baseUrl}/video/memory-of-a-woman.mp4`"
+                :href="`${$BASE_URL}/video/memory-of-a-woman.mp4`"
                 class="btn-play btn-iframe"
               >
                 <i class="d-icon-play-solid"></i>
@@ -136,7 +136,7 @@
       <div class="tab-pane" id="product-tab-size-guide">
         <figure class="size-image mt-4 mb-4">
           <img
-            :src="`${$baseUrl}/images/product/size_guide.png`"
+            :src="`${$BASE_URL}/images/product/size_guide.png`"
             alt="Size Guide Image"
             width="217"
             height="398"
@@ -201,7 +201,7 @@
                 <figure class="comment-media">
                   <a href="#">
                     <img
-                      :src="`${$baseUrl}/images/blog/comments/1.jpg`"
+                      :src="`${$BASE_URL}/images/blog/comments/1.jpg`"
                       alt="avatar"
                     />
                   </a>
@@ -237,7 +237,7 @@
                 <figure class="comment-media">
                   <a href="#">
                     <img
-                      :src="`${$baseUrl}/images/blog/comments/2.jpg`"
+                      :src="`${$BASE_URL}/images/blog/comments/2.jpg`"
                       alt="avatar"
                     />
                   </a>

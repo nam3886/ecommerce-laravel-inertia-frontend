@@ -23,7 +23,7 @@ export default {
   methods: {
     preAddCart() {
       if (this._product.has_variants) {
-        this.emitter.emit("show-popup:quickview", this._product);
+        this.$EMITTER.emit("show-popup:quickview", this._product);
       } else {
         this.product = this._product;
 

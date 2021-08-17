@@ -27,7 +27,6 @@ Route::as('api.')->group(function () {
 
     Route::get('attribute/{productId}', [ProductController::class, 'showAttributes'])->name('attribute.show');
 
-
     Route::prefix('location')->as('location.')->group(function () {
         Route::get('district', [ShippingController::class, 'getDistricts'])->name('district');
         Route::get('ward/{districtId}', [ShippingController::class, 'getWards'])->name('ward');

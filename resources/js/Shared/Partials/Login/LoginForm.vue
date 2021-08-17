@@ -91,7 +91,7 @@ export default {
         }))
         .post(this.route("login"), {
           onFinish: () => this.form.reset("password"),
-          onSuccess: () => this.emitter.emit("hide-popup:login"),
+          onSuccess: () => this.$EMITTER.emit("hide-popup:login"),
         });
     },
   },

@@ -10,9 +10,8 @@ export default {
   data() {
     return {
       variant: {},
-      selectVariants: {},
-      // get on $page props
       product: {},
+      selectVariants: {},
       // get by call api
       attributes: [],
       variants: [],
@@ -165,7 +164,7 @@ export default {
       let message;
 
       if (this.allInCart) {
-        message = `Bạn đã có ${this.allInCart.qty} sản phẩm trong giỏ hàng. Không thể thêm số lượng đã chọn vào giỏ hàng vì sẽ vượt quá giới hạn mua hàng của bạn.`;
+        message = this.$MESSAGES.ALL_IN_CART(this.allInCart.qty);
       } else if (quantity > this.availableQuantity) {
         message = `Số lượng không vượt quá ${this.availableQuantity}.`;
       } else if (this.product.has_variants && isEmpty(this.variant)) {

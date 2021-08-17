@@ -37,14 +37,14 @@ export default {
     store(id, qty, sku, callback) {
       Object.assign(this.form, { id, qty, sku });
 
-      this.emitter.emit("processing:cart");
+      this.$EMITTER.emit("processing:cart");
 
       this.form.post(this.route("cart.store"), {
         preserveScroll: true,
         onError: this.handleCartError,
-        onFinish: () => this.emitter.emit("processed:cart"),
+        onFinish: () => this.$EMITTER.emit("processed:cart"),
         onSuccess: () => {
-          this.emitter.emit("add-cart:success");
+          this.$EMITTER.emit("add-cart:success");
           typeof callback === "function" && callback();
         },
       });
@@ -53,28 +53,28 @@ export default {
     update(rowId, qty, callback) {
       Object.assign(this.form, { rowId, qty });
 
-      this.emitter.emit("processing:cart");
+      this.$EMITTER.emit("processing:cart");
 
       this.form.put(this.route("cart.update", rowId), {
         preserveScroll: true,
         onError: this.handleCartError,
-        onFinish: () => this.emitter.emit("processed:cart"),
+        onFinish: () => this.$EMITTER.emit("processed:cart"),
         onSuccess: () => {
-          this.emitter.emit("update-cart:success");
+          this.$EMITTER.emit("update-cart:success");
           typeof callback === "function" && callback();
         },
       });
     },
 
     destroy(rowId, callback) {
-      this.emitter.emit("processing:cart");
+      this.$EMITTER.emit("processing:cart");
 
       this.form.delete(this.route("cart.destroy", rowId), {
         preserveScroll: true,
         onError: this.handleCartError,
-        onFinish: () => this.emitter.emit("processed:cart"),
+        onFinish: () => this.$EMITTER.emit("processed:cart"),
         onSuccess: () => {
-          this.emitter.emit("destroy-cart:success");
+          this.$EMITTER.emit("destroy-cart:success");
           typeof callback === "function" && callback();
         },
       });
@@ -89,7 +89,7 @@ export default {
     },
 
     showMiniPopupAddedCart(cart, quantity) {
-      this.emitter.emit("show-popup:added-cart", { cart, quantity });
+      this.$EMITTER.emit("show-popup:added-cart", { cart, quantity });
     },
   },
 };

@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -43,3 +44,5 @@ Route::get('product/{product:slug}', [ProductController::class, 'show'])->name('
 Route::resource('cart', CartController::class);
 
 Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+
+Route::post('auth/update-address', [UserController::class, 'updateAddress'])->name('user.update_address');

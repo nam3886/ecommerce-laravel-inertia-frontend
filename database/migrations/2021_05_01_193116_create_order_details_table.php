@@ -23,7 +23,6 @@ class CreateOrderDetailsTable extends Migration
             $table->unsignedInteger('quantity');
             $table->unsignedBigInteger('price');
             $table->timestamps();
-            $table->softDeletes();
 
             $table->foreign('sku')->references('sku')->on('variants')->cascadeOnUpdate()->cascadeOnDelete();
         });

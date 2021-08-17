@@ -6,7 +6,7 @@
           <div class="col-lg-3">
             <a href="demo1.html" class="logo-footer">
               <img
-                :src="`${$baseUrl}/images/logo-footer.png`"
+                :src="`${$BASE_URL}/images/logo-footer.png`"
                 alt="logo-footer"
                 width="154"
                 height="43"
@@ -145,7 +145,7 @@
         <div class="footer-left">
           <figure class="payment">
             <img
-              :src="`${$baseUrl}/images/payment.png`"
+              :src="`${$BASE_URL}/images/payment.png`"
               alt="payment"
               width="159"
               height="29"
@@ -182,35 +182,35 @@ export default {
     return {
       images: [
         {
-          url: `${this.$baseUrl}/images/instagram/01.jpg`,
+          url: `${this.$BASE_URL}/images/instagram/01.jpg`,
           name: "instagram 1",
         },
         {
-          url: `${this.$baseUrl}/images/instagram/02.jpg`,
+          url: `${this.$BASE_URL}/images/instagram/02.jpg`,
           name: "instagram 2",
         },
         {
-          url: `${this.$baseUrl}/images/instagram/03.jpg`,
+          url: `${this.$BASE_URL}/images/instagram/03.jpg`,
           name: "instagram 3",
         },
         {
-          url: `${this.$baseUrl}/images/instagram/04.jpg`,
+          url: `${this.$BASE_URL}/images/instagram/04.jpg`,
           name: "instagram 4",
         },
         {
-          url: `${this.$baseUrl}/images/instagram/05.jpg`,
+          url: `${this.$BASE_URL}/images/instagram/05.jpg`,
           name: "instagram 5",
         },
         {
-          url: `${this.$baseUrl}/images/instagram/06.jpg`,
+          url: `${this.$BASE_URL}/images/instagram/06.jpg`,
           name: "instagram 6",
         },
         {
-          url: `${this.$baseUrl}/images/instagram/07.jpg`,
+          url: `${this.$BASE_URL}/images/instagram/07.jpg`,
           name: "instagram 7",
         },
         {
-          url: `${this.$baseUrl}/images/instagram/08.jpg`,
+          url: `${this.$BASE_URL}/images/instagram/08.jpg`,
           name: "instagram 8",
         },
       ],

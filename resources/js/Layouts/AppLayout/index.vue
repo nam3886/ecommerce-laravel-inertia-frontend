@@ -28,7 +28,7 @@
       <link
         rel="icon"
         type="image/png"
-        :href="$baseUrl + '/images/icons/favicon.png'"
+        :href="$BASE_URL + '/images/icons/favicon.png'"
       />
     </Head>
   </div>
@@ -68,11 +68,11 @@ export default {
     this.initRiode();
 
     Inertia.on("finish", (event) => {
-      this.emitter.emit("inertia-finish", event);
+      this.$EMITTER.emit("inertia-finish", event);
       this.initRiode();
     });
 
-    setInterval(() => this.emitter.emit("show-popup:purchased", {}), 60000);
+    setInterval(() => this.$EMITTER.emit("show-popup:purchased", {}), 60000);
   },
 
   methods: {

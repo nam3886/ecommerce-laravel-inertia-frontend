@@ -35,7 +35,7 @@
         <!-- guest -->
         <a
           v-if="!isLogged"
-          @click.prevent="emitter.emit('show-popup:login', 'login')"
+          @click.prevent="$EMITTER.emit('show-popup:login', 'login')"
           :href="route('login')"
           data-toggle="login-modal"
           class="login-link"
@@ -45,7 +45,7 @@
         <span v-if="!isLogged" class="delimiter">/</span>
         <a
           v-if="!isLogged"
-          @click.prevent="emitter.emit('show-popup:login', 'register')"
+          @click.prevent="$EMITTER.emit('show-popup:login', 'register')"
           :href="route('login')"
           data-toggle="login-modal"
           class="register-link ml-0"

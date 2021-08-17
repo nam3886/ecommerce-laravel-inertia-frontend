@@ -44,12 +44,12 @@ export default {
   },
 
   mounted() {
-    this.emitter.on("show-popup:login", (selector) => {
+    this.$EMITTER.on("show-popup:login", (selector) => {
       this.show = true;
       wait().then(() => $(`.login-popup a[href="#${selector}"]`).click());
     });
 
-    this.emitter.on("hide-popup:login", () => (this.show = false));
+    this.$EMITTER.on("hide-popup:login", () => (this.show = false));
   },
 
   methods: {

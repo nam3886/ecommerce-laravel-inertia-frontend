@@ -38,7 +38,7 @@ export default {
   },
 
   mounted() {
-    this.emitter.on("show-popup:added-cart", ({ cart, quantity }) => {
+    this.$EMITTER.on("show-popup:added-cart", ({ cart, quantity }) => {
       wait().then(this.close);
 
       wait(300).then(() => {
@@ -52,7 +52,7 @@ export default {
       });
     });
 
-    this.emitter.on("show-popup:purchased", ({ cart }) => {
+    this.$EMITTER.on("show-popup:purchased", ({ cart }) => {
       wait().then(this.close);
 
       wait(300).then(() => {

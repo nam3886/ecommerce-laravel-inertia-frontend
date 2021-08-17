@@ -93,7 +93,7 @@ export default {
     submit() {
       this.form.post(this.route("register"), {
         onFinish: () => this.form.reset("password", "password_confirmation"),
-        onSuccess: () => this.emitter.emit("hide-popup:login"),
+        onSuccess: () => this.$EMITTER.emit("hide-popup:login"),
       });
     },
   },

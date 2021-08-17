@@ -21,7 +21,7 @@ export default {
   mounted() {
     this.isHome = route().current("home");
 
-    this.emitter.on("inertia-finish", () => {
+    this.$EMITTER.on("inertia-finish", () => {
       this.isHome = route().current("home");
     });
   },

@@ -10,9 +10,10 @@ class GHNService
     private $shopId;
     private string $url = 'https://dev-online-gateway.ghn.vn/shiip/public-api';
 
-    public function __construct()
+    public function __construct(int $shopId = null)
     {
         $this->token = config('third_party.ghn_secret_id');
+        $this->shopId = $shopId;
     }
 
     /**
@@ -27,6 +28,7 @@ class GHNService
     }
 
     /**
+     * @param mixed $response
      * @return \Illuminate\Support\Collection
      */
     private function handleResponse($response)
@@ -59,11 +61,23 @@ class GHNService
     }
 
     /**
+     * @param int $districtId
      * @return \Illuminate\Support\Collection
      */
     public function getWards(int $districtId)
     {
         $response = $this->client()->get("{$this->url}/master-data/ward?district_id={$districtId}");
+
+        return $this->handleResponse($response);
+    }
+
+    /**
+     * @param array $params
+     * @return \Illuminate\Support\Collection
+     */
+    public function calculateShippingFee(array $params)
+    {
+        $response = $this->client()->post("{$this->url}/v2/shipping-order/fee", $params);
 
         return $this->handleResponse($response);
     }
