@@ -9,83 +9,10 @@
             class="alert alert-light alert-primary alert-icon mb-4 card-header"
           >
             <i class="fas fa-exclamation-circle"></i>
-            <span class="text-body">Returning customer?</span>
-            <a href="#alert-body1" class="text-primary collapse"
-              >Click here to login</a
-            >
-          </div>
-          <div class="alert-body collapsed" id="alert-body1">
-            <p>
-              If you have shopped with us before, please enter your details
-              below. If you are a new customer, please proceed to the Billing
-              section.
-            </p>
-            <div class="row cols-md-2">
-              <form class="mb-4 mb-md-0">
-                <label for="username">Username Or Email *</label>
-                <input
-                  type="text"
-                  class="input-text form-control mb-0"
-                  name="username"
-                  id="username"
-                  autocomplete="username"
-                />
-              </form>
-              <form class="mb-4 mb-md-0">
-                <label for="password">Password *</label>
-                <input
-                  class="input-text form-control mb-0"
-                  type="password"
-                  name="password"
-                  id="password"
-                  autocomplete="current-password"
-                />
-              </form>
-            </div>
-            <div
-              class="checkbox d-flex align-items-center justify-content-between"
-            >
-              <div class="form-checkbox pt-0 mb-0">
-                <input
-                  type="checkbox"
-                  class="custom-checkbox"
-                  id="signin-remember"
-                  name="signin-remember"
-                />
-                <label class="form-control-label" for="signin-remember"
-                  >Remember Me</label
-                >
-              </div>
-              <a href="#" class="lost-link">Lost your password?</a>
-            </div>
-            <div class="link-group">
-              <a href="#" class="btn btn-dark btn-rounded mb-4">Login</a>
-              <span class="d-inline-block text-body font-weight-semi-bold"
-                >or Login With</span
-              >
-              <div class="social-links mb-4">
-                <a href="#" class="social-link social-google fab fa-google"></a>
-                <a
-                  href="#"
-                  class="social-link social-facebook fab fa-facebook-f"
-                ></a>
-                <a
-                  href="#"
-                  class="social-link social-twitter fab fa-twitter"
-                ></a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card accordion">
-          <div
-            class="alert alert-light alert-primary alert-icon mb-4 card-header"
-          >
-            <i class="fas fa-exclamation-circle"></i>
-            <span class="text-body">Have a coupon?</span>
-            <a href="#alert-body2" class="text-primary"
-              >Click here to enter your code</a
-            >
+            <span class="text-body">Have a coupon?</span>&nbsp;
+            <a href="#alert-body2" class="text-primary">
+              Click here to enter your code
+            </a>
           </div>
           <div class="alert-body mb-4 collapsed" id="alert-body2">
             <p>If you have a coupon code, please apply it below.</p>
@@ -386,23 +313,32 @@
                       </div>
                     </div>
                   </div>
+                  <div class="payment accordion radio-type">
+                    <h4 class="summary-subtitle ls-m pb-3">
+                      Địa chỉ nhận hàng
+                    </h4>
+                    <div class="card">
+                      <div class="card-body ls-m pl-0">
+                        Nguyễn Phương Nam (+84) 973366072 75b, đường số 2,
+                        Phường Hiệp Bình Phước, Thành Phố Thủ Đức, TP. Hồ Chí
+                        Minh
+                      </div>
+                    </div>
+                  </div>
                   <div class="form-checkbox mt-4 mb-5">
-                    <input
-                      type="checkbox"
-                      class="custom-checkbox"
-                      id="terms-condition"
-                      name="terms-condition"
-                    />
-                    <label class="form-control-label" for="terms-condition">
-                      I have read and agree to the website
-                      <a href="#">terms and conditions </a>*
+                    <label
+                      class="form-control-label pl-0"
+                      for="terms-condition"
+                    >
+                      Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo
+                      <a href="#">Điều khoản Skinest </a>*
                     </label>
                   </div>
                   <button
                     type="submit"
                     class="btn btn-dark btn-rounded btn-order"
                   >
-                    Place Order
+                    Đặt hàng
                   </button>
                 </div>
               </div>

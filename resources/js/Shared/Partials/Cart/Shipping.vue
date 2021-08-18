@@ -76,6 +76,7 @@
 </template>
 
 <script>
+import isEmpty from "lodash-es/isEmpty";
 import axios from "axios";
 import { Link } from "@inertiajs/inertia-vue3";
 import Select2 from "@/Shared/Inputs/Select/Select2.vue";
@@ -102,9 +103,15 @@ export default {
     "form.ghn_address.district_id": function (districtId) {
       if (!districtId) return;
 
-      this.wards = [];
-      this.form.ghn_address.ward_code = null;
-      this.getWards(districtId);
+      if (!isEmpty(this.wards)) this.wards = [];
+
+      this.getWards(districtId).then((wards) => {
+        this.wards = wards;
+
+        let exists = wards.find((w) => w.id == this.form.ghn_address.ward_code);
+
+        if (!exists) this.form.ghn_address.ward_code = null;
+      });
     },
   },
 
@@ -115,13 +122,23 @@ export default {
     this.districts = response.data.data;
   },
 
+  mounted() {
+    const address = this.$page.props.user?.address;
+
+    if (!address) return;
+
+    this.form.delivery_method_id = address.delivery_method_id;
+    this.form.ghn_address = { ...address.ghn_address };
+    this.form.address = address.address;
+  },
+
   methods: {
     async getWards(districtId) {
       const url = this.route("api.location.ward", districtId);
 
       const response = await axios.get(url);
 
-      this.wards = response.data.data;
+      return new Promise((resolve) => resolve(response.data.data));
     },
 
     calculateShippingFee() {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\BaseController;
+use App\Models\Shop;
 use App\Services\GHN\GHNService;
 use Illuminate\Http\Request;
 
@@ -23,22 +24,24 @@ class ShippingController extends BaseController
     public function getDistricts()
     {
         try {
-            $provinces = $this->ghnService->getProvinces();
+            $districts = cache()->rememberForever("districts", function () {
+                $provinces = $this->ghnService->getProvinces();
 
-            $districts = $this->ghnService->getDistricts();
-            // format for frontend
-            $districts = $districts->reduce(function ($carry, $item) use ($provinces) {
-                if ($item->SupportType !== 3) return $carry;
+                $districts = $this->ghnService->getDistricts();
+                // format for frontend
+                return $districts->reduce(function ($carry, $item) use ($provinces) {
+                    if ($item->SupportType !== 3) return $carry;
 
-                $text = $provinces->where('ProvinceID', $item->ProvinceID)->first()->ProvinceName ?? 'undefined';
+                    $text = $provinces->where('ProvinceID', $item->ProvinceID)->first()->ProvinceName ?? 'undefined';
 
-                array_push($carry, [
-                    'id' => $item->DistrictID,
-                    'text' => $item->DistrictName . ' - ' . $text,
-                ]);
+                    array_push($carry, [
+                        'id' => $item->DistrictID,
+                        'text' => $item->DistrictName . ' - ' . $text,
+                    ]);
 
-                return $carry;
-            }, []);
+                    return $carry;
+                }, []);
+            });
         } catch (\Throwable $th) {
             return $this->responseJson(message: $th->getMessage(), responseCode: $th->getCode());
         }
@@ -54,18 +57,20 @@ class ShippingController extends BaseController
     public function getWards(int $districtId)
     {
         try {
-            $wards = $this->ghnService->getWards($districtId);
-            // format for frontend
-            $wards = $wards->reduce(function ($carry, $item) {
-                if ($item->SupportType !== 3) return $carry;
+            $wards = cache()->rememberForever("{$districtId}_ward", function () use ($districtId) {
+                $wards = $this->ghnService->getWards($districtId);
+                // format for frontend
+                return $wards->reduce(function ($carry, $item) {
+                    if ($item->SupportType !== 3) return $carry;
 
-                array_push($carry, [
-                    'id' => $item->WardCode,
-                    'text' => $item->WardName,
-                ]);
+                    array_push($carry, [
+                        'id' => $item->WardCode,
+                        'text' => $item->WardName,
+                    ]);
 
-                return $carry;
-            }, []);
+                    return $carry;
+                }, []);
+            });
         } catch (\Throwable $th) {
             return $this->responseJson(message: $th->getMessage(), responseCode: $th->getCode());
         }

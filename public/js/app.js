@@ -22036,7 +22036,7 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         id: 3,
         text: "Order Complete",
-        route: "checkout.index"
+        route: "order"
       }]
     };
   }
@@ -22183,6 +22183,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["modelValue", "options"],
+  emits: ["update:modelValue", "update:options", "unselect"],
   computed: {
     isMultiple: function isMultiple() {
       return this.$attrs.multiple;
@@ -22268,7 +22269,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["deliveryMethods"],
+  props: ["deliveryMethods", "modelValue"],
   emits: ["update:modelValue"]
 });
 
@@ -22303,7 +22304,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     updateQuantity: (0,lodash_es_debounce__WEBPACK_IMPORTED_MODULE_3__.default)(function (newQuatity, item) {
       this.update(item.rowId, newQuatity);
-    }, 500)
+    }, 300)
   }
 });
 
@@ -22322,16 +22323,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var lodash_es_isEmpty__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash-es/isEmpty */ "./node_modules/lodash-es/isEmpty.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
 /* harmony import */ var _Shared_Inputs_Select_Select2_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Shared/Inputs/Select/Select2.vue */ "./resources/js/Shared/Inputs/Select/Select2.vue");
 /* harmony import */ var _Shared_Partials_Cart_DeliveryMethod_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Shared/Partials/Cart/DeliveryMethod.vue */ "./resources/js/Shared/Partials/Cart/DeliveryMethod.vue");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -22361,14 +22370,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   watch: {
     "form.ghn_address.district_id": function formGhn_addressDistrict_id(districtId) {
+      var _this = this;
+
       if (!districtId) return;
-      this.wards = [];
-      this.form.ghn_address.ward_code = null;
-      this.getWards(districtId);
+      if (!(0,lodash_es_isEmpty__WEBPACK_IMPORTED_MODULE_5__.default)(this.wards)) this.wards = [];
+      this.getWards(districtId).then(function (wards) {
+        _this.wards = wards;
+        var exists = wards.find(function (w) {
+          return w.id == _this.form.ghn_address.ward_code;
+        });
+        if (!exists) _this.form.ghn_address.ward_code = null;
+      });
     }
   },
   created: function created() {
-    var _this = this;
+    var _this2 = this;
 
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       var response;
@@ -22377,11 +22393,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return axios__WEBPACK_IMPORTED_MODULE_1___default().get(_this.route("api.location.district"));
+              return axios__WEBPACK_IMPORTED_MODULE_1___default().get(_this2.route("api.location.district"));
 
             case 2:
               response = _context.sent;
-              _this.districts = response.data.data;
+              _this2.districts = response.data.data;
 
             case 4:
             case "end":
@@ -22391,9 +22407,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee);
     }))();
   },
+  mounted: function mounted() {
+    var _this$$page$props$use;
+
+    var address = (_this$$page$props$use = this.$page.props.user) === null || _this$$page$props$use === void 0 ? void 0 : _this$$page$props$use.address;
+    if (!address) return;
+    this.form.delivery_method_id = address.delivery_method_id;
+    this.form.ghn_address = _objectSpread({}, address.ghn_address);
+    this.form.address = address.address;
+  },
   methods: {
     getWards: function getWards(districtId) {
-      var _this2 = this;
+      var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
         var url, response;
@@ -22401,13 +22426,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                url = _this2.route("api.location.ward", districtId);
+                url = _this3.route("api.location.ward", districtId);
                 _context2.next = 3;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default().get(url);
 
               case 3:
                 response = _context2.sent;
-                _this2.wards = response.data.data;
+                return _context2.abrupt("return", new Promise(function (resolve) {
+                  return resolve(response.data.data);
+                }));
 
               case 5:
               case "end":
@@ -22418,14 +22445,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     calculateShippingFee: function calculateShippingFee() {
-      var _this3 = this;
+      var _this4 = this;
 
       // get full address
       var district = this.districts.find(function (district) {
-        return district.id == _this3.form.ghn_address.district_id;
+        return district.id == _this4.form.ghn_address.district_id;
       }).text;
       var ward = this.wards.find(function (ward) {
-        return ward.id == _this3.form.ghn_address.ward_code;
+        return ward.id == _this4.form.ghn_address.ward_code;
       }).text;
       this.form.address = "".concat(this.form.ghn_address.address, ", ").concat(ward, ", ").concat(district); // call api to update user address
 
@@ -27681,7 +27708,7 @@ var _hoisted_2 = {
   "class": "page-content pt-7 pb-10 mb-10"
 };
 
-var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"container mt-7\"><div class=\"card accordion\"><div class=\"alert alert-light alert-primary alert-icon mb-4 card-header\"><i class=\"fas fa-exclamation-circle\"></i><span class=\"text-body\">Returning customer?</span><a href=\"#alert-body1\" class=\"text-primary collapse\">Click here to login</a></div><div class=\"alert-body collapsed\" id=\"alert-body1\"><p> If you have shopped with us before, please enter your details below. If you are a new customer, please proceed to the Billing section. </p><div class=\"row cols-md-2\"><form class=\"mb-4 mb-md-0\"><label for=\"username\">Username Or Email *</label><input type=\"text\" class=\"input-text form-control mb-0\" name=\"username\" id=\"username\" autocomplete=\"username\"></form><form class=\"mb-4 mb-md-0\"><label for=\"password\">Password *</label><input class=\"input-text form-control mb-0\" type=\"password\" name=\"password\" id=\"password\" autocomplete=\"current-password\"></form></div><div class=\"checkbox d-flex align-items-center justify-content-between\"><div class=\"form-checkbox pt-0 mb-0\"><input type=\"checkbox\" class=\"custom-checkbox\" id=\"signin-remember\" name=\"signin-remember\"><label class=\"form-control-label\" for=\"signin-remember\">Remember Me</label></div><a href=\"#\" class=\"lost-link\">Lost your password?</a></div><div class=\"link-group\"><a href=\"#\" class=\"btn btn-dark btn-rounded mb-4\">Login</a><span class=\"d-inline-block text-body font-weight-semi-bold\">or Login With</span><div class=\"social-links mb-4\"><a href=\"#\" class=\"social-link social-google fab fa-google\"></a><a href=\"#\" class=\"social-link social-facebook fab fa-facebook-f\"></a><a href=\"#\" class=\"social-link social-twitter fab fa-twitter\"></a></div></div></div></div><div class=\"card accordion\"><div class=\"alert alert-light alert-primary alert-icon mb-4 card-header\"><i class=\"fas fa-exclamation-circle\"></i><span class=\"text-body\">Have a coupon?</span><a href=\"#alert-body2\" class=\"text-primary\">Click here to enter your code</a></div><div class=\"alert-body mb-4 collapsed\" id=\"alert-body2\"><p>If you have a coupon code, please apply it below.</p><div class=\"check-coupon-box d-flex\"><input type=\"text\" name=\"coupon_code\" class=\"input-text form-control text-grey ls-m mr-4\" id=\"coupon_code\" value=\"\" placeholder=\"Coupon code\"><button type=\"submit\" class=\"btn btn-dark btn-rounded btn-outline\"> Apply Coupon </button></div></div></div><form action=\"#\" class=\"form\"><div class=\"row\"><div class=\"col-lg-7 mb-6 mb-lg-0 pr-lg-4\"><h3 class=\"title title-simple text-left text-uppercase\"> Billing Details </h3><div class=\"row\"><div class=\"col-xs-6\"><label>First Name *</label><input type=\"text\" class=\"form-control\" name=\"first-name\" required=\"\"></div><div class=\"col-xs-6\"><label>Last Name *</label><input type=\"text\" class=\"form-control\" name=\"last-name\" required=\"\"></div></div><label>Company Name (Optional)</label><input type=\"text\" class=\"form-control\" name=\"company-name\" required=\"\"><label>Country / Region *</label><div class=\"select-box\"><select name=\"country\" class=\"form-control\"><option value=\"us\" selected>United States (US)</option><option value=\"uk\">United Kingdom</option><option value=\"fr\">France</option><option value=\"aus\">Austria</option></select></div><label>Street Address *</label><input type=\"text\" class=\"form-control\" name=\"address1\" required=\"\" placeholder=\"House number and street name\"><input type=\"text\" class=\"form-control\" name=\"address2\" required=\"\" placeholder=\"Apartment, suite, unit, etc. (optional)\"><div class=\"row\"><div class=\"col-xs-6\"><label>Town / City *</label><input type=\"text\" class=\"form-control\" name=\"city\" required=\"\"></div><div class=\"col-xs-6\"><label>State *</label><input type=\"text\" class=\"form-control\" name=\"state\" required=\"\"></div></div><div class=\"row\"><div class=\"col-xs-6\"><label>ZIP *</label><input type=\"text\" class=\"form-control\" name=\"zip\" required=\"\"></div><div class=\"col-xs-6\"><label>Phone *</label><input type=\"text\" class=\"form-control\" name=\"phone\" required=\"\"></div></div><label>Email Address *</label><input type=\"text\" class=\"form-control\" name=\"email-address\" required=\"\"><div class=\"form-checkbox mb-0\"><input type=\"checkbox\" class=\"custom-checkbox\" id=\"create-account\" name=\"create-account\"><label class=\"form-control-label ls-s\" for=\"create-account\">Create an account?</label></div><div class=\"form-checkbox mb-6\"><input type=\"checkbox\" class=\"custom-checkbox\" id=\"different-address\" name=\"different-address\"><label class=\"form-control-label ls-s\" for=\"different-address\">Ship to a different address?</label></div><h2 class=\"title title-simple text-uppercase text-left\"> Additional Information </h2><label>Order Notes (Optional)</label><textarea class=\"form-control pb-2 pt-2 mb-0\" cols=\"30\" rows=\"5\" placeholder=\"Notes about your order, e.g. special notes for delivery\"></textarea></div><aside class=\"col-lg-5 sticky-sidebar-wrapper\"><div class=\"sticky-sidebar mt-1\" data-sticky-options=\"{&#39;bottom&#39;: 50}\"><div class=\"summary pt-5\"><h3 class=\"title title-simple text-left text-uppercase\"> Your Order </h3><table class=\"order-table\"><thead><tr><th>Product</th><th></th></tr></thead><tbody><tr><td class=\"product-name\"> Fashionable Overnight Bag <span class=\"product-quantity\">× 1</span></td><td class=\"product-total text-body\">$110.00</td></tr><tr><td class=\"product-name\"> Mackintosh Poket backpack <span class=\"product-quantity\">× 1</span></td><td class=\"product-total text-body\">$180.00</td></tr><tr class=\"summary-subtotal\"><td><h4 class=\"summary-subtitle\">Subtotal</h4></td><td class=\"summary-subtotal-price pb-0 pt-0\"> $290.00 </td></tr><tr class=\"sumnary-shipping shipping-row-last\"><td colspan=\"2\"><h4 class=\"summary-subtitle\">Calculate Shipping</h4><ul><li><div class=\"custom-radio\"><input type=\"radio\" id=\"flat_rate\" name=\"shipping\" class=\"custom-control-input\" checked><label class=\"custom-control-label\" for=\"flat_rate\">Flat rate</label></div></li><li><div class=\"custom-radio\"><input type=\"radio\" id=\"free-shipping\" name=\"shipping\" class=\"custom-control-input\"><label class=\"custom-control-label\" for=\"free-shipping\">Free shipping</label></div></li><li><div class=\"custom-radio\"><input type=\"radio\" id=\"local_pickup\" name=\"shipping\" class=\"custom-control-input\"><label class=\"custom-control-label\" for=\"local_pickup\">Local pickup</label></div></li></ul></td></tr><tr class=\"summary-total\"><td class=\"pb-0\"><h4 class=\"summary-subtitle\">Total</h4></td><td class=\"pt-0 pb-0\"><p class=\"summary-total-price ls-s text-primary\"> $290.00 </p></td></tr></tbody></table><div class=\"payment accordion radio-type\"><h4 class=\"summary-subtitle ls-m pb-3\">Payment Methods</h4><div class=\"card\"><div class=\"card-header\"><a href=\"#collapse1\" class=\"collapse text-body text-normal ls-m\">Check payments </a></div><div id=\"collapse1\" class=\"expanded\" style=\"display:block;\"><div class=\"card-body ls-m\"> Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode. </div></div></div><div class=\"card\"><div class=\"card-header\"><a href=\"#collapse2\" class=\"expand text-body text-normal ls-m\">Cash on delivery</a></div><div id=\"collapse2\" class=\"collapsed\"><div class=\"card-body ls-m\"> Pay with cash upon delivery. </div></div></div></div><div class=\"form-checkbox mt-4 mb-5\"><input type=\"checkbox\" class=\"custom-checkbox\" id=\"terms-condition\" name=\"terms-condition\"><label class=\"form-control-label\" for=\"terms-condition\"> I have read and agree to the website <a href=\"#\">terms and conditions </a>* </label></div><button type=\"submit\" class=\"btn btn-dark btn-rounded btn-order\"> Place Order </button></div></div></aside></div></form></div>", 1);
+var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"container mt-7\"><div class=\"card accordion\"><div class=\"alert alert-light alert-primary alert-icon mb-4 card-header\"><i class=\"fas fa-exclamation-circle\"></i><span class=\"text-body\">Have a coupon?</span>  <a href=\"#alert-body2\" class=\"text-primary\"> Click here to enter your code </a></div><div class=\"alert-body mb-4 collapsed\" id=\"alert-body2\"><p>If you have a coupon code, please apply it below.</p><div class=\"check-coupon-box d-flex\"><input type=\"text\" name=\"coupon_code\" class=\"input-text form-control text-grey ls-m mr-4\" id=\"coupon_code\" value=\"\" placeholder=\"Coupon code\"><button type=\"submit\" class=\"btn btn-dark btn-rounded btn-outline\"> Apply Coupon </button></div></div></div><form action=\"#\" class=\"form\"><div class=\"row\"><div class=\"col-lg-7 mb-6 mb-lg-0 pr-lg-4\"><h3 class=\"title title-simple text-left text-uppercase\"> Billing Details </h3><div class=\"row\"><div class=\"col-xs-6\"><label>First Name *</label><input type=\"text\" class=\"form-control\" name=\"first-name\" required=\"\"></div><div class=\"col-xs-6\"><label>Last Name *</label><input type=\"text\" class=\"form-control\" name=\"last-name\" required=\"\"></div></div><label>Company Name (Optional)</label><input type=\"text\" class=\"form-control\" name=\"company-name\" required=\"\"><label>Country / Region *</label><div class=\"select-box\"><select name=\"country\" class=\"form-control\"><option value=\"us\" selected>United States (US)</option><option value=\"uk\">United Kingdom</option><option value=\"fr\">France</option><option value=\"aus\">Austria</option></select></div><label>Street Address *</label><input type=\"text\" class=\"form-control\" name=\"address1\" required=\"\" placeholder=\"House number and street name\"><input type=\"text\" class=\"form-control\" name=\"address2\" required=\"\" placeholder=\"Apartment, suite, unit, etc. (optional)\"><div class=\"row\"><div class=\"col-xs-6\"><label>Town / City *</label><input type=\"text\" class=\"form-control\" name=\"city\" required=\"\"></div><div class=\"col-xs-6\"><label>State *</label><input type=\"text\" class=\"form-control\" name=\"state\" required=\"\"></div></div><div class=\"row\"><div class=\"col-xs-6\"><label>ZIP *</label><input type=\"text\" class=\"form-control\" name=\"zip\" required=\"\"></div><div class=\"col-xs-6\"><label>Phone *</label><input type=\"text\" class=\"form-control\" name=\"phone\" required=\"\"></div></div><label>Email Address *</label><input type=\"text\" class=\"form-control\" name=\"email-address\" required=\"\"><div class=\"form-checkbox mb-0\"><input type=\"checkbox\" class=\"custom-checkbox\" id=\"create-account\" name=\"create-account\"><label class=\"form-control-label ls-s\" for=\"create-account\">Create an account?</label></div><div class=\"form-checkbox mb-6\"><input type=\"checkbox\" class=\"custom-checkbox\" id=\"different-address\" name=\"different-address\"><label class=\"form-control-label ls-s\" for=\"different-address\">Ship to a different address?</label></div><h2 class=\"title title-simple text-uppercase text-left\"> Additional Information </h2><label>Order Notes (Optional)</label><textarea class=\"form-control pb-2 pt-2 mb-0\" cols=\"30\" rows=\"5\" placeholder=\"Notes about your order, e.g. special notes for delivery\"></textarea></div><aside class=\"col-lg-5 sticky-sidebar-wrapper\"><div class=\"sticky-sidebar mt-1\" data-sticky-options=\"{&#39;bottom&#39;: 50}\"><div class=\"summary pt-5\"><h3 class=\"title title-simple text-left text-uppercase\"> Your Order </h3><table class=\"order-table\"><thead><tr><th>Product</th><th></th></tr></thead><tbody><tr><td class=\"product-name\"> Fashionable Overnight Bag <span class=\"product-quantity\">× 1</span></td><td class=\"product-total text-body\">$110.00</td></tr><tr><td class=\"product-name\"> Mackintosh Poket backpack <span class=\"product-quantity\">× 1</span></td><td class=\"product-total text-body\">$180.00</td></tr><tr class=\"summary-subtotal\"><td><h4 class=\"summary-subtitle\">Subtotal</h4></td><td class=\"summary-subtotal-price pb-0 pt-0\"> $290.00 </td></tr><tr class=\"sumnary-shipping shipping-row-last\"><td colspan=\"2\"><h4 class=\"summary-subtitle\">Calculate Shipping</h4><ul><li><div class=\"custom-radio\"><input type=\"radio\" id=\"flat_rate\" name=\"shipping\" class=\"custom-control-input\" checked><label class=\"custom-control-label\" for=\"flat_rate\">Flat rate</label></div></li><li><div class=\"custom-radio\"><input type=\"radio\" id=\"free-shipping\" name=\"shipping\" class=\"custom-control-input\"><label class=\"custom-control-label\" for=\"free-shipping\">Free shipping</label></div></li><li><div class=\"custom-radio\"><input type=\"radio\" id=\"local_pickup\" name=\"shipping\" class=\"custom-control-input\"><label class=\"custom-control-label\" for=\"local_pickup\">Local pickup</label></div></li></ul></td></tr><tr class=\"summary-total\"><td class=\"pb-0\"><h4 class=\"summary-subtitle\">Total</h4></td><td class=\"pt-0 pb-0\"><p class=\"summary-total-price ls-s text-primary\"> $290.00 </p></td></tr></tbody></table><div class=\"payment accordion radio-type\"><h4 class=\"summary-subtitle ls-m pb-3\">Payment Methods</h4><div class=\"card\"><div class=\"card-header\"><a href=\"#collapse1\" class=\"collapse text-body text-normal ls-m\">Check payments </a></div><div id=\"collapse1\" class=\"expanded\" style=\"display:block;\"><div class=\"card-body ls-m\"> Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode. </div></div></div><div class=\"card\"><div class=\"card-header\"><a href=\"#collapse2\" class=\"expand text-body text-normal ls-m\">Cash on delivery</a></div><div id=\"collapse2\" class=\"collapsed\"><div class=\"card-body ls-m\"> Pay with cash upon delivery. </div></div></div></div><div class=\"payment accordion radio-type\"><h4 class=\"summary-subtitle ls-m pb-3\"> Địa chỉ nhận hàng </h4><div class=\"card\"><div class=\"card-body ls-m pl-0\"> Nguyễn Phương Nam (+84) 973366072 75b, đường số 2, Phường Hiệp Bình Phước, Thành Phố Thủ Đức, TP. Hồ Chí Minh </div></div></div><div class=\"form-checkbox mt-4 mb-5\"><label class=\"form-control-label pl-0\" for=\"terms-condition\"> Nhấn &quot;Đặt hàng&quot; đồng nghĩa với việc bạn đồng ý tuân theo <a href=\"#\">Điều khoản Skinest </a>* </label></div><button type=\"submit\" class=\"btn btn-dark btn-rounded btn-order\"> Đặt hàng </button></div></div></aside></div></form></div>", 1);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_checkout_breadcrumb = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("checkout-breadcrumb");
@@ -29794,7 +29821,7 @@ __webpack_require__.r(__webpack_exports__);
 var _hoisted_1 = {
   "class": "custom-radio"
 };
-var _hoisted_2 = ["onInput", "id"];
+var _hoisted_2 = ["onInput", "id", "checked"];
 var _hoisted_3 = ["for"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("ul", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.deliveryMethods, function (method) {
@@ -29805,6 +29832,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         return _ctx.$emit('update:modelValue', method.id);
       },
       id: "delivery".concat(method.id),
+      checked: $props.modelValue == method.id,
       name: "shipping",
       type: "radio",
       "class": "custom-control-input"

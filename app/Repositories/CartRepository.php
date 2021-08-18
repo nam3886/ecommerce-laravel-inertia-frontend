@@ -23,8 +23,8 @@ class CartRepository extends BaseRepository implements CartContract
     public function __construct(Product $model)
     {
         parent::__construct($model);
-        $this->model = $model;
-        $this->cart = Cart::instance('cart');
+        $this->model    =   $model;
+        $this->cart     =   Cart::instance('cart');
     }
 
     /**
@@ -53,53 +53,47 @@ class CartRepository extends BaseRepository implements CartContract
      */
     public function listCartsGroupByShop()
     {
-        $listCarts = $this->listCarts();
+        $listCarts          =   $this->listCarts();
 
-        $itemsGroupByShop = $listCarts->get('items')->groupBy('options.shop_id');
+        $userAddress        =   auth()->user()->address;
 
-        $shops = Shop::findMany($itemsGroupByShop->keys());
+        $itemsGroupByShop   =   $listCarts->get('items')->groupBy('options.shop_id');
 
-        $userAddress = auth()->user()->address;
+        $shops              =   Shop::findMany($itemsGroupByShop->keys());
 
-        // calculate subtotal for each item and add shop information
-        $itemsGroupByShop = $itemsGroupByShop->reduce(function ($carry, $items) use ($shops, $userAddress) {
-            $totalOfShop = 0;
+        // calculate subtotal for each item and, shop information and calculate shipping fee
+        $itemsGroupByShop   =   $itemsGroupByShop->reduce(function ($carry, $items) use ($shops, $userAddress) {
+            $totalOfShop    =   0;
 
-            $shop = $shops->where('id', $items->first()->options->shop_id)->first();
+            $shop           =   $shops->where('id', $items->first()->options->shop_id)->first();
+            // calculate subtotal (qty * price)
+            $items          =   $items->map(function ($item) use (&$totalOfShop) {
+                $subtotal       =   $item->price * $item->qty;
 
-            $items = $items->map(function ($item) use (&$totalOfShop) {
-                $subtotal = $item->price * $item->qty;
+                $totalOfShop    +=  $subtotal;
 
-                $totalOfShop += $subtotal;
-
-                $options = collect($item->options)->put('subtotal', $subtotal)
+                $options        =   collect($item->options)
+                    ->put('subtotal', $subtotal)
                     ->put('subtotal_format', easy_format_price($subtotal));
 
                 return collect($item)->put('options', $options);
             });
 
-            if (
-                $userAddress->delivery_method_id == 1 &&
-                (!session()->has("shipping_{$shop->id}_fee") || session("cart_{$shop->id}_changed"))
-            ) {
-
-                $shippingFee = $this->calculateShippingFee($shop, $userAddress->ghn_address, $items->sum('weight'));
-
-                session(["shipping_{$shop->id}_fee" => $shippingFee]);
-
-                session(["cart_{$shop->id}_changed" => false]);
+            if ($this->needCalculateShippingFee($userAddress->delivery_method_id, $shop->id)) {
+                $this->calculateShippingFee($shop, $userAddress->ghn_address, $items->sum('weight'));
             }
 
-            $shippingFee = session("shipping_{$shop->id}_fee");
-            $totalOfShop += $shippingFee;
+            $shippingFee    =   session("shipping_{$shop->id}_fee");
+
+            $totalOfShop    +=  $shippingFee;
 
             return $carry->push([
-                'shop' => new ShopResource($shop),
-                'items' => $items,
-                'shipping_fee' => $shippingFee,
-                'shipping_fee_format' => easy_format_price($shippingFee),
-                'total' => $totalOfShop,
-                'total_format' => easy_format_price($totalOfShop)
+                'shop'                  =>  new ShopResource($shop),
+                'items'                 =>  $items,
+                'shipping_fee'          =>  $shippingFee,
+                'shipping_fee_format'   =>  easy_format_price($shippingFee),
+                'total'                 =>  $totalOfShop,
+                'total_format'          =>  easy_format_price($totalOfShop)
             ]);
         }, collect());
 
@@ -162,9 +156,9 @@ class CartRepository extends BaseRepository implements CartContract
      */
     public function createCart(array $params)
     {
-        $params = collect($params);
+        $params =   collect($params);
 
-        $params = $this->prepareParams($params);
+        $params =   $this->prepareParams($params);
 
         $this->quantityCheck(
             $params->get('qty'),
@@ -172,7 +166,7 @@ class CartRepository extends BaseRepository implements CartContract
             $params->get('options')['sku']
         );
 
-        $cart = $this->cart->add($params->all())->associate($this->model);
+        $cart   =   $this->cart->add($params->all())->associate($this->model);
 
         $this->cartChanged($cart->options->shop_id);
 
@@ -187,11 +181,11 @@ class CartRepository extends BaseRepository implements CartContract
      */
     public function updateCart(int|array $params, string $id)
     {
-        $cart = $this->findCartByRowIdOrFail($id);
+        $cart   =   $this->findCartByRowIdOrFail($id);
 
-        $params = collect($params);
+        $params =   collect($params);
 
-        $max = $cart->model->hasVariants()
+        $max    =   $cart->model->hasVariants()
             ? $cart->model->variants()->whereSku($cart->options->sku)->first()->quantity
             : $cart->model->quantity;
 
@@ -199,7 +193,7 @@ class CartRepository extends BaseRepository implements CartContract
             'qty' => "The qty must not be greater than {$max}.",
         ]));
 
-        $cart = $this->cart->update($id, collect($params)->except('rowId', 'id', 'sku')->all());
+        $cart   =   $this->cart->update($id, collect($params)->except('rowId', 'id', 'sku')->all());
 
         $this->cartChanged($cart->options->shop_id);
 
@@ -256,23 +250,23 @@ class CartRepository extends BaseRepository implements CartContract
      */
     private function prepareParams(Collection $params)
     {
-        $product = $this->findProductById($params->get('id'));
+        $product    =   $this->findProductById($params->get('id'));
 
-        $max = $product->quantity;
+        $max        =   $product->quantity;
 
         $options = collect([
-            'id'                    => $product->id,
-            'name'                  => $product->name,
-            'weight'                => $product->weight,
-            'price'                 => $product->price_after_discount,
-            'qty'                   => $params->get('qty'),
-            'options'               => [
-                'shop_id'           => $product->shop_id,
-                'sku'               => $product->sku,
-                'slug'              => $product->slug,
-                'max'               => $max,
-                'avatar'            => $product->gallery->avatar,
-                'price_format'      => easy_format_price($product->price_after_discount),
+            'id'                    =>  $product->id,
+            'name'                  =>  $product->name,
+            'weight'                =>  $product->weight,
+            'price'                 =>  $product->price_after_discount,
+            'qty'                   =>  $params->get('qty'),
+            'options'               =>  [
+                'shop_id'           =>  $product->shop_id,
+                'sku'               =>  $product->sku,
+                'slug'              =>  $product->slug,
+                'max'               =>  $max,
+                'avatar'            =>  $product->gallery->avatar,
+                'price_format'      =>  easy_format_price($product->price_after_discount),
             ],
         ]);
 
@@ -282,15 +276,15 @@ class CartRepository extends BaseRepository implements CartContract
                 'sku' => 'The sku field is required.',
             ]));
 
-            $variant = $product->variants()->whereSku($params->get('sku'))->first();
+            $variant    =   $product->variants()->whereSku($params->get('sku'))->first();
 
-            $max = $variant->quantity;
+            $max        =   $variant->quantity;
 
             $newOptions = array_merge($options->get('options'), [
-                'sku'           => $variant->sku,
-                'max'           => $max,
-                'variant_name'  => $variant->name,
-                'price_format'  => easy_format_price($variant->price_after_discount),
+                'sku'           =>  $variant->sku,
+                'max'           =>  $max,
+                'variant_name'  =>  $variant->name,
+                'price_format'  =>  easy_format_price($variant->price_after_discount),
             ]);
 
             $options->put('options', $newOptions)
@@ -311,9 +305,9 @@ class CartRepository extends BaseRepository implements CartContract
      */
     private function quantityCheck(int $quantity, int $max, string $sku)
     {
-        $existed = $this->findCartBySku($sku);
+        $existed    =   $this->findCartBySku($sku);
 
-        $max = empty($existed) ? $max : $max - $existed->qty;
+        $max        =   empty($existed) ? $max : $max - $existed->qty;
 
         throw_if($quantity > $max, ValidationException::withMessages([
             'qty' => "The qty must not be greater than {$max}.",
@@ -331,19 +325,36 @@ class CartRepository extends BaseRepository implements CartContract
     }
 
     /**
-     * calculate shipping fee
+     * @param int $methodId
+     * @param int $shopId
+     * @return bool
+     */
+    private function needCalculateShippingFee(int $methodId, int $shopId)
+    {
+        // delivery_method is GHN and (not exists shipping fee of shop || item in cart of shop changed)
+        return $methodId == 1 && (!session()->has("shipping_{$shopId}_fee") || session("cart_{$shopId}_changed"));
+    }
+
+    /**
+     * calculate fee and save it to session
      * @param \App\Models\Shop $shop
      * @return int
      */
     private function calculateShippingFee(Shop $shop, $userAddress, $weight)
     {
-        return (new GHNService($shop->ghn_shop_id))->calculateShippingFee([
+        $shippingFee = (new GHNService($shop->ghn_shop_id))->calculateShippingFee([
             // 1: Express , 2: Standard or 3: Saving
-            "service_type_id" => 2,
-            "from_district_id" => intval($shop->ghn_address->district_id),
-            "to_district_id" => intval($userAddress->district_id),
-            "to_ward_code" => $userAddress->ward_code,
-            "weight" => $weight,
+            "service_type_id"   =>  2,
+            "from_district_id"  =>  intval($shop->ghn_address->district_id),
+            "to_district_id"    =>  intval($userAddress->district_id),
+            "to_ward_code"      =>  $userAddress->ward_code,
+            "weight"            =>  $weight,
         ])->get('service_fee');
+
+        session(["shipping_{$shop->id}_fee" => $shippingFee]);
+
+        session(["cart_{$shop->id}_changed" => false]);
+
+        return $shippingFee;
     }
 }

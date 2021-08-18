@@ -24,7 +24,7 @@ export default {
       list: [
         { id: 1, text: "Shopping Cart", route: "cart.index" },
         { id: 2, text: "Checkout", route: "checkout.index" },
-        { id: 3, text: "Order Complete", route: "checkout.index" },
+        { id: 3, text: "Order Complete", route: "order" },
       ],
     };
   },

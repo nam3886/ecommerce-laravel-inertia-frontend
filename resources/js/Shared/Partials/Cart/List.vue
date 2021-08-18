@@ -86,7 +86,7 @@ export default {
   methods: {
     updateQuantity: debounce(function (newQuatity, item) {
       this.update(item.rowId, newQuatity);
-    }, 500),
+    }, 300),
   },
 };
 </script>

@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Contracts\CartContract;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\CartRequest;
-use App\Http\Resources\ShopResource;
 use App\Models\DeliveryMethod;
-use App\Models\Shop;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

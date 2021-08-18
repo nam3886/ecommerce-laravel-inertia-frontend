@@ -5,6 +5,7 @@
         <input
           @input="$emit('update:modelValue', method.id)"
           :id="`delivery${method.id}`"
+          :checked="modelValue == method.id"
           name="shipping"
           type="radio"
           class="custom-control-input"
@@ -23,7 +24,7 @@
 
 <script>
 export default {
-  props: ["deliveryMethods"],
+  props: ["deliveryMethods", "modelValue"],
 
   emits: ["update:modelValue"],
 };

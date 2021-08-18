@@ -2,11 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\CartContract;
+use App\Models\DeliveryMethod;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CheckoutController extends Controller
 {
+    /**
+     * @var \App\Contracts\CartContract
+     */
+    protected $cartRepository;
+
+    public function __construct(CartContract $cartRepository)
+    {
+        $this->cartRepository = $cartRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,6 +26,12 @@ class CheckoutController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Checkout');
+        $deliveryMethods = DeliveryMethod::select('id', 'code', 'name', 'price', 'description')
+            ->whereActive(1)
+            ->get();
+
+        $cartGroupByShop = $this->cartRepository->listCartsGroupByShop();
+
+        return Inertia::render('Checkout', compact('deliveryMethods', 'cartGroupByShop'));
     }
 }

@@ -12,6 +12,8 @@ import "select2";
 export default {
   props: ["modelValue", "options"],
 
+  emits: ["update:modelValue", "update:options", "unselect"],
+
   computed: {
     isMultiple() {
       return this.$attrs.multiple;
