@@ -87,15 +87,15 @@ class SettingsSeeder extends Seeder
         ],
         [
             'key' => 'get_featured_products',
-            'value' => 5
+            'value' => 6
         ],
         [
             'key' => 'get_best_sell_products',
-            'value' => 4
+            'value' => 5
         ],
         [
             'key' => 'get_related_products',
-            'value' => 4
+            'value' => 5
         ],
         [
             'key' => 'get_own_products',
