@@ -183,91 +183,52 @@
                   <table class="order-table">
                     <thead>
                       <tr>
-                        <th>Product</th>
-                        <th></th>
+                        <th>Địa chỉ nhận hàng</th>
+                        <th>
+                          <a href="#"><u>Thay đổi</u></a>
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td class="product-name">
-                          Fashionable Overnight Bag
-                          <span class="product-quantity">×&nbsp;1</span>
+                        <td colspan="2" class="product-name text-left">
+                          Nguyễn Phương Nam (+84) 973366072
                         </td>
-                        <td class="product-total text-body">$110.00</td>
                       </tr>
                       <tr>
-                        <td class="product-name">
-                          Mackintosh Poket backpack
-                          <span class="product-quantity">×&nbsp;1</span>
+                        <td colspan="2" class="product-name text-left">
+                          75b đường số 2, Phường Hiệp Bình Phước, Thành Phố Thủ
+                          Đức, TP. Hồ Chí Minh
                         </td>
-                        <td class="product-total text-body">$180.00</td>
+                      </tr>
+                      <tr class="sumnary-shipping shipping-row-last">
+                        <td colspan="2">
+                          <h4 class="summary-subtitle">Vận chuyển</h4>
+                          <delivery-method
+                            v-model="form.delivery_method_id"
+                            :deliveryMethods="deliveryMethods"
+                          />
+                        </td>
                       </tr>
                       <tr class="summary-subtotal">
                         <td>
-                          <h4 class="summary-subtitle">Subtotal</h4>
+                          <h4 class="summary-subtitle">Tổng tiền</h4>
                         </td>
                         <td class="summary-subtotal-price pb-0 pt-0">
                           $290.00
                         </td>
                       </tr>
-                      <tr class="sumnary-shipping shipping-row-last">
-                        <td colspan="2">
-                          <h4 class="summary-subtitle">Calculate Shipping</h4>
-                          <ul>
-                            <li>
-                              <div class="custom-radio">
-                                <input
-                                  type="radio"
-                                  id="flat_rate"
-                                  name="shipping"
-                                  class="custom-control-input"
-                                  checked
-                                />
-                                <label
-                                  class="custom-control-label"
-                                  for="flat_rate"
-                                  >Flat rate</label
-                                >
-                              </div>
-                            </li>
-
-                            <li>
-                              <div class="custom-radio">
-                                <input
-                                  type="radio"
-                                  id="free-shipping"
-                                  name="shipping"
-                                  class="custom-control-input"
-                                />
-                                <label
-                                  class="custom-control-label"
-                                  for="free-shipping"
-                                  >Free shipping</label
-                                >
-                              </div>
-                            </li>
-
-                            <li>
-                              <div class="custom-radio">
-                                <input
-                                  type="radio"
-                                  id="local_pickup"
-                                  name="shipping"
-                                  class="custom-control-input"
-                                />
-                                <label
-                                  class="custom-control-label"
-                                  for="local_pickup"
-                                  >Local pickup</label
-                                >
-                              </div>
-                            </li>
-                          </ul>
+                      <tr class="summary-subtotal">
+                        <td>
+                          <h4 class="summary-subtitle">Phí vận chuyển</h4>
+                        </td>
+                        <td class="summary-subtotal-price pb-0 pt-0">
+                          $290.00
                         </td>
                       </tr>
                       <tr class="summary-total">
                         <td class="pb-0">
-                          <h4 class="summary-subtitle">Total</h4>
+                          <h4 class="summary-subtitle">Tổng cộng</h4>
                         </td>
                         <td class="pt-0 pb-0">
                           <p class="summary-total-price ls-s text-primary">
@@ -278,52 +239,11 @@
                     </tbody>
                   </table>
                   <div class="payment accordion radio-type">
-                    <h4 class="summary-subtitle ls-m pb-3">Payment Methods</h4>
-                    <div class="card">
-                      <div class="card-header">
-                        <a
-                          href="#collapse1"
-                          class="collapse text-body text-normal ls-m"
-                          >Check payments
-                        </a>
-                      </div>
-                      <div
-                        id="collapse1"
-                        class="expanded"
-                        style="display: block"
-                      >
-                        <div class="card-body ls-m">
-                          Please send a check to Store Name, Store Street, Store
-                          Town, Store State / County, Store Postcode.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card">
-                      <div class="card-header">
-                        <a
-                          href="#collapse2"
-                          class="expand text-body text-normal ls-m"
-                          >Cash on delivery</a
-                        >
-                      </div>
-                      <div id="collapse2" class="collapsed">
-                        <div class="card-body ls-m">
-                          Pay with cash upon delivery.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="payment accordion radio-type">
-                    <h4 class="summary-subtitle ls-m pb-3">
-                      Địa chỉ nhận hàng
-                    </h4>
-                    <div class="card">
-                      <div class="card-body ls-m pl-0">
-                        Nguyễn Phương Nam (+84) 973366072 75b, đường số 2,
-                        Phường Hiệp Bình Phước, Thành Phố Thủ Đức, TP. Hồ Chí
-                        Minh
-                      </div>
-                    </div>
+                    <h4 class="summary-subtitle ls-m pb-3">Thanh toán</h4>
+                    <payment-method
+                      v-model="form.payment_method_id"
+                      :paymentMethods="paymentMethods"
+                    />
                   </div>
                   <div class="form-checkbox mt-4 mb-5">
                     <label
@@ -356,11 +276,28 @@
 import Layout from "@/Layouts/AppLayout/index.vue";
 import { Head } from "@inertiajs/inertia-vue3";
 import CheckoutBreadcrumb from "@/Shared/CheckoutBreadcrumb.vue";
+import DeliveryMethod from "@/Shared/Partials/Checkout/DeliveryMethod.vue";
+import PaymentMethod from "@/Shared/Partials/Checkout/PaymentMethod.vue";
 import "@r/css/style.css";
 
 export default {
   layout: Layout,
 
-  components: { Head, CheckoutBreadcrumb },
+  props: ["cart", "deliveryMethods", "paymentMethods"],
+
+  components: { Head, CheckoutBreadcrumb, DeliveryMethod, PaymentMethod },
+
+  data() {
+    return {
+      districts: [],
+      wards: [],
+      form: this.$inertia.form({
+        delivery_method_id: null,
+        payment_method_id: null,
+        ghn_address: { address: null, district_id: null, ward_code: null },
+        address: null,
+      }),
+    };
+  },
 };
 </script>

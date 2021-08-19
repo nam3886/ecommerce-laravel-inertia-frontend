@@ -2427,6 +2427,9 @@
     .select2-selection__choice {
     margin-top: 0;
 }
+  .select2-container.select2-container--default.select2-container--open {
+    z-index: 9999;
+}
   .loaded .page-wrapper {
     opacity: 1;
 }
@@ -2446,5 +2449,8 @@
 }
   .shipping-address .select-box {
     margin-bottom: 1.5rem;
+}
+  .order-table .shipping-row-last {
+    border-top: 1px solid #e1e1e1;
 }
 

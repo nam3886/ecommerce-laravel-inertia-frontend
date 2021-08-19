@@ -5,6 +5,8 @@
 
       <slot />
 
+      <button @click="$EMITTER.emit('show-popup:user-info')">clecik</button>
+
       <footer-layout />
     </div>
 
@@ -21,6 +23,8 @@
     <popup-login />
 
     <popup-quickview />
+
+    <popup-user-info />
 
     <minipopup />
 
@@ -47,6 +51,7 @@ import StickyFooter from "@/Layouts/AppLayout/StickyFooter.vue";
 import Photoshopwipe from "@/Layouts/AppLayout/Photoshopwipe.vue";
 import PopupLogin from "@/Shared/Popup/Login/";
 import PopupQuickview from "@/Shared/Popup/Quickview/";
+import PopupUserInfo from "@/Shared/Popup/UserInfo/";
 import Minipopup from "@/Shared/Popup/Mini/";
 
 export default {
@@ -61,6 +66,7 @@ export default {
     Photoshopwipe,
     PopupLogin,
     PopupQuickview,
+    PopupUserInfo,
     Minipopup,
   },
 

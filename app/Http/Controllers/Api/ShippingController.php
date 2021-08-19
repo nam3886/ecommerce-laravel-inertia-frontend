@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contracts\CartContract;
 use App\Http\Controllers\BaseController;
-use App\Models\Shop;
+use App\Models\UserAddress;
 use App\Services\GHN\GHNService;
 use Illuminate\Http\Request;
 
 class ShippingController extends BaseController
 {
-    private $ghnService;
+    private $cartRepository;
 
-    public function __construct()
+    public function __construct(CartContract $cartRepository)
     {
-        $this->ghnService = new GHNService;
+        $this->cartRepository = $cartRepository;
     }
 
     /**
@@ -21,60 +22,67 @@ class ShippingController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function getDistricts()
+    public function calculateShippingFee()
     {
+        $address = auth()->user()->address;
+
+        if (empty($address)) {
+            return $this->responseRedirectBack('User\'s address not created yet.', 'error');
+        }
+
+        $groupByShop = $this->cartRepository->listCartsGroupByShop()->get('items');
+
         try {
-            $districts = cache()->rememberForever("districts", function () {
-                $provinces = $this->ghnService->getProvinces();
+            $shippingFee = $groupByShop->reduce(function ($total, $group) use ($address) {
+                return $total + match ($address->delivery_method_id) {
+                    1 => $this->GHNShippingFee($group, $address),
+                };
+            }, 0);
 
-                $districts = $this->ghnService->getDistricts();
-                // format for frontend
-                return $districts->reduce(function ($carry, $item) use ($provinces) {
-                    if ($item->SupportType !== 3) return $carry;
-
-                    $text = $provinces->where('ProvinceID', $item->ProvinceID)->first()->ProvinceName ?? 'undefined';
-
-                    array_push($carry, [
-                        'id' => $item->DistrictID,
-                        'text' => $item->DistrictName . ' - ' . $text,
-                    ]);
-
-                    return $carry;
-                }, []);
-            });
+            session(['shipping_fee' => $shippingFee]);
+            // dd(1);
         } catch (\Throwable $th) {
             return $this->responseJson(message: $th->getMessage(), responseCode: $th->getCode());
         }
 
-        return $this->responseJson(data: $districts, error: false);
+        return $this->responseRedirectBack(trans('response.shipping.success.get_fee'), 'success');
     }
 
     /**
-     * Display a listing of the resource.
-     * @param int $districtId
-     * @return \Illuminate\Http\Response
+     * @param int $methodId
+     * @param int $shopId
+     * @return bool
      */
-    public function getWards(int $districtId)
+    private function needCalculateShippingFee(int $shopId)
     {
-        try {
-            $wards = cache()->rememberForever("{$districtId}_ward", function () use ($districtId) {
-                $wards = $this->ghnService->getWards($districtId);
-                // format for frontend
-                return $wards->reduce(function ($carry, $item) {
-                    if ($item->SupportType !== 3) return $carry;
+        return !session()->has("shipping_fee_{$shopId}");
+    }
 
-                    array_push($carry, [
-                        'id' => $item->WardCode,
-                        'text' => $item->WardName,
-                    ]);
+    /**
+     * calculate fee and save it to session
+     * @param array $group
+     * @param \App\Models\UserAddress $address
+     * @return int
+     */
+    private function GHNShippingFee(array $group, UserAddress $address)
+    {
+        $shop               =   $group['shop'];
 
-                    return $carry;
-                }, []);
-            });
-        } catch (\Throwable $th) {
-            return $this->responseJson(message: $th->getMessage(), responseCode: $th->getCode());
+        if ($this->needCalculateShippingFee($shop->id)) {
+
+            $weight         =   $group['items']->reduce(fn ($total, $item) => $total + $item->get('weight'));
+            $shippingFee    =   (new GHNService($shop->ghn_shop_id))->calculateShippingFee([
+                // 1: Express , 2: Standard or 3: Saving
+                "service_type_id"   =>  2,
+                "from_district_id"  =>  intval($shop->ghn_address->district_id),
+                "to_district_id"    =>  intval($address->ghn_address->district_id),
+                "to_ward_code"      =>  $address->ghn_address->ward_code,
+                "weight"            =>  $weight,
+            ])->get('service_fee');
+
+            session(["shipping_fee_{$shop->id}" => $shippingFee]);
         }
 
-        return $this->responseJson(data: $wards, error: false);
+        return session("shipping_fee_{$shop->id}");
     }
 }

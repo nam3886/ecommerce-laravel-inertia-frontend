@@ -200,3 +200,7 @@
     .select2-selection__choice {
     margin-top: 0;
 }
+.select2-container.select2-container--default.select2-container--open {
+    z-index: 9999;
+}
+

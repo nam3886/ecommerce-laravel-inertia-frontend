@@ -79,16 +79,12 @@ export default {
       // product changed
       product.id !== this.product.id && this.showNewProduct(product);
     });
+
+    this.$EMITTER.on("hide-popup:quickview", () => (this.show = false));
   },
 
   methods: {
     isEmpty,
-
-    overlay(event) {
-      if (!$(event.target).closest(".overlay-popup").length) {
-        this.show = false;
-      }
-    },
 
     showNewProduct(product) {
       // empty product để template re render và mất đi gallery cũ
@@ -116,7 +112,7 @@ export default {
     preAddCart(quantity) {
       this.addCart(quantity, () => {
         // on added cart
-        this.show = false;
+        this.$EMITTER.emit("hide-popup:quickview");
 
         const cart = this.getBySku(this.variant.sku || this.product.sku);
 

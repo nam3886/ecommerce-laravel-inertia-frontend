@@ -11,7 +11,7 @@
     >
       <div class="mfp-container mfp-ajax-holder mfp-s-ready">
         <div class="mfp-content">
-          <login-popup>
+          <user-info>
             <button
               @click="show = false"
               title="Close (Esc)"
@@ -20,7 +20,7 @@
             >
               <span>×</span>
             </button>
-          </login-popup>
+          </user-info>
         </div>
       </div>
     </div>
@@ -28,14 +28,13 @@
 </template>
 
 <script>
-import { wait } from "@/helpers.js";
-import LoginPopup from "@/Shared/Popup/Login/Login.vue";
+import UserInfo from "@/Shared/Popup/UserInfo/UserInfo.vue";
 import InteractsWithPopup from "@/Mixins/InteractsWithPopup.vue";
 
 export default {
   mixins: [InteractsWithPopup],
 
-  components: { LoginPopup },
+  components: { UserInfo },
 
   data() {
     return {
@@ -44,12 +43,9 @@ export default {
   },
 
   mounted() {
-    this.$EMITTER.on("show-popup:login", (selector) => {
-      this.show = true;
-      wait().then(() => $(`.login-popup a[href="#${selector}"]`).click());
-    });
+    this.$EMITTER.on("show-popup:user-info", () => (this.show = true));
 
-    this.$EMITTER.on("hide-popup:login", () => (this.show = false));
+    this.$EMITTER.on("hide-popup:user-info", () => (this.show = false));
   },
 };
 </script>

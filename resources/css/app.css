@@ -25,3 +25,6 @@
 .shipping-address .select-box {
     margin-bottom: 1.5rem;
 }
+.order-table .shipping-row-last {
+    border-top: 1px solid #e1e1e1;
+}

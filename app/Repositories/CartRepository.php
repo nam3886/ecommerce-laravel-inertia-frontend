@@ -6,7 +6,6 @@ use App\Contracts\CartContract;
 use App\Http\Resources\ShopResource;
 use App\Models\Product;
 use App\Models\Shop;
-use App\Services\GHN\GHNService;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
@@ -19,12 +18,13 @@ use Illuminate\Validation\ValidationException;
 class CartRepository extends BaseRepository implements CartContract
 {
     private $cart;
+    private $shippingFee = 0;
 
     public function __construct(Product $model)
     {
         parent::__construct($model);
-        $this->model    =   $model;
-        $this->cart     =   Cart::instance('cart');
+        $this->model        =   $model;
+        $this->cart         =   Cart::instance('cart');
     }
 
     /**
@@ -32,6 +32,8 @@ class CartRepository extends BaseRepository implements CartContract
      */
     public function listCarts()
     {
+        $total = $this->shippingFee + $this->cart->totalFloat();
+
         return collect([
             'items'                 =>  $this->cart->content(),
             'count'                 =>  $this->cart->count(),
@@ -40,66 +42,50 @@ class CartRepository extends BaseRepository implements CartContract
             'subtotal'              =>  $this->cart->subtotalFloat(),
             'discount'              =>  $this->cart->discountFloat(),
             'grandtotal'            =>  $this->cart->totalFloat(),
+            'shipping_fee'          =>  $this->shippingFee,
+            'total'                 =>  $total,
 
             'tax_format'            =>  easy_format_price($this->cart->taxFloat()),
             'subtotal_format'       =>  easy_format_price($this->cart->subtotalFloat()),
             'discount_format'       =>  easy_format_price($this->cart->discountFloat()),
             'grandtotal_format'     =>  easy_format_price($this->cart->totalFloat()),
+            'shipping_fee_format'   =>  easy_format_price($this->shippingFee),
+            'total_format'          =>  easy_format_price($total),
         ]);
     }
 
     /**
+     * @param int $shippingFee
      * @return \Illuminate\Support\Collection
      */
-    public function listCartsGroupByShop()
+    public function listCartsGroupByShop(int $shippingFee = null)
     {
+        $shippingFee && $this->setShippingFee($shippingFee);
+
         $listCarts          =   $this->listCarts();
-
-        $userAddress        =   auth()->user()->address;
-
         $itemsGroupByShop   =   $listCarts->get('items')->groupBy('options.shop_id');
-
         $shops              =   Shop::findMany($itemsGroupByShop->keys());
-
         // calculate subtotal for each item and, shop information and calculate shipping fee
-        $itemsGroupByShop   =   $itemsGroupByShop->reduce(function ($carry, $items) use ($shops, $userAddress) {
-            $totalOfShop    =   0;
+        $itemsGroupByShop   =   $itemsGroupByShop->reduce(function ($carry, $items) use ($shops) {
 
             $shop           =   $shops->where('id', $items->first()->options->shop_id)->first();
-            // calculate subtotal (qty * price)
-            $items          =   $items->map(function ($item) use (&$totalOfShop) {
-                $subtotal       =   $item->price * $item->qty;
-
-                $totalOfShop    +=  $subtotal;
-
-                $options        =   collect($item->options)
-                    ->put('subtotal', $subtotal)
-                    ->put('subtotal_format', easy_format_price($subtotal));
-
-                return collect($item)->put('options', $options);
-            });
-
-            if ($this->needCalculateShippingFee($userAddress->delivery_method_id, $shop->id)) {
-                $this->calculateShippingFee($shop, $userAddress->ghn_address, $items->sum('weight'));
-            }
-
-            $shippingFee    =   session("shipping_{$shop->id}_fee");
-
-            $totalOfShop    +=  $shippingFee;
+            $temp           =   $this->calculateSubtotalAndTotal($items);
+            $items          =   $temp->get('items');
+            $total          =   $temp->get('total');
+            $shippingFee    =   session("shipping_fee_{$shop->id}");
+            $total          +=  $shippingFee;
 
             return $carry->push([
                 'shop'                  =>  new ShopResource($shop),
                 'items'                 =>  $items,
                 'shipping_fee'          =>  $shippingFee,
                 'shipping_fee_format'   =>  easy_format_price($shippingFee),
-                'total'                 =>  $totalOfShop,
-                'total_format'          =>  easy_format_price($totalOfShop)
+                'total'                 =>  $total,
+                'total_format'          =>  easy_format_price($total)
             ]);
         }, collect());
 
-        $listCarts->put('items', $itemsGroupByShop);
-
-        return $listCarts;
+        return $listCarts->put('items', $itemsGroupByShop);
     }
 
     /**
@@ -157,15 +143,7 @@ class CartRepository extends BaseRepository implements CartContract
     public function createCart(array $params)
     {
         $params =   collect($params);
-
         $params =   $this->prepareParams($params);
-
-        $this->quantityCheck(
-            $params->get('qty'),
-            $params->get('options')['max'],
-            $params->get('options')['sku']
-        );
-
         $cart   =   $this->cart->add($params->all())->associate($this->model);
 
         $this->cartChanged($cart->options->shop_id);
@@ -182,9 +160,7 @@ class CartRepository extends BaseRepository implements CartContract
     public function updateCart(int|array $params, string $id)
     {
         $cart   =   $this->findCartByRowIdOrFail($id);
-
         $params =   collect($params);
-
         $max    =   $cart->model->hasVariants()
             ? $cart->model->variants()->whereSku($cart->options->sku)->first()->quantity
             : $cart->model->quantity;
@@ -251,10 +227,8 @@ class CartRepository extends BaseRepository implements CartContract
     private function prepareParams(Collection $params)
     {
         $product    =   $this->findProductById($params->get('id'));
-
         $max        =   $product->quantity;
-
-        $options = collect([
+        $options    =   collect([
             'id'                    =>  $product->id,
             'name'                  =>  $product->name,
             'weight'                =>  $product->weight,
@@ -277,10 +251,8 @@ class CartRepository extends BaseRepository implements CartContract
             ]));
 
             $variant    =   $product->variants()->whereSku($params->get('sku'))->first();
-
             $max        =   $variant->quantity;
-
-            $newOptions = array_merge($options->get('options'), [
+            $newOptions =   array_merge($options->get('options'), [
                 'sku'           =>  $variant->sku,
                 'max'           =>  $max,
                 'variant_name'  =>  $variant->name,
@@ -292,26 +264,58 @@ class CartRepository extends BaseRepository implements CartContract
                 ->put('price', $variant->price_after_discount);
         }
 
+        $this->quantityCheckBeforeStoreCart($options);
+
         return $options;
     }
 
     /**
      * check quantity before create
-     * @param int $quantity
-     * @param int $max
-     * @param string $sku
+     * @param \Illuminate\Support\Collection $params
      * @return void
      * @throws \Illuminate\Validation\ValidationException
      */
-    private function quantityCheck(int $quantity, int $max, string $sku)
+    private function quantityCheckBeforeStoreCart(Collection $params)
     {
-        $existed    =   $this->findCartBySku($sku);
-
+        $max        =   $params->get('options')['max'];
+        $existed    =   $this->findCartBySku($params->get('options')['sku']);
         $max        =   empty($existed) ? $max : $max - $existed->qty;
 
-        throw_if($quantity > $max, ValidationException::withMessages([
+        throw_if($params->get('qty') > $max, ValidationException::withMessages([
             'qty' => "The qty must not be greater than {$max}.",
         ]));
+    }
+
+    /**
+     * @param \Illuminate\Support\Collection $items
+     * @return \Illuminate\Support\Collection
+     */
+    private function calculateSubtotalAndTotal(Collection $items)
+    {
+        $total          =   0;
+        $items          =   $items->map(function ($item) use (&$total) {
+
+            $subtotal   =   $item->price * $item->qty;
+            $total      +=  $subtotal;
+            $options    =   collect($item->options)
+                ->put('subtotal', $subtotal)
+                ->put('subtotal_format', easy_format_price($subtotal));
+
+            return collect($item)->put('options', $options);
+        });
+
+        return collect([
+            'items' => $items,
+            'total' => $total,
+        ]);
+    }
+
+    /**
+     * @return void
+     */
+    private function setShippingFee(int $shippingFee)
+    {
+        $this->shippingFee = $shippingFee;
     }
 
     /**
@@ -321,40 +325,8 @@ class CartRepository extends BaseRepository implements CartContract
      */
     private function cartChanged(int $shopId)
     {
-        session(["cart_{$shopId}_changed" => true]);
-    }
-
-    /**
-     * @param int $methodId
-     * @param int $shopId
-     * @return bool
-     */
-    private function needCalculateShippingFee(int $methodId, int $shopId)
-    {
-        // delivery_method is GHN and (not exists shipping fee of shop || item in cart of shop changed)
-        return $methodId == 1 && (!session()->has("shipping_{$shopId}_fee") || session("cart_{$shopId}_changed"));
-    }
-
-    /**
-     * calculate fee and save it to session
-     * @param \App\Models\Shop $shop
-     * @return int
-     */
-    private function calculateShippingFee(Shop $shop, $userAddress, $weight)
-    {
-        $shippingFee = (new GHNService($shop->ghn_shop_id))->calculateShippingFee([
-            // 1: Express , 2: Standard or 3: Saving
-            "service_type_id"   =>  2,
-            "from_district_id"  =>  intval($shop->ghn_address->district_id),
-            "to_district_id"    =>  intval($userAddress->district_id),
-            "to_ward_code"      =>  $userAddress->ward_code,
-            "weight"            =>  $weight,
-        ])->get('service_fee');
-
-        session(["shipping_{$shop->id}_fee" => $shippingFee]);
-
-        session(["cart_{$shop->id}_changed" => false]);
-
-        return $shippingFee;
+        // when cart change remove shipping fee of shop and shipping total
+        session()->forget("shipping_fee_{$shopId}");
+        session()->forget('shipping_fee');
     }
 }

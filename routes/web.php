@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ShippingController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
@@ -45,4 +46,7 @@ Route::resource('cart', CartController::class);
 
 Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 
-Route::post('auth/update-address', [UserController::class, 'updateAddress'])->name('user.update_address');
+Route::put('auth/update-address', [UserController::class, 'updateAddress'])->name('user.update_address');
+
+Route::get('calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee'])->name('calculate_shipping_fee');
+

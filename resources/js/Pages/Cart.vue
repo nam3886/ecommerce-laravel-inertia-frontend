@@ -26,7 +26,7 @@
             <cart-coupon />
           </div>
 
-          <cart-shipping :cart="cart" :deliveryMethods="deliveryMethods" />
+          <cart-sidebar :cart="cartGroupByShop" />
         </div>
       </div>
     </div>
@@ -42,7 +42,7 @@ import CheckoutBreadcrumb from "@/Shared/CheckoutBreadcrumb.vue";
 import FlashMessage from "@/Shared/Alert/FlashMessage.vue";
 import CartList from "@/Shared/Partials/Cart/List.vue";
 import CartCoupon from "@/Shared/Partials/Cart/Coupon.vue";
-import CartShipping from "@/Shared/Partials/Cart/Shipping.vue";
+import CartSidebar from "@/Shared/Partials/Cart/Sidebar.vue";
 import "@r/css/style.css";
 
 export default {
@@ -55,9 +55,18 @@ export default {
     FlashMessage,
     CartList,
     CartCoupon,
-    CartShipping,
+    CartSidebar,
   },
 
-  props: ["cart", "cartGroupByShop", "deliveryMethods"],
+  props: ["cartGroupByShop", "calculatedShippingFee"],
+
+  async created() {
+    !this.cartGroupByShop.shipping_fee &&
+      this.$inertia.get(
+        this.route("calculate_shipping_fee"),
+        {},
+        { preserveState: true }
+      );
+  },
 };
 </script>

@@ -14,6 +14,7 @@ class UserAddress extends Model
     protected $fillable = [
         'user_id',
         'delivery_method_id',
+        'payment_method_id',
         'ghn_address',
         'address',
     ];
@@ -25,5 +26,10 @@ class UserAddress extends Model
     public function deliveryMethod(): BelongsTo
     {
         return $this->belongsTo(DeliveryMethod::class);
+    }
+
+    public function paymentMethod(): BelongsTo
+    {
+        return $this->belongsTo(PaymentMethod::class);
     }
 }

@@ -14,6 +14,7 @@ class Currency
     private static $defaultCurrency = 'VND';
     private static $defaultLocale = 'vi_VN';
     private static $currencyAvailable = ['USD', 'VND'];
+    private static $ceilVND = 1E2;
 
     private static function checkValid(string $from, string $to): void
     {
@@ -66,7 +67,7 @@ class Currency
 
     public static function ceilThousand($digits): int
     {
-        return ceil($digits / 1E3) * 1E3;
+        return ceil($digits / self::$ceilVND) * self::$ceilVND;
     }
 
     public static function getRate(string $from, string $to)

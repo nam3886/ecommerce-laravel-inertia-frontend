@@ -16,7 +16,8 @@ class CreateUserAddressesTable extends Migration
         Schema::create('user_addresses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('delivery_method_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('delivery_method_id')->default(1)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('payment_method_id')->nullable()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->json('ghn_address');
             $table->string('address');
             $table->timestamps();

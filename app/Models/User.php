@@ -24,6 +24,13 @@ class User extends Authenticatable
     use SoftDeletes;
 
     /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = ['address'];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

@@ -16,21 +16,21 @@ class PaymentsSeeder extends Seeder
     {
         PaymentMethod::create([
             'updated_by' => 1,
-            'name' => 'stripe',
+            'name' => 'Ví điện tử Stripe',
             'code' => 'stripe',
             'description' => 'Pay via Stripe; you can pay with your credit card if you don’t have a Stripe account.',
         ]);
 
         PaymentMethod::create([
             'updated_by' => 1,
-            'name' => 'paypal',
+            'name' => 'Ví điện tử Paypal',
             'code' => 'paypal',
             'description' => 'Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.',
         ]);
 
         PaymentMethod::create([
             'updated_by' => 1,
-            'name' => 'vnpay',
+            'name' => 'Thẻ ngân hàng',
             'code' => 'vnpay',
             'description' => 'Pay via vnpay; you can pay with your credit card if you don’t have a vnpay account.',
         ]);

@@ -20,5 +20,13 @@ export default {
       }
     },
   },
+
+  methods: {
+    overlay(event) {
+      if (!$(event.target).closest(".overlay-popup").length) {
+        this.show = false;
+      }
+    },
+  },
 };
 </script>

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\ShippingController;
+use App\Http\Controllers\Api\LocationController;
 use App\Http\Controllers\Api\VariantController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
@@ -28,7 +28,7 @@ Route::as('api.')->group(function () {
     Route::get('attribute/{productId}', [ProductController::class, 'showAttributes'])->name('attribute.show');
 
     Route::prefix('location')->as('location.')->group(function () {
-        Route::get('district', [ShippingController::class, 'getDistricts'])->name('district');
-        Route::get('ward/{districtId}', [ShippingController::class, 'getWards'])->name('ward');
+        Route::get('district', [LocationController::class, 'getDistricts'])->name('district');
+        Route::get('ward/{districtId}', [LocationController::class, 'getWards'])->name('ward');
     });
 });

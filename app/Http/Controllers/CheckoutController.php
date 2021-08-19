@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\CartContract;
 use App\Models\DeliveryMethod;
+use App\Models\PaymentMethod;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -30,8 +31,12 @@ class CheckoutController extends Controller
             ->whereActive(1)
             ->get();
 
+        $paymentMethods = PaymentMethod::select('id', 'code', 'name', 'price', 'description')
+            ->whereActive(1)
+            ->get();
+
         $cartGroupByShop = $this->cartRepository->listCartsGroupByShop();
 
-        return Inertia::render('Checkout', compact('deliveryMethods', 'cartGroupByShop'));
+        return Inertia::render('Checkout', compact('deliveryMethods', 'paymentMethods', 'cartGroupByShop'));
     }
 }

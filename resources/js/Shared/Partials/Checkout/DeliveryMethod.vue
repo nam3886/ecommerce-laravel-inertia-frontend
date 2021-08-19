@@ -15,7 +15,7 @@
           class="custom-control-label"
           style="text-transform: capitalize"
         >
-          {{ method.name }}
+          {{ method.name }}&nbsp;<i class="far fa-question-circle"></i>
         </label>
       </div>
     </li>

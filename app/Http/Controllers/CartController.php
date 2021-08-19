@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Contracts\CartContract;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\CartRequest;
-use App\Models\DeliveryMethod;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -28,13 +27,9 @@ class CartController extends BaseController
      */
     public function index()
     {
-        $deliveryMethods = DeliveryMethod::select('id', 'code', 'name', 'price', 'description')
-            ->whereActive(1)
-            ->get();
+        $cartGroupByShop = $this->cartRepository->listCartsGroupByShop(session('shipping_fee'));
 
-        $cartGroupByShop = $this->cartRepository->listCartsGroupByShop();
-
-        return Inertia::render('Cart', compact('deliveryMethods', 'cartGroupByShop'));
+        return Inertia::render('Cart', compact('cartGroupByShop'));
     }
 
     /**
