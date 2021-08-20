@@ -1,6 +1,10 @@
 <template>
   <div class="dropdown cart-dropdown type2 cart-offcanvas mr-0 mr-lg-2">
-    <a href="#" class="cart-toggle label-block link">
+    <a
+      :class="{ 'none-events': route().current('checkout.index') }"
+      href="#"
+      class="cart-toggle label-block link"
+    >
       <div class="cart-label d-lg-show">
         <span class="cart-name">Shopping Cart:</span>
         <span class="cart-price">{{ cart.subtotal_format }}</span>
@@ -11,10 +15,13 @@
     </a>
     <div class="cart-overlay"></div>
     <!-- End Cart Toggle -->
-    <div class="dropdown-box">
+    <div v-if="!route().current('checkout.index')" class="dropdown-box">
       <div class="cart-header">
         <h4 class="cart-title">Shopping Cart</h4>
-        <a href="#" class="btn btn-dark btn-link btn-icon-right btn-close"
+        <a
+          ref="btnCloseQuickCart"
+          href="#"
+          class="btn btn-dark btn-link btn-icon-right btn-close"
           >close<i class="d-icon-arrow-right"></i
           ><span class="sr-only">Cart</span></a
         >
@@ -40,7 +47,10 @@
             </button>
           </figure>
           <div class="product-detail">
-            <link-slug :slug="item.options.slug" class="product-name">
+            <link-slug
+              :slug="item.options.slug"
+              class="product-name break-word two-line-truncate"
+            >
               {{ item.name }}
             </link-slug>
             <div class="price-box">
@@ -80,6 +90,12 @@ export default {
   mixins: [InteractsWithCart],
 
   components: { Link, LinkSlug },
+
+  mounted() {
+    this.$EMITTER.on("inertia-finish", () => {
+      this.$refs.btnCloseQuickCart?.click();
+    });
+  },
 };
 </script>
 

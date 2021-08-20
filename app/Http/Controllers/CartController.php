@@ -27,8 +27,8 @@ class CartController extends BaseController
      */
     public function index()
     {
-        $cartGroupByShop = $this->cartRepository->listCartsGroupByShop(session('shipping_fee'));
-
+        $cartGroupByShop = $this->cartRepository->listCartsGroupByShop();
+        
         return Inertia::render('Cart', compact('cartGroupByShop'));
     }
 

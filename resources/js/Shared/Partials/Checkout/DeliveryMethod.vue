@@ -1,6 +1,6 @@
 <template>
   <ul>
-    <li v-for="method in deliveryMethods" :key="method.id">
+    <li v-for="method in methods" :key="method.id">
       <div class="custom-radio">
         <input
           @input="$emit('update:modelValue', method.id)"
@@ -15,7 +15,7 @@
           class="custom-control-label"
           style="text-transform: capitalize"
         >
-          {{ method.name }}&nbsp;<i class="far fa-question-circle"></i>
+          {{ method.name }}&nbsp;<i class="far fa-question-circle pointer"></i>
         </label>
       </div>
     </li>
@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  props: ["deliveryMethods", "modelValue"],
+  props: ["methods", "modelValue"],
 
   emits: ["update:modelValue"],
 };

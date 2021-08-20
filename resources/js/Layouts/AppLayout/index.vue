@@ -5,8 +5,6 @@
 
       <slot />
 
-      <button @click="$EMITTER.emit('show-popup:user-info')">clecik</button>
-
       <footer-layout />
     </div>
 

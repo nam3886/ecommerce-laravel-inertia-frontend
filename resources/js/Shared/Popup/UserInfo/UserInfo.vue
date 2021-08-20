@@ -20,7 +20,7 @@
         </ul>
         <div class="tab-content">
           <div class="tab-pane active">
-            <form @submit.prevent="updateUserAddress">
+            <form @submit.prevent="$emit('submit', form, fullAddress)">
               <group :errorMessage="form.errors.name">
                 <input
                   v-model.trim="form.name"
@@ -60,9 +60,8 @@
                   placeholder="Nhập địa chỉ giao hàng"
                 />
               </group>
-              <button class="btn btn-dark btn-block btn-rounded" type="submit">
-                Thay đổi
-              </button>
+
+              <slot name="action" :form="form" />
             </form>
           </div>
         </div>
@@ -81,6 +80,8 @@ import Select2 from "@/Shared/Inputs/Select/Select2.vue";
 export default {
   components: { Group, Select2 },
 
+  emits: ["submit"],
+
   data() {
     return {
       districts: [],
@@ -94,6 +95,19 @@ export default {
         address: null,
       }),
     };
+  },
+
+  computed: {
+    fullAddress() {
+      // get full address
+      const { district_id, ward_code, address } = this.form.ghn_address;
+
+      const district = this.districts.find((d) => d.id == district_id);
+
+      const ward = this.wards.find((w) => w.id == ward_code);
+
+      return `${address}, ${ward.text}, ${district.text}`;
+    },
   },
 
   watch: {
@@ -136,23 +150,6 @@ export default {
       const response = await axios.get(url);
 
       return new Promise((resolve) => resolve(response.data.data));
-    },
-
-    updateUserAddress() {
-      this.form.address = this.getFullAddress();
-
-      this.form.put(this.route("user.update_address"));
-    },
-
-    getFullAddress() {
-      // get full address
-      const { district_id, ward_code, address } = this.form.ghn_address;
-
-      const district = this.districts.find((d) => d.id == district_id);
-
-      const ward = this.wards.find((w) => w.id == ward_code);
-
-      return `${address}, ${ward.text}, ${district.text}`;
     },
   },
 };

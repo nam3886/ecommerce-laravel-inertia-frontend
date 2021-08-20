@@ -28,3 +28,22 @@
 .order-table .shipping-row-last {
     border-top: 1px solid #e1e1e1;
 }
+.pointer {
+    cursor: pointer;
+}
+.not-allowed {
+    cursor: not-allowed !important;
+}
+.none-events {
+    pointer-events: none;
+}
+.break-word {
+    word-break: break-all !important;
+    hyphens: auto;
+}
+.two-line-truncate {
+    overflow: hidden !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}

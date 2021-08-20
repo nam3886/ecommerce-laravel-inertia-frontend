@@ -3,9 +3,11 @@
 namespace App\Repositories;
 
 use App\Contracts\CartContract;
+use App\Events\CartChanged;
 use App\Http\Resources\ShopResource;
 use App\Models\Product;
 use App\Models\Shop;
+use App\Traits\SessionShippingFee;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
@@ -17,8 +19,9 @@ use Illuminate\Validation\ValidationException;
  */
 class CartRepository extends BaseRepository implements CartContract
 {
+    use SessionShippingFee;
+
     private $cart;
-    private $shippingFee = 0;
 
     public function __construct(Product $model)
     {
@@ -32,7 +35,8 @@ class CartRepository extends BaseRepository implements CartContract
      */
     public function listCarts()
     {
-        $total = $this->shippingFee + $this->cart->totalFloat();
+        $shippingFee    =   $this->getTotalShippingFee();
+        $grandtotal     =   $shippingFee + $this->cart->totalFloat();
 
         return collect([
             'items'                 =>  $this->cart->content(),
@@ -41,27 +45,24 @@ class CartRepository extends BaseRepository implements CartContract
             'tax'                   =>  $this->cart->taxFloat(),
             'subtotal'              =>  $this->cart->subtotalFloat(),
             'discount'              =>  $this->cart->discountFloat(),
-            'grandtotal'            =>  $this->cart->totalFloat(),
-            'shipping_fee'          =>  $this->shippingFee,
-            'total'                 =>  $total,
+            'total'                 =>  $this->cart->totalFloat(),
+            'shipping_fee'          =>  $shippingFee,
+            'grandtotal'            =>  $grandtotal,
 
             'tax_format'            =>  easy_format_price($this->cart->taxFloat()),
             'subtotal_format'       =>  easy_format_price($this->cart->subtotalFloat()),
             'discount_format'       =>  easy_format_price($this->cart->discountFloat()),
-            'grandtotal_format'     =>  easy_format_price($this->cart->totalFloat()),
-            'shipping_fee_format'   =>  easy_format_price($this->shippingFee),
-            'total_format'          =>  easy_format_price($total),
+            'total_format'          =>  easy_format_price($this->cart->totalFloat()),
+            'shipping_fee_format'   =>  easy_format_price($shippingFee),
+            'grandtotal_format'     =>  easy_format_price($grandtotal),
         ]);
     }
 
     /**
-     * @param int $shippingFee
      * @return \Illuminate\Support\Collection
      */
-    public function listCartsGroupByShop(int $shippingFee = null)
+    public function listCartsGroupByShop()
     {
-        $shippingFee && $this->setShippingFee($shippingFee);
-
         $listCarts          =   $this->listCarts();
         $itemsGroupByShop   =   $listCarts->get('items')->groupBy('options.shop_id');
         $shops              =   Shop::findMany($itemsGroupByShop->keys());
@@ -71,17 +72,30 @@ class CartRepository extends BaseRepository implements CartContract
             $shop           =   $shops->where('id', $items->first()->options->shop_id)->first();
             $temp           =   $this->calculateSubtotalAndTotal($items);
             $items          =   $temp->get('items');
-            $total          =   $temp->get('total');
-            $shippingFee    =   session("shipping_fee_{$shop->id}");
-            $total          +=  $shippingFee;
+            $subtotal       =   $temp->get('subtotal');
+            $discount       =   $temp->get('discount');
+            $tax            =   $temp->get('tax');
+            $total          =   $subtotal + $discount + $tax;
+            $shippingFee    =   $this->getShippingFeeByShopId($shop->id);
+            $grandtotal     =   $total + $shippingFee;
 
             return $carry->push([
                 'shop'                  =>  new ShopResource($shop),
                 'items'                 =>  $items,
-                'shipping_fee'          =>  $shippingFee,
-                'shipping_fee_format'   =>  easy_format_price($shippingFee),
+
+                'subtotal'              =>  $subtotal,
+                'discount'              =>  $discount,
+                'tax'                   =>  $tax,
                 'total'                 =>  $total,
-                'total_format'          =>  easy_format_price($total)
+                'shipping_fee'          =>  $shippingFee,
+                'grandtotal'            =>  $grandtotal,
+
+                'subtotal_format'       =>  easy_format_price($subtotal),
+                'discount_format'       =>  easy_format_price($discount),
+                'tax_format'            =>  easy_format_price($tax),
+                'total_format'          =>  easy_format_price($total),
+                'shipping_fee_format'   =>  easy_format_price($shippingFee),
+                'grandtotal_format'     =>  easy_format_price($grandtotal)
             ]);
         }, collect());
 
@@ -146,7 +160,7 @@ class CartRepository extends BaseRepository implements CartContract
         $params =   $this->prepareParams($params);
         $cart   =   $this->cart->add($params->all())->associate($this->model);
 
-        $this->cartChanged($cart->options->shop_id);
+        CartChanged::dispatch($cart->options->shop_id);
 
         return collect($cart);
     }
@@ -171,7 +185,7 @@ class CartRepository extends BaseRepository implements CartContract
 
         $cart   =   $this->cart->update($id, collect($params)->except('rowId', 'id', 'sku')->all());
 
-        $this->cartChanged($cart->options->shop_id);
+        CartChanged::dispatch($cart->options->shop_id);
 
         return collect($cart);
     }
@@ -184,7 +198,7 @@ class CartRepository extends BaseRepository implements CartContract
     {
         $cart = $this->findCartByRowIdOrFail($id);
 
-        $this->cartChanged($cart->options->shop_id);
+        CartChanged::dispatch($cart->options->shop_id);
 
         return collect($this->cart->remove($id));
     }
@@ -292,41 +306,22 @@ class CartRepository extends BaseRepository implements CartContract
      */
     private function calculateSubtotalAndTotal(Collection $items)
     {
-        $total          =   0;
-        $items          =   $items->map(function ($item) use (&$total) {
+        $tax = $discount = 0;
 
-            $subtotal   =   $item->price * $item->qty;
-            $total      +=  $subtotal;
-            $options    =   collect($item->options)
-                ->put('subtotal', $subtotal)
-                ->put('subtotal_format', easy_format_price($subtotal));
+        $items = $items->map(function ($item) use (&$tax, &$discount) {
+
+            $tax        +=  $item->taxTotal;
+            $discount   +=  $item->discountTotal;
+            $options    =   collect($item->options)->put('subtotal_format', easy_format_price($item->subtotal));
 
             return collect($item)->put('options', $options);
         });
 
         return collect([
-            'items' => $items,
-            'total' => $total,
+            'items'     =>  $items,
+            'subtotal'  =>  $items->sum('subtotal'),
+            'discount'  =>  $discount,
+            'tax'       =>  $tax,
         ]);
-    }
-
-    /**
-     * @return void
-     */
-    private function setShippingFee(int $shippingFee)
-    {
-        $this->shippingFee = $shippingFee;
-    }
-
-    /**
-     * trigger session cart change
-     * @param int $shopId
-     * @return void
-     */
-    private function cartChanged(int $shopId)
-    {
-        // when cart change remove shipping fee of shop and shipping total
-        session()->forget("shipping_fee_{$shopId}");
-        session()->forget('shipping_fee');
     }
 }

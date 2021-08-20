@@ -58,15 +58,6 @@ export default {
     CartSidebar,
   },
 
-  props: ["cartGroupByShop", "calculatedShippingFee"],
-
-  async created() {
-    !this.cartGroupByShop.shipping_fee &&
-      this.$inertia.get(
-        this.route("calculate_shipping_fee"),
-        {},
-        { preserveState: true }
-      );
-  },
+  props: ["cartGroupByShop"],
 };
 </script>

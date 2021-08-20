@@ -12,14 +12,20 @@
               <p class="summary-subtotal-price">{{ cart.subtotal_format }}</p>
             </td>
           </tr>
-          <tr v-if="cart.shipping_fee" class="summary-subtotal">
+          <tr v-if="cart.tax" class="summary-subtotal">
             <td>
-              <h4 class="summary-subtitle">Phí vận chuyển</h4>
+              <h4 class="summary-subtitle">Thuế</h4>
             </td>
             <td>
-              <p class="summary-subtotal-price">
-                {{ cart.shipping_fee_format }}
-              </p>
+              <p class="summary-subtotal-price">{{ cart.tax_format }}</p>
+            </td>
+          </tr>
+          <tr v-if="cart.discount" class="summary-subtotal">
+            <td>
+              <h4 class="summary-subtitle">Voucher</h4>
+            </td>
+            <td>
+              <p class="summary-subtotal-price">{{ cart.discount_format }}</p>
             </td>
           </tr>
         </table>
@@ -30,7 +36,6 @@
             </td>
             <td>
               <p class="summary-total-price ls-s">
-                <!-- {{ cart.grandtotal_format }} -->
                 {{ cart.total_format }}
               </p>
             </td>

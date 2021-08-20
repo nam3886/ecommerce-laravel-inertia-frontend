@@ -4,13 +4,14 @@
       <checkout-breadcrumb index-active="2" />
 
       <div class="container mt-7">
+        <flash-message class="mb-2" />
         <div class="card accordion">
           <div
             class="alert alert-light alert-primary alert-icon mb-4 card-header"
           >
             <i class="fas fa-exclamation-circle"></i>
-            <span class="text-body">Have a coupon?</span>&nbsp;
-            <a href="#alert-body2" class="text-primary">
+            <span class="text-body font-weight-normal"> Have a coupon? </span>
+            <a href="#alert-body2" class="text-primary font-weight-normal">
               Click here to enter your code
             </a>
           </div>
@@ -34,237 +35,20 @@
             </div>
           </div>
         </div>
-        <form action="#" class="form">
-          <div class="row">
-            <div class="col-lg-7 mb-6 mb-lg-0 pr-lg-4">
-              <h3 class="title title-simple text-left text-uppercase">
-                Billing Details
-              </h3>
-              <div class="row">
-                <div class="col-xs-6">
-                  <label>First Name *</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="first-name"
-                    required=""
-                  />
-                </div>
-                <div class="col-xs-6">
-                  <label>Last Name *</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="last-name"
-                    required=""
-                  />
-                </div>
-              </div>
-              <label>Company Name (Optional)</label>
-              <input
-                type="text"
-                class="form-control"
-                name="company-name"
-                required=""
-              />
-              <label>Country / Region *</label>
-              <div class="select-box">
-                <select name="country" class="form-control">
-                  <option value="us" selected>United States (US)</option>
-                  <option value="uk">United Kingdom</option>
-                  <option value="fr">France</option>
-                  <option value="aus">Austria</option>
-                </select>
-              </div>
-              <label>Street Address *</label>
-              <input
-                type="text"
-                class="form-control"
-                name="address1"
-                required=""
-                placeholder="House number and street name"
-              />
-              <input
-                type="text"
-                class="form-control"
-                name="address2"
-                required=""
-                placeholder="Apartment, suite, unit, etc. (optional)"
-              />
-              <div class="row">
-                <div class="col-xs-6">
-                  <label>Town / City *</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="city"
-                    required=""
-                  />
-                </div>
-                <div class="col-xs-6">
-                  <label>State *</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="state"
-                    required=""
-                  />
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xs-6">
-                  <label>ZIP *</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="zip"
-                    required=""
-                  />
-                </div>
-                <div class="col-xs-6">
-                  <label>Phone *</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="phone"
-                    required=""
-                  />
-                </div>
-              </div>
-              <label>Email Address *</label>
-              <input
-                type="text"
-                class="form-control"
-                name="email-address"
-                required=""
-              />
-              <div class="form-checkbox mb-0">
-                <input
-                  type="checkbox"
-                  class="custom-checkbox"
-                  id="create-account"
-                  name="create-account"
-                />
-                <label class="form-control-label ls-s" for="create-account"
-                  >Create an account?</label
-                >
-              </div>
-              <div class="form-checkbox mb-6">
-                <input
-                  type="checkbox"
-                  class="custom-checkbox"
-                  id="different-address"
-                  name="different-address"
-                />
-                <label class="form-control-label ls-s" for="different-address"
-                  >Ship to a different address?</label
-                >
-              </div>
-              <h2 class="title title-simple text-uppercase text-left">
-                Additional Information
-              </h2>
-              <label>Order Notes (Optional)</label>
-              <textarea
-                class="form-control pb-2 pt-2 mb-0"
-                cols="30"
-                rows="5"
-                placeholder="Notes about your order, e.g. special notes for delivery"
-              ></textarea>
-            </div>
-            <aside class="col-lg-5 sticky-sidebar-wrapper">
-              <div
-                class="sticky-sidebar mt-1"
-                data-sticky-options="{'bottom': 50}"
-              >
-                <div class="summary pt-5">
-                  <h3 class="title title-simple text-left text-uppercase">
-                    Your Order
-                  </h3>
-                  <table class="order-table">
-                    <thead>
-                      <tr>
-                        <th>Địa chỉ nhận hàng</th>
-                        <th>
-                          <a href="#"><u>Thay đổi</u></a>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td colspan="2" class="product-name text-left">
-                          Nguyễn Phương Nam (+84) 973366072
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colspan="2" class="product-name text-left">
-                          75b đường số 2, Phường Hiệp Bình Phước, Thành Phố Thủ
-                          Đức, TP. Hồ Chí Minh
-                        </td>
-                      </tr>
-                      <tr class="sumnary-shipping shipping-row-last">
-                        <td colspan="2">
-                          <h4 class="summary-subtitle">Vận chuyển</h4>
-                          <delivery-method
-                            v-model="form.delivery_method_id"
-                            :deliveryMethods="deliveryMethods"
-                          />
-                        </td>
-                      </tr>
-                      <tr class="summary-subtotal">
-                        <td>
-                          <h4 class="summary-subtitle">Tổng tiền</h4>
-                        </td>
-                        <td class="summary-subtotal-price pb-0 pt-0">
-                          $290.00
-                        </td>
-                      </tr>
-                      <tr class="summary-subtotal">
-                        <td>
-                          <h4 class="summary-subtitle">Phí vận chuyển</h4>
-                        </td>
-                        <td class="summary-subtotal-price pb-0 pt-0">
-                          $290.00
-                        </td>
-                      </tr>
-                      <tr class="summary-total">
-                        <td class="pb-0">
-                          <h4 class="summary-subtitle">Tổng cộng</h4>
-                        </td>
-                        <td class="pt-0 pb-0">
-                          <p class="summary-total-price ls-s text-primary">
-                            $290.00
-                          </p>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div class="payment accordion radio-type">
-                    <h4 class="summary-subtitle ls-m pb-3">Thanh toán</h4>
-                    <payment-method
-                      v-model="form.payment_method_id"
-                      :paymentMethods="paymentMethods"
-                    />
-                  </div>
-                  <div class="form-checkbox mt-4 mb-5">
-                    <label
-                      class="form-control-label pl-0"
-                      for="terms-condition"
-                    >
-                      Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo
-                      <a href="#">Điều khoản Skinest </a>*
-                    </label>
-                  </div>
-                  <button
-                    type="submit"
-                    class="btn btn-dark btn-rounded btn-order"
-                  >
-                    Đặt hàng
-                  </button>
-                </div>
-              </div>
-            </aside>
+        <div class="row form">
+          <div class="col-lg-7 mb-6 mb-lg-0 pr-lg-4">
+            <h3 class="title title-simple text-left text-uppercase">
+              Sản phẩm
+            </h3>
+            <cart-list :carts="cartGroupByShop.items" />
           </div>
-        </form>
+          <invoice
+            :user="user"
+            :cart="cartGroupByShop"
+            :deliveryMethods="deliveryMethods"
+            :paymentMethods="paymentMethods"
+          />
+        </div>
       </div>
     </div>
 
@@ -276,28 +60,16 @@
 import Layout from "@/Layouts/AppLayout/index.vue";
 import { Head } from "@inertiajs/inertia-vue3";
 import CheckoutBreadcrumb from "@/Shared/CheckoutBreadcrumb.vue";
-import DeliveryMethod from "@/Shared/Partials/Checkout/DeliveryMethod.vue";
-import PaymentMethod from "@/Shared/Partials/Checkout/PaymentMethod.vue";
+import Invoice from "@/Shared/Partials/Checkout/Invoice.vue";
+import CartList from "@/Shared/Partials/Checkout/List.vue";
+import FlashMessage from "@/Shared/Alert/FlashMessage.vue";
 import "@r/css/style.css";
 
 export default {
   layout: Layout,
 
-  props: ["cart", "deliveryMethods", "paymentMethods"],
+  props: ["cartGroupByShop", "user", "deliveryMethods", "paymentMethods"],
 
-  components: { Head, CheckoutBreadcrumb, DeliveryMethod, PaymentMethod },
-
-  data() {
-    return {
-      districts: [],
-      wards: [],
-      form: this.$inertia.form({
-        delivery_method_id: null,
-        payment_method_id: null,
-        ghn_address: { address: null, district_id: null, ward_code: null },
-        address: null,
-      }),
-    };
-  },
+  components: { Head, CheckoutBreadcrumb, Invoice, CartList, FlashMessage },
 };
 </script>

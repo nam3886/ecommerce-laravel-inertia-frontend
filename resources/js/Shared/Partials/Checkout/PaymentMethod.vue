@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="method in paymentMethods" :key="method.id" class="card">
+    <div v-for="method in methods" :key="method.id" class="card">
       <div class="card-header">
         <a
           @click.prevent="$emit('update:modelValue', method.id)"
@@ -31,7 +31,7 @@
 
 <script>
 export default {
-  props: ["paymentMethods", "modelValue"],
+  props: ["methods", "modelValue"],
 
   emits: ["update:modelValue"],
 };

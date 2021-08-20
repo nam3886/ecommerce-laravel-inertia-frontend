@@ -6,10 +6,13 @@ use App\Contracts\CartContract;
 use App\Http\Controllers\BaseController;
 use App\Models\UserAddress;
 use App\Services\GHN\GHNService;
+use App\Traits\SessionShippingFee;
 use Illuminate\Http\Request;
 
 class ShippingController extends BaseController
 {
+    use SessionShippingFee;
+
     private $cartRepository;
 
     public function __construct(CartContract $cartRepository)
@@ -39,7 +42,7 @@ class ShippingController extends BaseController
                 };
             }, 0);
 
-            session(['shipping_fee' => $shippingFee]);
+            $this->setTotalShippingFee($shippingFee);
             // dd(1);
         } catch (\Throwable $th) {
             return $this->responseJson(message: $th->getMessage(), responseCode: $th->getCode());
@@ -55,7 +58,7 @@ class ShippingController extends BaseController
      */
     private function needCalculateShippingFee(int $shopId)
     {
-        return !session()->has("shipping_fee_{$shopId}");
+        return !$this->hasShippingFeeByShopId($shopId) || $this->checkAddressHasBeenChanged();
     }
 
     /**
@@ -80,9 +83,10 @@ class ShippingController extends BaseController
                 "weight"            =>  $weight,
             ])->get('service_fee');
 
-            session(["shipping_fee_{$shop->id}" => $shippingFee]);
+            $this->setShippingFeeByShopId($shop->id, $shippingFee);
+            $this->addressChangeConfirmed();
         }
 
-        return session("shipping_fee_{$shop->id}");
+        return $this->getShippingFeeByShopId($shop->id);
     }
 }

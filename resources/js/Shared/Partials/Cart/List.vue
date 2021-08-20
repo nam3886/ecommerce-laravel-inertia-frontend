@@ -1,6 +1,9 @@
 <template>
   <div v-for="(cart, index) in carts" :key="index" :class="{ 'mt-7': index }">
-    <h5>{{ cart.shop.name }}</h5>
+    <h5>
+      <i class="fas fa-store text-primary"></i>&nbsp;
+      {{ cart.shop.name }}
+    </h5>
     <table class="shop-table cart-table">
       <thead>
         <tr>
@@ -26,7 +29,7 @@
             </figure>
           </td>
           <td class="product-name">
-            <div class="product-name-section">
+            <div class="product-name-section break-word">
               <link-slug :slug="item.options.slug">{{ item.name }}</link-slug>
             </div>
           </td>
@@ -55,11 +58,9 @@
             </a>
           </td>
         </tr>
-        <tr v-if="cart.shipping_fee">
-          <td colspan="4" class="product-name">Phí vận chuyển</td>
-          <td colspan="2" class="product-price">
-            {{ cart.shipping_fee_format }}
-          </td>
+        <tr v-if="cart.tax">
+          <td colspan="4" class="product-name">Thuế</td>
+          <td colspan="2" class="product-price">{{ cart.tax_format }}</td>
         </tr>
         <tr>
           <td colspan="4" class="product-name">Tổng tiền</td>

@@ -44,9 +44,18 @@ Route::get('product/{product:slug}', [ProductController::class, 'show'])->name('
 
 Route::resource('cart', CartController::class);
 
-Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::get('empty-cart', function () {
+    return 'deo co hang OK';
+})->name('empty_cart');
 
-Route::put('auth/update-address', [UserController::class, 'updateAddress'])->name('user.update_address');
+Route::middleware('auth')->group(function () {
 
-Route::get('calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee'])->name('calculate_shipping_fee');
+    Route::put('auth/update-address', [UserController::class, 'updateAddress'])->name('user.update_address');
+});
 
+Route::middleware('auth', 'not_empty_cart')->group(function () {
+
+    Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+
+    Route::get('calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee'])->name('calculate_shipping_fee');
+});

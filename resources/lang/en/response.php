@@ -118,7 +118,7 @@ return [
             'get_fee' => 'Error occurred while getting address.',
         ],
         'success' => [
-            'get_fee' => 'shipping fee got successfully.',
+            'get_fee' => 'Shipping fee got successfully.',
         ],
     ],
 

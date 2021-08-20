@@ -29,8 +29,8 @@ class CreateSubOrdersTable extends Migration
             $table->unsignedInteger('discount_price');
             $table->unsignedInteger('tax_price');
             $table->unsignedInteger('subtotal');
-            $table->unsignedInteger('grandtotal'); // exclude delivery fee
-            $table->unsignedInteger('total'); // include delivery fee
+            $table->unsignedInteger('total'); // exclude delivery fee
+            $table->unsignedInteger('grandtotal'); // include delivery fee
 
             $table->string('note')->nullable();
             $table->string('status')->nullable();

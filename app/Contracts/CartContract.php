@@ -14,10 +14,9 @@ interface CartContract
     public function listCarts();
 
     /**
-     * @param int $shippingFee
      * @return \Illuminate\Support\Collection
      */
-    public function listCartsGroupByShop(int $shippingFee = null);
+    public function listCartsGroupByShop();
 
     /**
      * @param string $id
