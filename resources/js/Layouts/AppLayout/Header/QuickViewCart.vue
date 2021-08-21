@@ -13,15 +13,12 @@
         <span class="cart-count">{{ cart.count }}</span>
       </i>
     </a>
-    <div class="cart-overlay"></div>
+    <div ref="overlay" class="cart-overlay"></div>
     <!-- End Cart Toggle -->
     <div v-if="!route().current('checkout.index')" class="dropdown-box">
       <div class="cart-header">
         <h4 class="cart-title">Shopping Cart</h4>
-        <a
-          ref="btnCloseQuickCart"
-          href="#"
-          class="btn btn-dark btn-link btn-icon-right btn-close"
+        <a href="#" class="btn btn-dark btn-link btn-icon-right btn-close"
           >close<i class="d-icon-arrow-right"></i
           ><span class="sr-only">Cart</span></a
         >
@@ -93,7 +90,7 @@ export default {
 
   mounted() {
     this.$EMITTER.on("inertia-finish", () => {
-      this.$refs.btnCloseQuickCart?.click();
+      this.$refs.overlay.click();
     });
   },
 };

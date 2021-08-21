@@ -35,6 +35,10 @@
                   v-model="form.delivery_method_id"
                   :methods="deliveryMethods"
                 />
+                <error-message
+                  v-if="form.errors.delivery_method_id"
+                  :message="form.errors.delivery_method_id"
+                />
               </td>
             </tr>
             <tr class="summary-subtotal">
@@ -87,6 +91,10 @@
             v-model="form.payment_method_id"
             :methods="paymentMethods"
           />
+          <error-message
+            v-if="form.errors.payment_method_id"
+            :message="form.errors.payment_method_id"
+          />
         </div>
         <div class="form-checkbox mt-4 mb-5">
           <label class="form-control-label pl-0" for="terms-condition">
@@ -112,9 +120,10 @@
 import { wait } from "@/helpers.js";
 import DeliveryMethod from "@/Shared/Partials/Checkout/DeliveryMethod.vue";
 import PaymentMethod from "@/Shared/Partials/Checkout/PaymentMethod.vue";
+import ErrorMessage from "@/Shared/Inputs/ErrorMessage.vue";
 
 export default {
-  components: { DeliveryMethod, PaymentMethod },
+  components: { DeliveryMethod, PaymentMethod, ErrorMessage },
 
   props: ["user", "cart", "deliveryMethods", "paymentMethods"],
 
@@ -139,14 +148,13 @@ export default {
 
   mounted() {
     if (this.user.address) return Object.assign(this.form, this.user.address);
-
     // wait popup mounted
     wait().then(() => this.$EMITTER.emit("show-popup:user-info"));
   },
 
   methods: {
     checkout() {
-      console.log(this.form);
+      this.form.post(this.route("checkout.store"));
     },
   },
 };

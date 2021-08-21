@@ -3,13 +3,16 @@
 namespace App\Providers;
 
 use App\Contracts\CartContract;
+use App\Contracts\OrderContract;
 use App\Repositories\CartRepository;
+use App\Repositories\OrderRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
     protected $repositories = [
         CartContract::class => CartRepository::class,
+        OrderContract::class => OrderRepository::class,
     ];
     /**
      * Register services.

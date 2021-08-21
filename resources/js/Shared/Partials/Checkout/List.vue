@@ -17,7 +17,7 @@
       </thead>
       <tbody>
         <tr v-for="item in cart.items" :key="item.rowId">
-          <td class="product-name break-word" style="width: 75%">
+          <td class="product-name break-word">
             <link-slug :slug="item.options.slug">{{ item.name }}</link-slug>
             <span class="product-quantity">×&nbsp;{{ item.qty }}</span>
           </td>
@@ -63,3 +63,14 @@ export default {
   components: { LinkSlug },
 };
 </script>
+
+<style scoped>
+table .product-name {
+  width: 75%;
+}
+@media (max-width: 992px) {
+  table .product-name {
+    width: 100%;
+  }
+}
+</style>

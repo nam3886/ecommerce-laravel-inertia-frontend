@@ -10,32 +10,80 @@
     >
       <div class="mfp-container mfp-ajax-holder mfp-s-ready">
         <div class="mfp-content">
-          <user-info @submit="updateUserAddress">
-            <template #action="{ form }">
-              <div class="d-flex">
-                <button
-                  :disabled="form.processing"
-                  :class="{ 'opacity-65 not-allowed': form.processing }"
-                  type="button"
+          <div class="login-popup overlay-popup">
+            <div class="form-box">
+              <div class="tab tab-nav-simple tab-nav-boxed form-tab">
+                <ul
                   class="
-                    btn btn-md btn-dark btn-block btn-rounded btn-outline
-                    mr-4
+                    nav nav-tabs nav-fill
+                    align-items-center
+                    border-no
+                    justify-content-center
+                    mb-5
                   "
-                  style="border-width: 1px"
+                  role="tablist"
                 >
-                  Trở lại
-                </button>
-                <button
-                  :disabled="form.processing"
-                  :class="{ 'opacity-65 not-allowed': form.processing }"
-                  class="btn btn-dark btn-block btn-rounded ml-4"
-                  type="submit"
-                >
-                  Thay đổi
-                </button>
+                  <li class="nav-item">
+                    <span class="nav-link active border-no lh-1 ls-normal">
+                      Thông tin
+                    </span>
+                  </li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active">
+                    <form @submit.prevent="updateUserAddress">
+                      <group>
+                        <input
+                          :value="$page.props.user.name"
+                          disabled
+                          type="text"
+                          class="form-control not-allowed"
+                          placeholder="Họ và Tên"
+                        />
+                      </group>
+                      <group>
+                        <input
+                          :value="$page.props.user.phone"
+                          disabled
+                          type="text"
+                          class="form-control not-allowed"
+                          placeholder="Số điện thoại"
+                        />
+                      </group>
+                      <user-info v-model="form" />
+                      <div class="d-flex">
+                        <button
+                          @click="show = false"
+                          :disabled="form.processing"
+                          :class="{ 'opacity-65 not-allowed': form.processing }"
+                          type="button"
+                          class="
+                            btn
+                            btn-md
+                            btn-dark
+                            btn-block
+                            btn-rounded
+                            btn-outline
+                            mr-4
+                          "
+                          style="border-width: 1px"
+                        >
+                          Trở lại
+                        </button>
+                        <button
+                          :disabled="form.processing"
+                          :class="{ 'opacity-65 not-allowed': form.processing }"
+                          class="btn btn-dark btn-block btn-rounded ml-4"
+                          type="submit"
+                        >
+                          Thay đổi
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
               </div>
-            </template>
-
+            </div>
             <button
               @click="show = false"
               title="Close (Esc)"
@@ -44,7 +92,7 @@
             >
               <span>×</span>
             </button>
-          </user-info>
+          </div>
         </div>
       </div>
     </div>
@@ -53,14 +101,28 @@
 
 <script>
 import UserInfo from "@/Shared/Popup/UserInfo/UserInfo.vue";
+import Group from "@/Shared/Inputs/Group.vue";
 
 export default {
-  components: { UserInfo },
+  components: { UserInfo, Group },
 
   data() {
     return {
       show: false,
+      form: this.$inertia.form({
+        ghn_address: {},
+        address: null,
+      }),
     };
+  },
+
+  watch: {
+    show(show) {
+      if (!show) {
+        this.form.clearErrors();
+        this.form.ghn_address = {};
+      }
+    },
   },
 
   mounted() {
@@ -70,10 +132,8 @@ export default {
   },
 
   methods: {
-    updateUserAddress(form, address) {
-      form.address = address;
-
-      form.put(this.route("user.update_address"), {
+    updateUserAddress() {
+      this.form.put(this.route("user.update_address"), {
         onSuccess: () => this.$EMITTER.emit("hide-popup:user-info"),
         preserveState: false,
         preserveScroll: true,
