@@ -13,13 +13,12 @@ class Discount extends Model
     use HasFactory, SoftDeletes, WithStandardPrice;
 
     protected $fillable = [
-        'variant_id',
-        'product_id',
+        'sku',
         'price',
         'start',
         'end',
         'unit',
-        'valid',
+        'active',
     ];
 
     protected $casts = [
@@ -29,12 +28,12 @@ class Discount extends Model
 
     public function variant(): BelongsTo
     {
-        return $this->belongsTo(Variant::class);
+        return $this->belongsTo(Variant::class, 'sku', 'sku');
     }
 
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'sku', 'sku');
     }
 
     public function discountFormat(): string

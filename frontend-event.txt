@@ -17,10 +17,13 @@ hide-popup:login
 show-popup:user-info
 hide-popup:user-info
 
-processing:add-cart
-end-processing:add-cart
+processing:cart
+processed:cart
 
 session:
 "shipping_{$shop->id}_fee"
 "shipping_fee"
 "user_address_changed"
+
+
+// todo loading

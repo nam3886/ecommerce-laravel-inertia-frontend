@@ -23,11 +23,11 @@ class CreateSubOrdersTable extends Migration
 
             $table->enum('required_note', ['CHOTHUHANG', 'CHOXEMHANGKHONGTHU', 'KHONGCHOXEMHANG'])->default('KHONGCHOXEMHANG');
             $table->unsignedInteger('cod_amount')->nullable(); // tiền thu hộ
-            $table->unsignedInteger('delivery_fee');
+            $table->unsignedInteger('shipping_fee');
 
             $table->unsignedInteger('items_count');
-            $table->unsignedInteger('discount_price');
-            $table->unsignedInteger('tax_price');
+            $table->unsignedInteger('discount');
+            $table->unsignedInteger('tax');
             $table->unsignedInteger('subtotal');
             $table->unsignedInteger('total'); // exclude delivery fee
             $table->unsignedInteger('grandtotal'); // include delivery fee

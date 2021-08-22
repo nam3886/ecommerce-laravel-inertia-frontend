@@ -15,13 +15,12 @@ class CreateDiscountsTable extends Migration
     {
         Schema::create('discounts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('variant_id')->unique()->nullable()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('product_id')->unique()->nullable()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('sku');
             $table->unsignedBigInteger('price');
             $table->timestamp('start');
             $table->timestamp('end');
             $table->enum('unit', ['percent', 'currency'])->default('percent');
-            $table->boolean('valid')->default(1);
+            $table->boolean('active')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

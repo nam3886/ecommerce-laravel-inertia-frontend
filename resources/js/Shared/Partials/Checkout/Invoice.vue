@@ -38,6 +38,7 @@
                 <error-message
                   v-if="form.errors.delivery_method_id"
                   :message="form.errors.delivery_method_id"
+                  class="mt-2"
                 />
               </td>
             </tr>
@@ -94,6 +95,24 @@
           <error-message
             v-if="form.errors.payment_method_id"
             :message="form.errors.payment_method_id"
+            class="mt-2"
+          />
+        </div>
+        <!-- payment_method_id == 1 => stripe -->
+        <div
+          v-if="form.payment_method_id == 1"
+          class="payment accordion radio-type"
+        >
+          <h4 class="summary-subtitle ls-m pb-3">Credit hoặc debit card</h4>
+          <stripe
+            v-model="form.stripe_token"
+            @error="form.errors.stripe_token = $event"
+            @input="form.clearErrors('stripe_token')"
+            :publishableKey="stripePublishableKey"
+          />
+          <error-message
+            v-if="form.errors.stripe_token"
+            :message="form.errors.stripe_token"
           />
         </div>
         <div class="form-checkbox mt-4 mb-5">
@@ -120,18 +139,26 @@
 import { wait } from "@/helpers.js";
 import DeliveryMethod from "@/Shared/Partials/Checkout/DeliveryMethod.vue";
 import PaymentMethod from "@/Shared/Partials/Checkout/PaymentMethod.vue";
+import Stripe from "@/Shared/Partials/Checkout/Stripe.vue";
 import ErrorMessage from "@/Shared/Inputs/ErrorMessage.vue";
 
 export default {
-  components: { DeliveryMethod, PaymentMethod, ErrorMessage },
+  components: { DeliveryMethod, PaymentMethod, Stripe, ErrorMessage },
 
-  props: ["user", "cart", "deliveryMethods", "paymentMethods"],
+  props: [
+    "user",
+    "cart",
+    "deliveryMethods",
+    "paymentMethods",
+    "stripePublishableKey",
+  ],
 
   data() {
     return {
       form: this.$inertia.form({
         delivery_method_id: null,
         payment_method_id: null,
+        stripe_token: null,
       }),
     };
   },
@@ -139,6 +166,7 @@ export default {
   created() {
     // chưa có shippping fee và user đã có address
     if (!this.cart.shipping_fee && this.user.address) {
+      // todo loading
       this.form.get(this.route("calculate_shipping_fee"), {
         preserveState: false,
         preserveScroll: true,
@@ -154,7 +182,9 @@ export default {
 
   methods: {
     checkout() {
-      this.form.post(this.route("checkout.store"));
+      this.form.post(this.route("checkout.store"), {
+        preserveScroll: true,
+      });
     },
   },
 };

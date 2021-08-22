@@ -38,7 +38,8 @@ class CheckoutController extends BaseController
         $paymentMethods     =   PaymentMethod::select($selects)->whereActive(1)->get();
         $cartGroupByShop    =   $this->cartRepository->listCartsGroupByShop();
 
-        return Inertia::render('Checkout', compact('deliveryMethods', 'paymentMethods', 'cartGroupByShop'));
+        return Inertia::render('Checkout', compact('deliveryMethods', 'paymentMethods', 'cartGroupByShop'))
+            ->with('stripePublishableKey', config('third_party.stripe_client_id'));
     }
 
     /**

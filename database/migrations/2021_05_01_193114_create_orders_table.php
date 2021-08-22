@@ -20,14 +20,11 @@ class CreateOrdersTable extends Migration
             $table->foreignId('payment_method_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
 
             $table->unsignedInteger('items_count');
-            $table->unsignedInteger('discount_price');
-            $table->unsignedInteger('tax_price');
+            $table->unsignedInteger('discount');
+            $table->unsignedInteger('tax');
             $table->unsignedInteger('subtotal');
             $table->unsignedInteger('total'); // exclude delivery fee
             $table->unsignedInteger('grandtotal'); // include delivery fee
-
-            // $table->unsignedFloat('exchange_rate')->default(1);
-            // $table->json('exchange_currency');
 
             $table->boolean('is_paid')->nullable();
             $table->string('transaction_number')->nullable();

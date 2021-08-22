@@ -91,19 +91,21 @@ class Product extends Model
 
     public function discount(): HasOne
     {
-        return $this->hasOne(Discount::class);
+        return $this->hasOne(Discount::class, 'sku', 'sku')
+            ->whereActive(1)
+            ->whereDate('end', '>', now());
     }
 
     public function orders(): BelongsToMany
     {
-        return $this->belongsToMany(Order::class, 'order_details')
+        return $this->belongsToMany(Order::class)
             ->using(OrderDetail::class)
             ->withPivot('price', 'quantity', 'sku');
     }
 
     public function subOrders(): BelongsToMany
     {
-        return $this->belongsToMany(SubOrder::class, 'order_details')
+        return $this->belongsToMany(SubOrder::class)
             ->using(OrderDetail::class)
             ->withPivot('price', 'quantity', 'sku');
     }

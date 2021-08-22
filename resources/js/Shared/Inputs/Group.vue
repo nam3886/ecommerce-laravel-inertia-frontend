@@ -1,7 +1,7 @@
 <template>
   <div :class="{ 'is-invalid': errorMessage }" class="form-group">
     <slot />
-    <error-message v-if="errorMessage" :message="errorMessage" />
+    <error-message v-if="errorMessage" :message="errorMessage" class="mt-1" />
   </div>
 </template>
 

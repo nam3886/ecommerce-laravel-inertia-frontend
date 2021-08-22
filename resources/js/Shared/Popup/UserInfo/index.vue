@@ -100,10 +100,13 @@
 </template>
 
 <script>
+import InteractsWithPopup from "@/Mixins/InteractsWithPopup.vue";
 import UserInfo from "@/Shared/Popup/UserInfo/UserInfo.vue";
 import Group from "@/Shared/Inputs/Group.vue";
 
 export default {
+  mixins: [InteractsWithPopup],
+
   components: { UserInfo, Group },
 
   data() {

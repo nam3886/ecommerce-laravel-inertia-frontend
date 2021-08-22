@@ -1,6 +1,6 @@
 <template>
   <div
-    class="alert-danger alert-simple border-no font-weight-normal mt-1"
+    class="alert-danger alert-simple border-no font-weight-normal"
     style="font-size: 13px"
   >
     {{ message }}

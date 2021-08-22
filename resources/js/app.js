@@ -3,6 +3,7 @@ import { createInertiaApp } from "@inertiajs/inertia-vue3";
 import { InertiaProgress } from "@inertiajs/progress";
 import mitt from "mitt";
 import messages from "@/constants/messages.js";
+import "@stripe/stripe-js";
 
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";

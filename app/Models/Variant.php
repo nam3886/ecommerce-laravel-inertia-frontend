@@ -32,7 +32,9 @@ class Variant extends Model
 
     public function discount(): HasOne
     {
-        return $this->hasOne(Discount::class);
+        return $this->hasOne(Discount::class, 'sku', 'sku')
+            ->whereActive(1)
+            ->whereDate('end', '>', now());
     }
 
     public function product(): BelongsTo

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Contracts\OrderContract;
 use App\Models\Order;
+use App\Services\Checkout\StripeCheckoutService;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 
@@ -44,6 +45,7 @@ class OrderRepository extends BaseRepository implements OrderContract
     public function createOrder(array $params)
     {
         // stripe has id 1
+        (new StripeCheckoutService($params))->execute();
     }
 
     /**

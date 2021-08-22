@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OrderDetail extends Pivot
 {
@@ -29,6 +28,11 @@ class OrderDetail extends Pivot
     public function subOrder(): BelongsTo
     {
         return $this->belongsTo(SubOrder::class);
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class, 'sku', 'sku');
     }
 
     public function variant(): BelongsTo

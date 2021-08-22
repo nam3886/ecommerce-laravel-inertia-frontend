@@ -47,6 +47,7 @@
             :cart="cartGroupByShop"
             :deliveryMethods="deliveryMethods"
             :paymentMethods="paymentMethods"
+            :stripePublishableKey="stripePublishableKey"
           />
         </div>
       </div>
@@ -68,7 +69,13 @@ import "@r/css/style.css";
 export default {
   layout: Layout,
 
-  props: ["cartGroupByShop", "user", "deliveryMethods", "paymentMethods"],
+  props: [
+    "cartGroupByShop",
+    "user",
+    "deliveryMethods",
+    "paymentMethods",
+    "stripePublishableKey",
+  ],
 
   components: { Head, CheckoutBreadcrumb, Invoice, CartList, FlashMessage },
 };

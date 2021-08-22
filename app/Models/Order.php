@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
@@ -18,8 +17,8 @@ class Order extends Model
         'user_id',
         'payment_method_id',
         'items_count',
-        'discount_price',
-        'tax_price',
+        'discount',
+        'tax',
         'subtotal',
         'total',
         'grandtotal',
@@ -30,15 +29,6 @@ class Order extends Model
         'create_order_success',
         'active',
         'updated_by',
-    ];
-
-    protected $casts = [
-        'api_address' => 'object',
-        'exchange_currency' => 'object',
-    ];
-
-    protected $attributes = [
-        'exchange_currency' => ['from' => 'VND', 'to' => 'VND'],
     ];
 
     public function setOrderCodeAttribute($value)
@@ -63,7 +53,7 @@ class Order extends Model
 
     public function items(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, 'order_details')
+        return $this->belongsToMany(Product::class)
             ->using(OrderDetail::class)
             ->withPivot('price', 'quantity', 'sku');
     }
