@@ -18,7 +18,7 @@ export default {
   },
 
   async mounted() {
-    // todo loading
+    this.$EMITTER.emit("processing");
     this.stripe = await loadStripe(this.publishableKey);
     this.card = this.stripe.elements().create("card", {
       style: {
@@ -43,6 +43,7 @@ export default {
 
     this.card.mount(this.$refs.stripeElement);
     this.card.addEventListener("change", this.handleChangeInput);
+    this.$EMITTER.emit("processed");
   },
 
   methods: {
@@ -51,13 +52,18 @@ export default {
       this.$emit("update:modelValue", null);
 
       event.error && this.$emit("error", event.error.message);
-      // todo loading
-      event.complete &&
+
+      if (event.complete) {
+        this.$EMITTER.emit("processing");
+
         this.createToken().then((result) => {
+          this.$EMITTER.emit("processed");
+
           if (result.error) return this.$emit("error", result.error.message);
 
           this.$emit("update:modelValue", result.token.id);
         });
+      }
     },
 
     createToken() {

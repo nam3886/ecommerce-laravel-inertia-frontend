@@ -3,8 +3,13 @@
 namespace App\Providers;
 
 use App\Events\CartChanged;
+use App\Events\OrderCreated;
 use App\Events\UserAddressChanged;
+use App\Listeners\CacheOrder;
 use App\Listeners\ClearSessionShippingFee;
+use App\Listeners\ClearVoucher;
+use App\Listeners\DestroyCart;
+use App\Listeners\SendMailOrder;
 use App\Listeners\SetSessionUserAddressChanged;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -28,6 +33,12 @@ class EventServiceProvider extends ServiceProvider
         UserAddressChanged::class => [
             SetSessionUserAddressChanged::class,
         ],
+        OrderCreated::class => [
+            DestroyCart::class,
+            ClearVoucher::class,
+            CacheOrder::class,
+            SendMailOrder::class,
+        ]
     ];
 
     /**

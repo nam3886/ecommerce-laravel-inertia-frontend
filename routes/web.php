@@ -38,19 +38,18 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 Route::redirect('/', '/home', 301);
 Route::get('home', [HomeController::class, 'index'])->name('home');
 Route::get('wishlist', [HomeController::class, 'wishlist']);
-Route::get('order', [HomeController::class, 'order'])->name('order');
 
 Route::get('product/{product:slug}', [ProductController::class, 'show'])->name('product.show');
 
 Route::resource('cart', CartController::class);
 
-Route::get('empty-cart', function () {
-    return 'deo co hang OK';
-})->name('empty_cart');
+Route::get('empty-cart', fn () => 'deo co hang OK')->name('empty_cart');
 
 Route::middleware('auth')->group(function () {
 
     Route::put('auth/update-address', [UserController::class, 'updateAddress'])->name('user.update_address');
+
+    Route::get('order/{order}', [CheckoutController::class, 'show'])->name('checkout.show');
 });
 
 Route::middleware('auth', 'not_empty_cart')->group(function () {
@@ -58,5 +57,6 @@ Route::middleware('auth', 'not_empty_cart')->group(function () {
     Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout.index');
     Route::post('checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 
-    Route::get('calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee'])->name('calculate_shipping_fee');
+    Route::get('calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee'])
+        ->name('calculate_shipping_fee');
 });

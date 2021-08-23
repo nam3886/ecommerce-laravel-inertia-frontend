@@ -52,9 +52,9 @@ export default {
   },
 
   mounted() {
-    this.$EMITTER.on("processing:cart", () => (this.isProcessing = true));
+    this.$EMITTER.on("processing", () => (this.isProcessing = true));
 
-    this.$EMITTER.on("processed:cart", () => (this.isProcessing = false));
+    this.$EMITTER.on("processed", () => (this.isProcessing = false));
   },
 };
 </script>

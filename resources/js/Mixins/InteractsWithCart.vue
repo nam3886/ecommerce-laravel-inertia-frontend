@@ -37,12 +37,12 @@ export default {
     store(id, qty, sku, callback) {
       Object.assign(this.form, { id, qty, sku });
 
-      this.$EMITTER.emit("processing:cart");
+      this.$EMITTER.emit("processing");
 
       this.form.post(this.route("cart.store"), {
         preserveScroll: true,
         onError: this.handleCartError,
-        onFinish: () => this.$EMITTER.emit("processed:cart"),
+        onFinish: () => this.$EMITTER.emit("processed"),
         onSuccess: () => {
           this.$EMITTER.emit("add-cart:success");
           typeof callback === "function" && callback();
@@ -53,12 +53,12 @@ export default {
     update(rowId, qty, callback) {
       Object.assign(this.form, { rowId, qty });
 
-      this.$EMITTER.emit("processing:cart");
+      this.$EMITTER.emit("processing");
 
       this.form.put(this.route("cart.update", rowId), {
         preserveScroll: true,
         onError: this.handleCartError,
-        onFinish: () => this.$EMITTER.emit("processed:cart"),
+        onFinish: () => this.$EMITTER.emit("processed"),
         onSuccess: () => {
           this.$EMITTER.emit("update-cart:success");
           typeof callback === "function" && callback();
@@ -67,12 +67,12 @@ export default {
     },
 
     destroy(rowId, callback) {
-      this.$EMITTER.emit("processing:cart");
+      this.$EMITTER.emit("processing");
 
       this.form.delete(this.route("cart.destroy", rowId), {
         preserveScroll: true,
         onError: this.handleCartError,
-        onFinish: () => this.$EMITTER.emit("processed:cart"),
+        onFinish: () => this.$EMITTER.emit("processed"),
         onSuccess: () => {
           this.$EMITTER.emit("destroy-cart:success");
           typeof callback === "function" && callback();

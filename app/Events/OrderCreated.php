@@ -2,7 +2,8 @@
 
 namespace App\Events;
 
-use App\Traits\SessionShippingFee;
+use App\Contracts\CartContract;
+use App\Models\Order;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,18 +12,22 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CartChanged
+class OrderCreated
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels, SessionShippingFee;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public int $shopId;
+    /**
+     * @var \App\Models\Order
+     */
+    public $order;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(int $shopId)
+    public function __construct(Order $order)
     {
-        $this->shopId = $shopId;
+        $this->order = $order;
     }
 }

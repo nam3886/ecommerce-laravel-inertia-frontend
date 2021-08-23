@@ -18,17 +18,8 @@ class OrderDetail extends Pivot
         'sku',
         'quantity',
         'price',
+        'updated_by',
     ];
-
-    public function order(): BelongsTo
-    {
-        return $this->belongsTo(Order::class);
-    }
-
-    public function subOrder(): BelongsTo
-    {
-        return $this->belongsTo(SubOrder::class);
-    }
 
     public function product(): BelongsTo
     {

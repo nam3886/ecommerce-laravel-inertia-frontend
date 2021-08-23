@@ -24,6 +24,8 @@
 
     <popup-user-info />
 
+    <popup-loading />
+
     <minipopup />
 
     <Head>
@@ -50,6 +52,7 @@ import Photoshopwipe from "@/Layouts/AppLayout/Photoshopwipe.vue";
 import PopupLogin from "@/Shared/Popup/Login/";
 import PopupQuickview from "@/Shared/Popup/Quickview/";
 import PopupUserInfo from "@/Shared/Popup/UserInfo/";
+import PopupLoading from "@/Shared/Popup/Loading.vue";
 import Minipopup from "@/Shared/Popup/Mini/";
 
 export default {
@@ -65,6 +68,7 @@ export default {
     PopupLogin,
     PopupQuickview,
     PopupUserInfo,
+    PopupLoading,
     Minipopup,
   },
 

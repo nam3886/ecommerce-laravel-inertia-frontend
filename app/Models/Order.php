@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
@@ -22,10 +23,6 @@ class Order extends Model
         'subtotal',
         'total',
         'grandtotal',
-        'is_paid',
-        'transaction_number',
-        'bank_tran_number',
-        'bank_code',
         'create_order_success',
         'active',
         'updated_by',
@@ -53,18 +50,18 @@ class Order extends Model
 
     public function items(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class)
+        return $this->belongsToMany(Product::class, 'order_details')
             ->using(OrderDetail::class)
             ->withPivot('price', 'quantity', 'sku');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Some methods
-    |--------------------------------------------------------------------------
-    */
-    public function generateSubOrders()
+    public function billingAddress(): HasOne
     {
-        $this->subOrders()->create();
+        return $this->hasOne(BillingAddress::class);
+    }
+
+    public function transaction(): HasOne
+    {
+        return $this->hasOne(Transaction::class);
     }
 }

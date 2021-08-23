@@ -4,7 +4,7 @@
       <checkout-breadcrumb index-active="3" />
 
       <div class="container mt-8">
-        <div class="order-message mr-auto ml-auto">
+        <div v-if="checkout_success" class="order-message mr-auto ml-auto">
           <div class="icon-box d-inline-flex align-items-center">
             <div class="icon-box-icon mb-0">
               <svg
@@ -45,35 +45,35 @@
               <h5 class="icon-box-title font-weight-bold lh-1 mb-1">
                 Thank You!
               </h5>
-              <p class="lh-1 ls-m">Your order has been received</p>
+              <p class="lh-1 ls-m">Đơn đặt hàng của bạn đã được nhận</p>
             </div>
           </div>
         </div>
 
         <div class="order-results">
           <div class="overview-item">
-            <span>Order number:</span>
-            <strong>4935</strong>
+            <span>Mã đơn:</span>
+            <strong>{{ order.data.order_code }}</strong>
           </div>
           <div class="overview-item">
-            <span>Status:</span>
-            <strong>Processing</strong>
+            <span>Tình trạng:</span>
+            <strong>Pending</strong>
           </div>
           <div class="overview-item">
-            <span>Date:</span>
-            <strong>November 20, 2020</strong>
+            <span>Thời gian:</span>
+            <strong>{{ order.data.created_at }}</strong>
           </div>
           <div class="overview-item">
             <span>Email:</span>
-            <strong>12345@gmail.com</strong>
+            <strong>{{ $page.props.user.email }}</strong>
           </div>
           <div class="overview-item">
-            <span>Total:</span>
-            <strong>$312.00</strong>
+            <span>Tổng:</span>
+            <strong>{{ order.data.grandtotal_format }}</strong>
           </div>
           <div class="overview-item">
-            <span>Payment method:</span>
-            <strong>Cash on delivery</strong>
+            <span>Thanh toán:</span>
+            <strong>{{ order.data.payment_method.name }}</strong>
           </div>
         </div>
 
@@ -86,79 +86,89 @@
             text-uppercase
           "
         >
-          Order Details
+          Chi tiết
         </h2>
-        <div class="order-details">
+        <div
+          v-for="(sub_order, index) in order.data.sub_orders"
+          :key="index"
+          :class="{ 'mt-5': index }"
+          class="order-details"
+        >
           <table class="order-details-table">
             <thead>
               <tr class="summary-subtotal">
                 <td>
-                  <h3 class="summary-subtitle">Product</h3>
+                  <h3 class="summary-subtitle">
+                    <i class="fas fa-store text-primary"></i>&nbsp;
+                    {{ sub_order.shop.name }}
+                  </h3>
                 </td>
                 <td></td>
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr v-for="item in sub_order.items" :key="item.id">
                 <td class="product-name">
-                  Beige knitted shoes
-                  <span> <i class="fas fa-times"></i> 1</span>
+                  <link-slug :slug="item.slug">{{ item.name }}</link-slug>&nbsp;
+                  <span> <i class="fas fa-times"></i> {{ item.quantity }}</span>
                 </td>
-                <td class="product-price">$84.00</td>
-              </tr>
-              <tr>
-                <td class="product-name">
-                  Best dark blue pedestrian
-                  <span><i class="fas fa-times"></i> 1</span>
-                </td>
-                <td class="product-price">$76.00</td>
-              </tr>
-              <tr>
-                <td class="product-name">
-                  Women's fashion handing
-                  <span><i class="fas fa-times"></i> 2</span>
-                </td>
-                <td class="product-price">$152.00</td>
+                <td class="product-price">{{ item.price_format }}</td>
               </tr>
               <tr class="summary-subtotal">
                 <td>
-                  <h4 class="summary-subtitle">Subtotal:</h4>
+                  <h4 class="summary-subtitle">Tổng tiền:</h4>
                 </td>
-                <td class="summary-subtotal-price">$312.00</td>
+                <td class="summary-subtotal-price">
+                  {{ sub_order.subtotal_format }}
+                </td>
+              </tr>
+              <tr v-if="sub_order.tax" class="summary-subtotal">
+                <td>
+                  <h4 class="summary-subtitle">Thuế:</h4>
+                </td>
+                <td class="summary-subtotal-price">
+                  {{ sub_order.tax_format }}
+                </td>
               </tr>
               <tr class="summary-subtotal">
                 <td>
-                  <h4 class="summary-subtitle">Shipping:</h4>
+                  <h4 class="summary-subtitle">Phí vận chuyển:</h4>
                 </td>
-                <td class="summary-subtotal-price">Free shipping</td>
+                <td class="summary-subtotal-price">
+                  {{ sub_order.shipping_fee_format }}
+                </td>
               </tr>
               <tr class="summary-subtotal">
                 <td>
-                  <h4 class="summary-subtitle">Payment method:</h4>
+                  <h4 class="summary-subtitle">Thanh toán:</h4>
                 </td>
-                <td class="summary-subtotal-price">Cash on delivery</td>
+                <td class="summary-subtotal-price">
+                  {{ order.data.payment_method.name }}
+                </td>
               </tr>
               <tr class="summary-subtotal">
                 <td>
-                  <h4 class="summary-subtitle">Total:</h4>
+                  <h4 class="summary-subtitle">Tổng:</h4>
                 </td>
                 <td>
-                  <p class="summary-total-price">$312.00</p>
+                  <p class="summary-total-price">
+                    {{ sub_order.grandtotal_format }}
+                  </p>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <h2 class="title title-simple text-left pt-10 mb-2">Billing Address</h2>
+        <h2 class="title title-simple text-left pt-10 mb-2">
+          Địa chỉ nhận hàng
+        </h2>
         <div class="address-info pb-8 mb-6">
           <p class="address-detail pb-2">
-            John Doe<br />
-            Riode Company<br />
-            Steven street<br />
-            El Carjon, CA 92020<br />
-            123456789
+            {{ order.data.billing_address.name }}<br />
+            {{ order.data.billing_address.address }}<br />
+            {{ order.data.billing_address.phone }}
           </p>
-          <p class="email">mail@riode.com</p>
+          <p class="email">{{ $page.props.user.email }}</p>
         </div>
 
         <a
@@ -177,11 +187,14 @@
 import Layout from "@/Layouts/AppLayout/index.vue";
 import { Head } from "@inertiajs/inertia-vue3";
 import CheckoutBreadcrumb from "@/Shared/CheckoutBreadcrumb.vue";
+import LinkSlug from "@/Shared/ProductElement/LinkSlug.vue";
 import "@r/css/style.css";
 
 export default {
   layout: Layout,
 
-  components: { Head, CheckoutBreadcrumb },
+  components: { Head, CheckoutBreadcrumb, LinkSlug },
+
+  props: ["order", "checkout_success"],
 };
 </script>

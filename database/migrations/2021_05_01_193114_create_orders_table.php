@@ -26,11 +26,6 @@ class CreateOrdersTable extends Migration
             $table->unsignedInteger('total'); // exclude delivery fee
             $table->unsignedInteger('grandtotal'); // include delivery fee
 
-            $table->boolean('is_paid')->nullable();
-            $table->string('transaction_number')->nullable();
-            $table->string('bank_tran_number')->nullable();
-            $table->string('bank_code')->nullable();
-
             // 0: unprocessed
             // 1: success => order created
             // 2: canceled => order not created yet

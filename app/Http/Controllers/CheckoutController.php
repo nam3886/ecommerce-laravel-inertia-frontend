@@ -6,9 +6,11 @@ use App\Contracts\CartContract;
 use App\Contracts\OrderContract;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\CheckoutRequest;
+use App\Http\Resources\DeliveryMethodResource;
+use App\Http\Resources\OrderResource;
+use App\Http\Resources\PaymentMethodResource;
 use App\Models\DeliveryMethod;
 use App\Models\PaymentMethod;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CheckoutController extends BaseController
@@ -27,6 +29,23 @@ class CheckoutController extends BaseController
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  string $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $order = cache()->get("order.{$id}", null);
+
+        abort_if(empty($order), 404);
+
+        return Inertia::render('Order')
+            ->with('checkout_success', session('checkout_success'))
+            ->with('order', new OrderResource($order));
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -38,8 +57,11 @@ class CheckoutController extends BaseController
         $paymentMethods     =   PaymentMethod::select($selects)->whereActive(1)->get();
         $cartGroupByShop    =   $this->cartRepository->listCartsGroupByShop();
 
-        return Inertia::render('Checkout', compact('deliveryMethods', 'paymentMethods', 'cartGroupByShop'))
-            ->with('stripePublishableKey', config('third_party.stripe_client_id'));
+        return Inertia::render('Checkout')
+            ->with('stripePublishableKey', config('third_party.stripe_client_id'))
+            ->with('paymentMethods', PaymentMethodResource::collection($paymentMethods))
+            ->with('deliveryMethods', DeliveryMethodResource::collection($deliveryMethods))
+            ->with('cartGroupByShop', $cartGroupByShop);
     }
 
     /**
@@ -52,11 +74,12 @@ class CheckoutController extends BaseController
     {
         $params = $this->cartRepository->listCartsGroupByShop()->merge($request->validated());
 
-        $result = $this->orderRepository->createOrder($params->all());
-
-        if (!$result) {
-            return $this->responseRedirectBack(trans('response.order.error.store'), 'error');
+        try {
+            $result = $this->orderRepository->createOrder($params->all());
+        } catch (\Throwable $th) {
+            return $this->responseRedirectBack($th->getMessage(), 'error');
         }
-        return $this->responseRedirectBack(trans('response.order.success.store'), 'success');
+
+        return redirect()->route('checkout.show', $result->id)->with('checkout_success', true);
     }
 }

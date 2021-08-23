@@ -98,14 +98,14 @@ class Product extends Model
 
     public function orders(): BelongsToMany
     {
-        return $this->belongsToMany(Order::class)
+        return $this->belongsToMany(Order::class, 'order_details')
             ->using(OrderDetail::class)
             ->withPivot('price', 'quantity', 'sku');
     }
 
     public function subOrders(): BelongsToMany
     {
-        return $this->belongsToMany(SubOrder::class)
+        return $this->belongsToMany(SubOrder::class, 'order_details')
             ->using(OrderDetail::class)
             ->withPivot('price', 'quantity', 'sku');
     }

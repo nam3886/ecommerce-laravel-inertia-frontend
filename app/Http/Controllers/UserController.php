@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\UserAddressRequest;
-use App\Models\UserAddress;
 use App\Traits\SessionShippingFee;
 
 class UserController extends BaseController

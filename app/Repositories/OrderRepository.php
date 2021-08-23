@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Contracts\OrderContract;
 use App\Models\Order;
 use App\Services\Checkout\StripeCheckoutService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 
@@ -35,6 +36,12 @@ class OrderRepository extends BaseRepository implements OrderContract
      */
     public function findOrderById(int $id)
     {
+        try {
+            return $this->findOneOrFail($id);
+        } catch (ModelNotFoundException $e) {
+
+            throw new ModelNotFoundException($e);
+        }
     }
 
     /**
@@ -44,8 +51,14 @@ class OrderRepository extends BaseRepository implements OrderContract
      */
     public function createOrder(array $params)
     {
-        // stripe has id 1
-        (new StripeCheckoutService($params))->execute();
+        $service = match ($params['payment_method_id']) {
+            1 => StripeCheckoutService::class,
+            // 2 => PayPalCheckoutService::class,
+            // 3 => VNPayCheckoutService::class,
+            // 4 => CashCheckoutService::class,
+        };
+
+        return (new $service($params))->execute();
     }
 
     /**

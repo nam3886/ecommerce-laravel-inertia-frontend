@@ -16,12 +16,10 @@ class VariantResource extends JsonResource
     public function toArray($request)
     {
         return [
-            // 'product_id'    =>  $this->product_id,
             'id'            =>  $this->id,
             'sku'           =>  $this->sku,
             'combination'   =>  $this->combination,
             'name'          =>  $this->name,
-            // 'price'         =>  $this->price,
             'price_format'  =>  easy_format_price($this->price),
             'price_after_discount_format'   =>  easy_format_price($this->price_after_discount),
             'quantity'      =>  $this->quantity,
@@ -31,7 +29,6 @@ class VariantResource extends JsonResource
             'height'        =>  $this->height,
             // relations
             'discount'          =>  new DiscountResource($this->discount),
-            // 'attribute_value'   =>  AttributeValueResource::collection($this->attributeValues),
         ];
     }
 }

@@ -13,35 +13,27 @@ class StripeService
 
     public function __construct()
     {
-        $this->currencyCode = Currency::getDefaultCurrency();
-        $this->stripe = Stripe::make(config('third_party.stripe_secret_id'));
+        $this->currencyCode =   Currency::getDefaultCurrency();
+        $this->stripe       =   Stripe::make(config('third_party.stripe_secret_id'));
     }
 
     public function createOrder(Order $order)
     {
         $items = $order->items->map(function ($item) {
-            return "Name:{$item->name}; Variant:{$item->pivot->variant->name}; Quantity:{$item->pivot->quantity}; Price:" . Currency::getSymbol() . $item->pivot->price;
+            $meta = "{$item->name}";
+            $item->hasVariants() && $meta .= " ({$item->pivot->variant->name})";
+            $meta .= " x {$item->pivot->quantity} : " . easy_format_price($item->pivot->price);
+            return $meta;
         });
 
         $this->stripe->charges()->create([
             'currency'      =>  $this->currencyCode,
-            'amount'        =>  $order->order_total,
-            'source'        =>  $order->transaction_number,
+            'amount'        =>  $order->grandtotal,
+            'source'        =>  $order->transaction->transaction_number,
             'description'   =>  Str::title(config('app.name') . ' order'),
             'receipt_email' =>  auth()->user()->email,
             'metadata'      =>  [
                 ...$items,
-                'note'      =>  $order->note,
-            ],
-            'shipping'      =>  [
-                // 'method'            =>  'Giao hang nhanh',
-                // 'name'              =>  $order->name,
-                // 'phone'             =>  $order->phone,
-                // 'address'           =>  [
-                //     'address'       =>  $order->address,
-                //     'postal_code'   =>  '100000',
-                //     'country_code'  =>  Currency::getLocale(),
-                // ],
             ],
         ]);
     }

@@ -16,14 +16,20 @@ show-popup:login
 hide-popup:login
 show-popup:user-info
 hide-popup:user-info
-
-processing:cart
-processed:cart
+processed
+processing
 
 session:
 "shipping_{$shop->id}_fee"
 "shipping_fee"
 "user_address_changed"
 
+cache:
+"order.{$id}"
+related{$product->id}
+"own_product{$product->shop_id}"
+"districts"
+"{$districtId}_ward"
 
-// todo loading
+
+

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrderDetailsTable extends Migration
+class CreateTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateOrderDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('order_details', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('order_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('sub_order_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('discount_id')->nullable()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('sku');
-            $table->unsignedInteger('quantity');
-            $table->unsignedBigInteger('price');
+            $table->boolean('is_paid')->nullable();
+            $table->string('transaction_number')->nullable();
+            $table->string('bank_tran_number')->nullable();
+            $table->string('bank_code')->nullable();
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();
 
@@ -36,6 +34,6 @@ class CreateOrderDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_details');
+        Schema::dropIfExists('transactions');
     }
 }

@@ -33,7 +33,7 @@ class CreateSubOrdersTable extends Migration
             $table->unsignedInteger('grandtotal'); // include delivery fee
 
             $table->string('note')->nullable();
-            $table->string('status')->nullable();
+            $table->string('status')->default('pending');
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();

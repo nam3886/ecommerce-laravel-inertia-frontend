@@ -33,7 +33,7 @@
                 <h4 class="summary-subtitle">Vận chuyển</h4>
                 <delivery-method
                   v-model="form.delivery_method_id"
-                  :methods="deliveryMethods"
+                  :methods="deliveryMethods.data"
                 />
                 <error-message
                   v-if="form.errors.delivery_method_id"
@@ -90,7 +90,7 @@
           <h4 class="summary-subtitle ls-m pb-3">Thanh toán</h4>
           <payment-method
             v-model="form.payment_method_id"
-            :methods="paymentMethods"
+            :methods="paymentMethods.data"
           />
           <error-message
             v-if="form.errors.payment_method_id"
@@ -98,7 +98,7 @@
             class="mt-2"
           />
         </div>
-        <!-- payment_method_id == 1 => stripe -->
+        <!-- is stripe method -->
         <div
           v-if="form.payment_method_id == 1"
           class="payment accordion radio-type"
@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import { wait } from "@/helpers.js";
+import { wait, scrollToAlert } from "@/helpers.js";
 import DeliveryMethod from "@/Shared/Partials/Checkout/DeliveryMethod.vue";
 import PaymentMethod from "@/Shared/Partials/Checkout/PaymentMethod.vue";
 import Stripe from "@/Shared/Partials/Checkout/Stripe.vue";
@@ -165,11 +165,13 @@ export default {
 
   created() {
     // chưa có shippping fee và user đã có address
-    if (!this.cart.shipping_fee && this.user.address) {
-      // todo loading
+    if (this.user.address && !this.cart.shipping_fee) {
+      wait().then(() => this.$EMITTER.emit("processing"));
+
       this.form.get(this.route("calculate_shipping_fee"), {
         preserveState: false,
         preserveScroll: true,
+        onFinish: () => this.$EMITTER.emit("processed"),
       });
     }
   },
@@ -184,6 +186,7 @@ export default {
     checkout() {
       this.form.post(this.route("checkout.store"), {
         preserveScroll: true,
+        onFinish: scrollToAlert,
       });
     },
   },
