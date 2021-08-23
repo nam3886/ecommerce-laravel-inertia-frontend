@@ -33,7 +33,7 @@
       </div>
     </div>
 
-    <Head title="Product" />
+    <Head :title="product.data.name" />
   </main>
 </template>
 

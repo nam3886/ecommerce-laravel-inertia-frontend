@@ -51,7 +51,9 @@ export default {
 .load-more-overlay::before {
   background-color: transparent;
 }
-.load-more-overlay::after {
-  border-color: #26c !important;
+.loading:not(.load-more-overlay),
+.load-more-overlay.loading::after {
+  border-radius: 50% !important;
+  border-left-color: #26c;
 }
 </style>

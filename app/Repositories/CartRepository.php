@@ -255,7 +255,7 @@ class CartRepository extends BaseRepository implements CartContract
                 'max'               =>  $max,
                 'avatar'            =>  $product->gallery->avatar,
                 'price_format'      =>  easy_format_price($product->price_after_discount),
-                'discount_id'       =>  $product->discount->id,
+                'discount_id'       =>  $product->discount?->id,
             ],
         ]);
 
@@ -272,7 +272,7 @@ class CartRepository extends BaseRepository implements CartContract
                 'max'           =>  $max,
                 'variant_name'  =>  $variant->name,
                 'price_format'  =>  easy_format_price($variant->price_after_discount),
-                'discount_id'   =>  $variant->discount->id,
+                'discount_id'   =>  $variant->discount?->id,
             ]);
 
             $options->put('options', $newOptions)

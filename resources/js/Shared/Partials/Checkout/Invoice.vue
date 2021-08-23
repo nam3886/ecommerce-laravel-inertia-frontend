@@ -121,15 +121,17 @@
             <a href="#">Điều khoản Skinest </a>*
           </label>
         </div>
-        <button
+        <button-spinner
+          v-model="form.processing"
           @click="checkout"
           :disabled="form.processing"
-          :class="{ 'opacity-65 not-allowed': form.processing }"
+          :class="{ 'not-allowed': form.processing }"
+          as="button"
           type="button"
           class="btn btn-dark btn-rounded btn-order"
         >
           Đặt hàng
-        </button>
+        </button-spinner>
       </div>
     </div>
   </aside>
@@ -141,9 +143,16 @@ import DeliveryMethod from "@/Shared/Partials/Checkout/DeliveryMethod.vue";
 import PaymentMethod from "@/Shared/Partials/Checkout/PaymentMethod.vue";
 import Stripe from "@/Shared/Partials/Checkout/Stripe.vue";
 import ErrorMessage from "@/Shared/Inputs/ErrorMessage.vue";
+import ButtonSpinner from "@/Shared/Buttons/Spinner.vue";
 
 export default {
-  components: { DeliveryMethod, PaymentMethod, Stripe, ErrorMessage },
+  components: {
+    DeliveryMethod,
+    PaymentMethod,
+    Stripe,
+    ErrorMessage,
+    ButtonSpinner,
+  },
 
   props: [
     "user",
@@ -186,7 +195,6 @@ export default {
     checkout() {
       this.form.post(this.route("checkout.store"), {
         preserveScroll: true,
-        onFinish: scrollToAlert,
       });
     },
   },

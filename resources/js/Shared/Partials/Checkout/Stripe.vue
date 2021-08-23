@@ -18,7 +18,6 @@ export default {
   },
 
   async mounted() {
-    this.$EMITTER.emit("processing");
     this.stripe = await loadStripe(this.publishableKey);
     this.card = this.stripe.elements().create("card", {
       style: {
@@ -43,7 +42,6 @@ export default {
 
     this.card.mount(this.$refs.stripeElement);
     this.card.addEventListener("change", this.handleChangeInput);
-    this.$EMITTER.emit("processed");
   },
 
   methods: {
