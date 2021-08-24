@@ -13,37 +13,37 @@ import "@p/vendor/jquery.plugin/jquery.plugin.min.js";
 import "@p/vendor/jquery.countdown/jquery.countdown.min.js";
 
 import moduleCountdown from "@/Riode/countdown.js";
-import moduleScrollTopButton from "@/Riode/scrollTopButton.js";
-import moduleAppearAnimate from "@/Riode/appearAnimate.js";
-import moduleHeaderToggleSearch from "@/Riode/headerToggleSearch.js";
-import moduleCountTo from "@/Riode/countTo.js";
-import modulePlayableVideo from "@/Riode/playableVideo.js";
+import moduleScrollTopButton from "@/Riode/scroll-top-button.js";
+import moduleAppearAnimate from "@/Riode/appear-animate.js";
+import moduleHeaderToggleSearch from "@/Riode/header-toggle-search.js";
+import moduleCountTo from "@/Riode/count-to.js";
+import modulePlayableVideo from "@/Riode/playable-video.js";
 import moduleParallax from "@/Riode/parallax.js";
-import moduleCloseTopNotice from "@/Riode/closeTopNotice.js";
-import moduleStickyContent from "@/Riode/stickyContent.js";
+import moduleCloseTopNotice from "@/Riode/close-top-notice.js";
+import moduleStickyContent from "@/Riode/sticky-content.js";
 import moduleAccordion from "@/Riode/accordion.js";
 import moduleTab from "@/Riode/tab.js";
 import moduleAlert from "@/Riode/alert.js";
 import modulePopup from "@/Riode/popup.js";
 import moduleZoom from "@/Riode/zoom.js";
-import moduleFloatSVG from "@/Riode/floatSVG.js";
+import moduleFloatSVG from "@/Riode/float-svg.js";
 import moduleMenu from "@/Riode/menu.js";
-import moduleProductSingle from "@/Riode/productSingle.js";
-import moduleProductSinglePage from "@/Riode/productSinglePage.js";
+import moduleProductSingle from "@/Riode/product-single.js";
+import moduleProductSinglePage from "@/Riode/product-single-page.js";
 import moduleShop from "@/Riode/shop.js";
 
 /* jQuery easing */
 $.extend($.easing, {
     def: "easeOutQuad",
-    swing: function(x, t, b, c, d) {
+    swing: function (x, t, b, c, d) {
         return $.easing[$.easing.def](x, t, b, c, d);
     },
-    easeOutQuad: function(x, t, b, c, d) {
+    easeOutQuad: function (x, t, b, c, d) {
         return -c * (t /= d) * (t - 2) + b;
     },
-    easeOutQuint: function(x, t, b, c, d) {
+    easeOutQuint: function (x, t, b, c, d) {
         return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
-    }
+    },
 });
 
 /**
@@ -59,27 +59,28 @@ Riode.status = ""; // Riode Status
 Riode.minDesktopWidth = 992; // Detect desktop screen
 Riode.isIE = navigator.userAgent.indexOf("Trident") >= 0; // Detect Internet Explorer
 Riode.isEdge = navigator.userAgent.indexOf("Edge") >= 0; // Detect Edge
-Riode.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent
-); // Detect Mobile
+Riode.isMobile =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+    ); // Detect Mobile
 Riode.defaults = {
     animation: {
         name: "fadeIn",
         duration: "1.2s",
-        delay: ".2s"
+        delay: ".2s",
     },
     isotope: {
         itemsSelector: ".grid-item",
         layoutMode: "masonry",
         percentPosition: true,
         masonry: {
-            columnWidth: ".grid-space"
-        }
+            columnWidth: ".grid-space",
+        },
     },
     popup: {
         removalDelay: 350,
         callbacks: {
-            open: function() {
+            open: function () {
                 $("html").css("overflow-y", "hidden");
                 $("body").css("overflow-x", "visible");
                 $(".mfp-wrap").css("overflow", "hidden auto");
@@ -88,54 +89,54 @@ Riode.defaults = {
                     window.innerWidth - document.body.clientWidth
                 );
             },
-            close: function() {
+            close: function () {
                 $("html").css("overflow-y", "");
                 $("body").css("overflow-x", "hidden");
                 $(".mfp-wrap").css("overflow", "");
                 $(".sticky-header.fixed").css("padding-right", "");
-            }
-        }
+            },
+        },
     },
     popupPresets: {
         login: {
             type: "ajax",
             mainClass: "mfp-login mfp-fade",
             tLoading: "",
-            preloader: false
+            preloader: false,
         },
         video: {
             type: "iframe",
             mainClass: "mfp-fade",
             preloader: false,
-            closeBtnInside: false
+            closeBtnInside: false,
         },
         quickview: {
             type: "ajax",
             mainClass: "mfp-product mfp-fade",
             tLoading: "",
-            preloader: false
-        }
+            preloader: false,
+        },
     },
     slider: {
         responsiveClass: true,
         navText: [
             '<i class="d-icon-angle-left">',
-            '<i class="d-icon-angle-right">'
+            '<i class="d-icon-angle-right">',
         ],
         checkVisible: false,
         items: 1,
         smartSpeed: Riode.isEdge ? 200 : 500,
         autoplaySpeed: Riode.isEdge ? 200 : 1000,
-        autoplayTimeout: 10000
+        autoplayTimeout: 10000,
     },
     sliderPresets: {
         "intro-slider": {
             animateIn: "fadeIn",
-            animateOut: "fadeOut"
+            animateOut: "fadeOut",
         },
         "product-single-carousel": {
             dots: false,
-            nav: true
+            nav: true,
         },
         "product-gallery-carousel": {
             dots: false,
@@ -144,12 +145,12 @@ Riode.defaults = {
             items: 1,
             responsive: {
                 576: {
-                    items: 2
+                    items: 2,
                 },
                 768: {
-                    items: 3
-                }
-            }
+                    items: 3,
+                },
+            },
         },
         "rotate-slider": {
             dots: false,
@@ -157,8 +158,8 @@ Riode.defaults = {
             margin: 0,
             items: 1,
             animateIn: "",
-            animateOut: ""
-        }
+            animateOut: "",
+        },
     },
     sliderThumbs: {
         margin: 0,
@@ -167,8 +168,8 @@ Riode.defaults = {
         nav: true,
         navText: [
             '<i class="fas fa-chevron-left">',
-            '<i class="fas fa-chevron-right">'
-        ]
+            '<i class="fas fa-chevron-right">',
+        ],
     },
     stickyContent: {
         minWidth: Riode.minDesktopWidth,
@@ -176,24 +177,24 @@ Riode.defaults = {
         top: 300,
         hide: false, // hide when it is not sticky.
         max_index: 1060, // maximum z-index of sticky contents
-        scrollMode: false
+        scrollMode: false,
     },
     stickyHeader: {
         // activeScreenWidth: Riode.minDesktopWidth
-        activeScreenWidth: 768
+        activeScreenWidth: 768,
     },
     stickyFooter: {
         minWidth: 0,
         maxWidth: 767,
         top: 150,
         hide: true,
-        scrollMode: true
+        scrollMode: true,
     },
     stickyToolbox: {
         minWidth: 0,
         maxWidth: 767,
         top: false,
-        scrollMode: true
+        scrollMode: true,
     },
     stickySidebar: {
         autoInit: true,
@@ -202,7 +203,7 @@ Riode.defaults = {
         autoFit: true,
         activeClass: "sticky-sidebar-fixed",
         paddingOffsetTop: 93,
-        paddingOffsetBottom: 0
+        paddingOffsetBottom: 0,
     },
     templateCartAddedAlert:
         '<div class="alert alert-simple alert-btn cart-added-alert">' +
@@ -216,15 +217,15 @@ Riode.defaults = {
         zoomWindowFadeOut: 500,
         borderSize: 0,
         zoomType: "inner",
-        cursor: "crosshair"
-    }
+        cursor: "crosshair",
+    },
 };
 
 /**
  * Get jQuery object
  * @param {string|jQuery} selector
  */
-Riode.$ = function(selector) {
+Riode.$ = function (selector) {
     return selector instanceof jQuery ? selector : $(selector);
 };
 
@@ -233,7 +234,7 @@ Riode.$ = function(selector) {
  * @param {function} fn
  * @param {number} delay
  */
-Riode.call = function(fn, delay) {
+Riode.call = function (fn, delay) {
     setTimeout(fn, delay);
 };
 
@@ -241,7 +242,7 @@ Riode.call = function(fn, delay) {
  * Get dom element by id
  * @param {string} id
  */
-Riode.byId = function(id) {
+Riode.byId = function (id) {
     return document.getElementById(id);
 };
 
@@ -250,7 +251,7 @@ Riode.byId = function(id) {
  * @param {string} tagName
  * @param {HTMLElement} element this can be omitted.
  */
-Riode.byTag = function(tagName, element) {
+Riode.byTag = function (tagName, element) {
     return element
         ? element.getElementsByTagName(tagName)
         : document.getElementsByTagName(tagName);
@@ -261,7 +262,7 @@ Riode.byTag = function(tagName, element) {
  * @param {string} className
  * @param {HTMLElement} element this can be omitted.
  */
-Riode.byClass = function(className, element) {
+Riode.byClass = function (className, element) {
     return element
         ? element.getElementsByClassName(className)
         : document.getElementsByClassName(className);
@@ -273,7 +274,7 @@ Riode.byClass = function(className, element) {
  * @param {string} value Cookie value
  * @param {number} exdays Expire period
  */
-Riode.setCookie = function(name, value, exdays) {
+Riode.setCookie = function (name, value, exdays) {
     var date = new Date();
     date.setTime(date.getTime() + exdays * 24 * 60 * 60 * 1000);
     document.cookie =
@@ -284,7 +285,7 @@ Riode.setCookie = function(name, value, exdays) {
  * Get cookie
  * @param {string} name Cookie name
  */
-Riode.getCookie = function(name) {
+Riode.getCookie = function (name) {
     var n = name + "=";
     var ca = document.cookie.split(";");
     for (var i = 0; i < ca.length; ++i) {
@@ -303,7 +304,7 @@ Riode.getCookie = function(name) {
  * Parse options string to object
  * @param {string} options
  */
-Riode.parseOptions = function(options) {
+Riode.parseOptions = function (options) {
     return "string" == typeof options
         ? JSON.parse(options.replace(/'/g, '"').replace(";", ""))
         : {};
@@ -314,8 +315,8 @@ Riode.parseOptions = function(options) {
  * @param {string} template
  * @param {object} vars
  */
-Riode.parseTemplate = function(template, vars) {
-    return template.replace(/\{\{(\w+)\}\}/g, function() {
+Riode.parseTemplate = function (template, vars) {
+    return template.replace(/\{\{(\w+)\}\}/g, function () {
         return vars[arguments[1]];
     });
 };
@@ -326,7 +327,7 @@ Riode.parseTemplate = function(template, vars) {
  * @param {number} dx
  * @param {number} dy
  */
-Riode.isOnScreen = function(el, dx, dy) {
+Riode.isOnScreen = function (el, dx, dy) {
     var a = window.pageXOffset,
         b = window.pageYOffset,
         o = el.getBoundingClientRect(),
@@ -350,20 +351,18 @@ Riode.isOnScreen = function(el, dx, dy) {
  * @param {function} fn
  * @param {object} options
  */
-Riode.appear = (function() {
+Riode.appear = (function () {
     var checks = [],
         timerId = false,
         one;
 
-    var checkAll = function() {
+    var checkAll = function () {
         for (var i = checks.length; i--; ) {
             one = checks[i];
 
             if (Riode.isOnScreen(one.el, one.options.accX, one.options.accY)) {
                 typeof $(one.el).data("appear-callback") == "function" &&
-                    $(one.el)
-                        .data("appear-callback")
-                        .call(one.el, one.data);
+                    $(one.el).data("appear-callback").call(one.el, one.data);
                 one.fn && one.fn.call(one.el, one.data);
                 checks.splice(i, 1);
             }
@@ -374,11 +373,11 @@ Riode.appear = (function() {
     window.addEventListener("resize", checkAll, { passive: true });
     $(window).on("appear.check", checkAll);
 
-    return function(el, fn, options) {
+    return function (el, fn, options) {
         var settings = {
             data: undefined,
             accX: 0,
-            accY: 0
+            accY: 0,
         };
 
         if (options) {
@@ -401,11 +400,11 @@ Riode.zoomImageObjects = [];
  * @requires elevateZoom
  * @param {string|jQuery} selector
  */
-Riode.zoomImage = function(selector) {
+Riode.zoomImage = function (selector) {
     if ($.fn.elevateZoom && selector) {
         Riode.$(selector)
             .find("img")
-            .each(function() {
+            .each(function () {
                 var $this = $(this);
                 Riode.defaults.zoomImage.zoomContainer = $this.parent();
                 $this.elevateZoom(Riode.defaults.zoomImage);
@@ -443,9 +442,9 @@ Riode.countdown = moduleCountdown;
  * @param {string} selector
  * @param {object} option
  */
-Riode.priceSlider = function(selector, option) {
+Riode.priceSlider = function (selector, option) {
     if (typeof noUiSlider === "object") {
-        Riode.$(selector).each(function() {
+        Riode.$(selector).each(function () {
             var self = this;
 
             noUiSlider.create(
@@ -458,16 +457,16 @@ Riode.priceSlider = function(selector, option) {
                         step: 1,
                         range: {
                             min: 18,
-                            max: 35
-                        }
+                            max: 35,
+                        },
                     },
                     option
                 )
             );
 
             // Update Price Range
-            self.noUiSlider.on("update", function(values, handle) {
-                var values = values.map(function(value) {
+            self.noUiSlider.on("update", function (values, handle) {
+                var values = values.map(function (value) {
                     return "$" + parseInt(value);
                 });
                 $(self)
@@ -479,10 +478,10 @@ Riode.priceSlider = function(selector, option) {
     }
 };
 
-Riode.lazyload = function(selector, force) {
+Riode.lazyload = function (selector, force) {
     function load() {
         this.setAttribute("src", this.getAttribute("data-src"));
-        this.addEventListener("load", function() {
+        this.addEventListener("load", function () {
             this.style["padding-top"] = "";
             this.classList.remove("lazy-img");
         });
@@ -491,7 +490,7 @@ Riode.lazyload = function(selector, force) {
     // Lazyload images
     Riode.$(selector)
         .find(".lazy-img")
-        .each(function() {
+        .each(function () {
             if ("undefined" != typeof force && force) {
                 load.call(this);
             } else {
@@ -507,11 +506,11 @@ Riode.lazyload = function(selector, force) {
  * @param {string} selector
  * @param {object} options
  */
-Riode.isotopes = function(selector, options) {
+Riode.isotopes = function (selector, options) {
     if (typeof imagesLoaded === "function" && $.fn.isotope) {
         var self = this;
 
-        Riode.$(selector).each(function() {
+        Riode.$(selector).each(function () {
             var $this = $(this),
                 settings = $.extend(
                     true,
@@ -522,10 +521,10 @@ Riode.isotopes = function(selector, options) {
                 );
 
             Riode.lazyload($this);
-            $this.imagesLoaded(function() {
+            $this.imagesLoaded(function () {
                 settings.customInitHeight && $this.height($this.height());
                 settings.customDelay &&
-                    Riode.call(function() {
+                    Riode.call(function () {
                         $this.isotope(settings);
                     }, parseInt(settings.customDelay));
 
@@ -541,25 +540,18 @@ Riode.isotopes = function(selector, options) {
  * @requires isotope
  * @param {string} selector
  */
-Riode.initNavFilter = function(selector) {
+Riode.initNavFilter = function (selector) {
     if ($.fn.isotope) {
-        Riode.$(selector).on("click", function(e) {
+        Riode.$(selector).on("click", function (e) {
             var $this = $(this),
                 filterValue = $this.attr("data-filter"),
-                filterTarget = $this
-                    .parent()
-                    .parent()
-                    .attr("data-target");
+                filterTarget = $this.parent().parent().attr("data-target");
             (filterTarget ? $(filterTarget) : $(".grid"))
                 .isotope({ filter: filterValue })
-                .isotope("on", "arrangeComplete", function() {
+                .isotope("on", "arrangeComplete", function () {
                     Riode.$window.trigger("appear.check");
                 });
-            $this
-                .parent()
-                .siblings()
-                .children()
-                .removeClass("active");
+            $this.parent().siblings().children().removeClass("active");
             $this.addClass("active");
             e.preventDefault();
         });
@@ -571,8 +563,8 @@ Riode.initNavFilter = function(selector) {
  *
  * @param {string} selector
  */
-Riode.initShowVendorSearch = function(selector) {
-    Riode.$body.on("click", selector, function(e) {
+Riode.initShowVendorSearch = function (selector) {
+    Riode.$body.on("click", selector, function (e) {
         var $this = $(this),
             $formWrapper = $this.closest(".toolbox").next(".form-wrapper");
 
@@ -614,7 +606,7 @@ Riode.closeTopNotice = moduleCloseTopNotice;
  * Init sticky header
  * @param {string} selector
  */
-Riode.stickyHeader = function(selector) {
+Riode.stickyHeader = function (selector) {
     var $stickyHeader = Riode.$(selector);
     if ($stickyHeader.length == 0) return;
 
@@ -623,7 +615,7 @@ Riode.stickyHeader = function(selector) {
         isWrapped = false;
 
     // define wrap function
-    var stickyHeaderWrap = function() {
+    var stickyHeaderWrap = function () {
         height = $stickyHeader[0].offsetHeight;
         top = $stickyHeader.offset().top + height;
 
@@ -654,7 +646,7 @@ Riode.stickyHeader = function(selector) {
     };
 
     // define refresh function
-    var stickyHeaderRefresh = function() {
+    var stickyHeaderRefresh = function () {
         var isFixed =
             window.innerWidth >=
                 Riode.defaults.stickyHeader.activeScreenWidth &&
@@ -672,7 +664,7 @@ Riode.stickyHeader = function(selector) {
 
     // register events
     window.addEventListener("scroll", stickyHeaderRefresh, {
-        passive: true
+        passive: true,
     });
     Riode.$window.on("resize", stickyHeaderWrap);
     Riode.$window.on("resize", stickyHeaderRefresh);
@@ -731,9 +723,9 @@ Riode.appearAnimate = moduleAppearAnimate;
  * @requires themeSticky
  * @param {string} selector
  */
-Riode.stickySidebar = function(selector) {
+Riode.stickySidebar = function (selector) {
     if ($.fn.themeSticky) {
-        Riode.$(selector).each(function() {
+        Riode.$(selector).each(function () {
             var $this = $(this);
             $this.themeSticky(
                 $.extend(
@@ -750,9 +742,9 @@ Riode.stickySidebar = function(selector) {
  *
  * @param {string} selector
  */
-Riode.refreshSidebar = function(selector) {
+Riode.refreshSidebar = function (selector) {
     if ($.fn.themeSticky) {
-        Riode.$(selector).each(function() {
+        Riode.$(selector).each(function () {
             $(this).trigger("recalc.pin");
         });
     }
@@ -764,11 +756,11 @@ Riode.refreshSidebar = function(selector) {
  *
  * @param {HTMLElement} root
  */
-Riode.ratingTooltip = function(root) {
+Riode.ratingTooltip = function (root) {
     var els = Riode.byClass("ratings-full", root ? root : document.body),
         len = els.length;
 
-    var ratingHandler = function() {
+    var ratingHandler = function () {
         var res =
             parseInt(this.firstElementChild.style.width.slice(0, -1)) / 20;
         this.lastElementChild.innerText = res ? res.toFixed(2) : res;
@@ -785,7 +777,7 @@ Riode.ratingTooltip = function(root) {
  * @params {object} options
  * @params {string|undefined} preset
  */
-Riode.popup = function(options, preset) {
+Riode.popup = function (options, preset) {
     var mpInstance = $.magnificPopup.instance,
         opt = $.extend(
             true,
@@ -800,7 +792,7 @@ Riode.popup = function(options, preset) {
     // if something is already opened ( except login popup )
     if (mpInstance.isOpen && mpInstance.content) {
         mpInstance.close(); // close current
-        setTimeout(function() {
+        setTimeout(function () {
             // and open new after a moment
             $.magnificPopup.open(opt);
         }, 500);
@@ -824,7 +816,7 @@ Riode.initScrollTopButton = moduleScrollTopButton;
  * @param {function} fn
  * @param {number} delay
  */
-Riode.requestTimeout = function(fn, delay) {
+Riode.requestTimeout = function (fn, delay) {
     var handler =
         window.requestAnimationFrame ||
         window.webkitRequestAnimationFrame ||
@@ -853,7 +845,7 @@ Riode.requestTimeout = function(fn, delay) {
  * @param {number} step
  * @param {number} timeOut
  */
-Riode.requestInterval = function(fn, step, timeOut) {
+Riode.requestInterval = function (fn, step, timeOut) {
     var handler =
         window.requestAnimationFrame ||
         window.webkitRequestAnimationFrame ||
@@ -891,7 +883,7 @@ Riode.requestInterval = function(fn, step, timeOut) {
  * @function deleteTimeout
  * @param {number} timerID
  */
-Riode.deleteTimeout = function(timerID) {
+Riode.deleteTimeout = function (timerID) {
     if (!timerID) {
         return;
     }
@@ -910,9 +902,9 @@ Riode.deleteTimeout = function(timerID) {
 /**
  * @function sidebar
  */
-Riode.sidebar = (function() {
+Riode.sidebar = (function () {
     var is_mobile = window.innerWidth < Riode.minDesktopWidth;
-    var onResizeNavigationStyle = function() {
+    var onResizeNavigationStyle = function () {
         if (window.innerWidth < Riode.minDesktopWidth && !is_mobile) {
             this.$sidebar
                 .find(".sidebar-content, .filter-clean")
@@ -939,7 +931,7 @@ Riode.sidebar = (function() {
         return this.init(name);
     }
 
-    Sidebar.prototype.init = function(name) {
+    Sidebar.prototype.init = function (name) {
         var self = this;
 
         self.name = name;
@@ -958,7 +950,7 @@ Riode.sidebar = (function() {
                 Riode.$window.on("resize", onResizeNavigationStyle);
             }
 
-            Riode.$window.on("resize", function() {
+            Riode.$window.on("resize", function () {
                 Riode.$body.removeClass(name + "-active");
             });
 
@@ -970,7 +962,7 @@ Riode.sidebar = (function() {
                         ? ".left-sidebar-toggle"
                         : "." + name + "-toggle"
                 )
-                .on("click", function(e) {
+                .on("click", function (e) {
                     self.toggle();
                     $(this).blur();
                     $(".sticky-sidebar").trigger("recalc.pin.left", [400]);
@@ -980,20 +972,20 @@ Riode.sidebar = (function() {
             // Register close event
             self.$sidebar
                 .find(".sidebar-overlay, .sidebar-close")
-                .on("click", function(e) {
+                .on("click", function (e) {
                     Riode.$body.removeClass(name + "-active");
                     $(".sticky-sidebar").trigger("recalc.pin.left", [400]);
                     e.preventDefault();
                 });
 
-            setTimeout(function() {
+            setTimeout(function () {
                 $(".sticky-sidebar").trigger("recalc.pin", [400]);
             });
         }
         return false;
     };
 
-    Sidebar.prototype.toggle = function() {
+    Sidebar.prototype.toggle = function () {
         var self = this;
 
         // if fixed sidebar
@@ -1019,9 +1011,9 @@ Riode.sidebar = (function() {
                     .animate(
                         {
                             height: "toggle",
-                            "margin-bottom": isClosed ? "toggle" : -6
+                            "margin-bottom": isClosed ? "toggle" : -6,
                         },
-                        function() {
+                        function () {
                             $(this).css("margin-bottom", "");
                             isClosed &&
                                 self.$sidebar
@@ -1049,7 +1041,7 @@ Riode.sidebar = (function() {
                             maxColsCount = colsClasses
                                 ? Math.max.apply(
                                       null,
-                                      colsClasses.map(function(cls) {
+                                      colsClasses.map(function (cls) {
                                           return cls.match(/\d/)[0];
                                       })
                                   )
@@ -1099,7 +1091,7 @@ Riode.sidebar = (function() {
         }
     };
 
-    return function(name) {
+    return function (name) {
         return new Sidebar(name);
     };
 })();
@@ -1128,7 +1120,7 @@ Riode.initProductSingle = moduleProductSingle;
  */
 Riode.initProductSinglePage = moduleProductSinglePage;
 
-Riode.openFullImage = function(e) {
+Riode.openFullImage = function (e) {
     e.preventDefault();
 
     var $this = $(e.currentTarget),
@@ -1154,14 +1146,14 @@ Riode.openFullImage = function(e) {
     // if images exist
     if ($images.length) {
         var images = $images
-                .map(function() {
+                .map(function () {
                     var $this = $(this);
 
                     return {
                         src: $this.attr("data-zoom-image"),
                         w: 800,
                         h: 899,
-                        title: $this.attr("alt")
+                        title: $this.attr("alt"),
                     };
                 })
                 .get(),
@@ -1186,7 +1178,7 @@ Riode.openFullImage = function(e) {
                 images,
                 {
                     index: currentIndex,
-                    closeOnScroll: false
+                    closeOnScroll: false,
                 }
             );
             photoswipe.init();
@@ -1200,7 +1192,7 @@ Riode.openFullImage = function(e) {
  *
  * @requires OwlCarousel
  */
-Riode.slider = (function() {
+Riode.slider = (function () {
     /**
      * @class Slider
      */
@@ -1208,7 +1200,7 @@ Riode.slider = (function() {
         return this.init($el, options);
     }
 
-    var onInitialize = function(e) {
+    var onInitialize = function (e) {
         var i,
             j,
             breaks = ["", "-xs", "-sm", "-md", "-lg", "-xl"];
@@ -1229,7 +1221,7 @@ Riode.slider = (function() {
             }
         }
     };
-    var onInitialized = function(e) {
+    var onInitialized = function (e) {
         var els = this.firstElementChild.firstElementChild.children,
             i,
             len = els.length;
@@ -1245,7 +1237,7 @@ Riode.slider = (function() {
 
         // Video
         var $el = $(e.currentTarget);
-        $el.find("video").on("ended", function() {
+        $el.find("video").on("ended", function () {
             var $this = $(this);
             if ($this.closest(".owl-item").hasClass("active")) {
                 if (true === $el.data("owl.carousel").options.autoplay) {
@@ -1266,14 +1258,14 @@ Riode.slider = (function() {
             }
         });
     };
-    var onTranslated = function(e) {
+    var onTranslated = function (e) {
         $(window).trigger("appear.check");
 
         // Video Play
         var $el = $(e.currentTarget),
             $activeVideos = $el.find(".owl-item.active video");
 
-        $el.find(".owl-item:not(.active) video").each(function() {
+        $el.find(".owl-item:not(.active) video").each(function () {
             if (!this.paused) {
                 $el.trigger("play.owl.autoplay");
             }
@@ -1285,18 +1277,18 @@ Riode.slider = (function() {
             if (true === $el.data("owl.carousel").options.autoplay) {
                 $el.trigger("stop.owl.autoplay");
             }
-            $activeVideos.each(function() {
+            $activeVideos.each(function () {
                 this.paused && this.play();
             });
         }
     };
-    var onSliderInitialized = function(e) {
+    var onSliderInitialized = function (e) {
         var self = this,
             $el = $(e.currentTarget);
 
         // carousel content animation
 
-        $el.find(".owl-item.active .slide-animate").each(function() {
+        $el.find(".owl-item.active .slide-animate").each(function () {
             var $animation_item = $(this),
                 settings = $.extend(
                     true,
@@ -1313,7 +1305,7 @@ Riode.slider = (function() {
             $animation_item.css("animation-duration", duration);
 
             var temp = Riode.requestTimeout(
-                function() {
+                function () {
                     $animation_item.addClass(aniName);
                     $animation_item.addClass("show-content");
                 },
@@ -1324,22 +1316,22 @@ Riode.slider = (function() {
         });
     };
 
-    var onSliderResized = function(e) {
+    var onSliderResized = function (e) {
         $(e.currentTarget)
             .find(".owl-item.active .slide-animate")
-            .each(function() {
+            .each(function () {
                 var $animation_item = $(this);
                 $animation_item.addClass("show-content");
                 $animation_item.attr("style", "");
             });
     };
 
-    var onSliderTranslate = function(e) {
+    var onSliderTranslate = function (e) {
         var self = this,
             $el = $(e.currentTarget);
         self.translateFlag = 1;
         self.prev = self.next;
-        $el.find(".owl-item .slide-animate").each(function() {
+        $el.find(".owl-item .slide-animate").each(function () {
             var $animation_item = $(this),
                 settings = $.extend(
                     true,
@@ -1353,7 +1345,7 @@ Riode.slider = (function() {
         });
     };
 
-    var onSliderTranslated = function(e) {
+    var onSliderTranslated = function (e) {
         var self = this,
             $el = $(e.currentTarget);
         if (1 == self.translateFlag) {
@@ -1372,7 +1364,7 @@ Riode.slider = (function() {
                     }
                     self.timers = [];
                 }
-                $el.find(".owl-item.active .slide-animate").each(function() {
+                $el.find(".owl-item.active .slide-animate").each(function () {
                     var $animation_item = $(this),
                         settings = $.extend(
                             true,
@@ -1399,7 +1391,7 @@ Riode.slider = (function() {
                     duration = duration ? duration : "0.75s";
                     $animation_item.addClass("show-content");
                     var temp = Riode.requestTimeout(
-                        function() {
+                        function () {
                             $animation_item.css("transition-property", "");
                             $animation_item.css("transition-delay", "");
                             $animation_item.css("transition-duration", "");
@@ -1424,12 +1416,12 @@ Riode.slider = (function() {
 
     // Public Properties
 
-    Slider.zoomImage = function() {
+    Slider.zoomImage = function () {
         Riode.zoomImage(this.$element);
     };
 
-    Slider.zoomImageRefresh = function() {
-        this.$element.find("img").each(function() {
+    Slider.zoomImageRefresh = function () {
+        this.$element.find("img").each(function () {
             var $this = $(this);
 
             if ($.fn.elevateZoom) {
@@ -1444,18 +1436,14 @@ Riode.slider = (function() {
         });
     };
 
-    Riode.defaults.sliderPresets[
-        "product-single-carousel"
-    ].onInitialized = Riode.defaults.sliderPresets[
-        "product-gallery-carousel"
-    ].onInitialized = Slider.zoomImage;
-    Riode.defaults.sliderPresets[
-        "product-single-carousel"
-    ].onRefreshed = Riode.defaults.sliderPresets[
-        "product-gallery-carousel"
-    ].onRefreshed = Slider.zoomImageRefresh;
+    Riode.defaults.sliderPresets["product-single-carousel"].onInitialized =
+        Riode.defaults.sliderPresets["product-gallery-carousel"].onInitialized =
+            Slider.zoomImage;
+    Riode.defaults.sliderPresets["product-single-carousel"].onRefreshed =
+        Riode.defaults.sliderPresets["product-gallery-carousel"].onRefreshed =
+            Slider.zoomImageRefresh;
 
-    Slider.prototype.init = function($el, options) {
+    Slider.prototype.init = function ($el, options) {
         this.timers = [];
         this.translateFlag = 0;
         this.prev = 1;
@@ -1467,13 +1455,13 @@ Riode.slider = (function() {
             settings = $.extend(true, {}, Riode.defaults.slider);
 
         // extend preset options
-        classes.forEach(function(className) {
+        classes.forEach(function (className) {
             var preset = Riode.defaults.sliderPresets[className];
             preset && $.extend(true, settings, preset);
         });
 
         var $videos = $el.find("video");
-        $videos.each(function() {
+        $videos.each(function () {
             this.loop = false;
         });
 
@@ -1505,11 +1493,11 @@ Riode.slider = (function() {
         $el.owlCarousel(settings);
     };
 
-    return function(selector, options) {
-        Riode.$(selector).each(function() {
+    return function (selector, options) {
+        Riode.$(selector).each(function () {
             var $this = $(this);
 
-            Riode.call(function() {
+            Riode.call(function () {
                 new Slider($this, options);
             });
         });
@@ -1541,7 +1529,7 @@ Riode.Shop = moduleShop;
  */
 
 // Initialize Method while document is being loaded.
-Riode.prepare = function() {
+Riode.prepare = function () {
     if (
         Riode.$body.hasClass("with-flex-container") &&
         window.innerWidth >= 1200
@@ -1551,13 +1539,13 @@ Riode.prepare = function() {
 };
 
 // Initialize Method while document is interactive
-Riode.initLayout = function() {
+Riode.initLayout = function () {
     Riode.isotopes(".grid:not(.grid-float)");
     Riode.stickySidebar(".sticky-sidebar");
 };
 
 // Initialize Method after document has been loaded
-Riode.init = function() {
+Riode.init = function () {
     Riode.appearAnimate(".appear-animate"); // Runs appear animations
     Riode.playableVideo(".post-video"); // Initialize playable video
     Riode.headerToggleSearch(".hs-toggle"); // Initialize header toggle search
@@ -1565,7 +1553,7 @@ Riode.init = function() {
     Riode.initScrollTopButton(); // Initialize scroll top button.
     Riode.closeTopNotice(".btn-notice-close"); // Initialize header toggle search
     Riode.stickyContent(".product-sticky-content, .sticky-header", {
-        top: false
+        top: false,
     }); // Initialize sticky content
     Riode.stickyContent(".sticky-footer", Riode.defaults.stickyFooter); // Initialize sticky footer
     Riode.stickyContent(".sticky-toolbox", Riode.defaults.stickyToolbox); // Initialize sticky toolbox
