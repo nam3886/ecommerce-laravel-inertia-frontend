@@ -10,7 +10,11 @@
           style="background-color: #f2f3f5"
         />
       </link-slug>
-      <product-label :flag="product.flag" :discount="product.discount" />
+      <product-label
+        :flag="product.flag"
+        :discount="product.discount"
+        :quantity="product.quantity"
+      />
       <div class="product-action-vertical">
         <button-add-cart :_product="product" />
         <a

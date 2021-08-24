@@ -17,6 +17,7 @@
                   <product-label
                     :flag="product.data.flag"
                     :discount="product.data.discount"
+                    :quantity="product.quantity"
                   />
                 </gallery>
               </div>

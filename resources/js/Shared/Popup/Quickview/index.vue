@@ -95,18 +95,17 @@ export default {
       this.attributes = [];
       this.variants = [];
 
-      if (!product.has_variants) {
-        return wait().then(() => (this.product = product));
+      wait().then(() => (this.product = product));
+
+      if (product.has_variants) {
+        this.getAttributesByProductId(product.id).then((attributes) => {
+          this.attributes = attributes;
+        });
+
+        this.getVariantsByProductId(product.id).then((variants) => {
+          this.variants = variants;
+        });
       }
-
-      this.getAttributesByProductId(product.id).then((attributes) => {
-        this.attributes = attributes;
-        this.product = product;
-      });
-
-      this.getVariantsByProductId(product.id).then((variants) => {
-        this.variants = variants;
-      });
     },
 
     preAddCart(quantity) {

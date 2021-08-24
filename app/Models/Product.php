@@ -120,6 +120,11 @@ class Product extends Model
         return $query->whereActive(1);
     }
 
+    public function scopeInStock($query)
+    {
+        return $query->where('quantity', '>=', 1);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Some methods

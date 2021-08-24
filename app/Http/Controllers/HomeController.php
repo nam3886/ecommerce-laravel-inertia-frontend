@@ -13,7 +13,7 @@ class HomeController extends BaseController
     public function index()
     {
         // load categories ???
-        $product = Product::with('discount', 'gallery', 'brand')->withCount('variants');
+        $product = Product::with('discount', 'gallery', 'brand')->active()->inStock()->withCount('variants');
 
         $featuredProduct = $product->whereIsFeatured(1)
             ->take(config('settings.get_featured_products', 5))

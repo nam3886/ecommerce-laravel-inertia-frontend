@@ -23,7 +23,8 @@ class ProductController extends BaseController
 
             $tags = $product->tags->pluck('id');
 
-            return Product::with('discount', 'gallery', 'brand', 'categories')->withCount('variants')
+            return Product::with('discount', 'gallery', 'brand', 'categories')
+                ->active()->inStock()->withCount('variants')
                 ->whereBrandId($product->brand_id)
                 ->orWhereHas('tags', fn ($query) => $query->whereIn('tags.id', $tags))
                 ->orWhereHas('categories', fn ($query) => $query->whereIn('categories.id', $categories))
@@ -34,6 +35,7 @@ class ProductController extends BaseController
 
         $ownProduct = cache()->rememberForever("own_product{$product->shop_id}", function () use ($product) {
             return Product::with('discount', 'gallery', 'brand')
+                ->active()->inStock()
                 ->whereShopId($product->shop_id)
                 ->inRandomOrder()
                 ->take(config('settings.get_own_products'))

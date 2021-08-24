@@ -17,6 +17,13 @@
           width="800"
           height="900"
         />
+        <a
+          @click.prevent="$EMITTER.emit('show:photoswipe', { images, index })"
+          href="#"
+          class="product-image-full"
+        >
+          <i class="d-icon-zoom"></i>
+        </a>
       </figure>
     </div>
     <div class="product-thumbs-wrap">

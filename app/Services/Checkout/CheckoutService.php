@@ -42,7 +42,7 @@ abstract class CheckoutService
 
         // Store Transaction
         $transaction                =   new Transaction();
-        $transaction->updated_by    = auth()->id();
+        $transaction->updated_by    =   auth()->id();
         $transaction->transaction_number = $this->params->get('stripe_token');
         $order->transaction()->save($transaction);
 

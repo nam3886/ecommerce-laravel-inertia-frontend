@@ -1,5 +1,5 @@
 <template>
-  <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <div ref="pswp" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
     <!-- Background of PhotoSwipe. It's a separate element as animating opacity is faster than rgba(). -->
     <div class="pswp__bg"></div>
 
@@ -59,7 +59,31 @@
 </template>
 
 <script>
-export default {};
+import PhotoSwipe from "@p/vendor/photoswipe/photoswipe.min.js";
+import PhotoSwipeUI_Default from "@p/vendor/photoswipe/photoswipe-ui-default.min.js";
+
+export default {
+  mounted() {
+    this.$EMITTER.on("show:photoswipe", this.handleShowPhotoswipe);
+  },
+
+  methods: {
+    handleShowPhotoswipe({ images, index }) {
+      images = images.map((image) => ({
+        src: image.url,
+        w: 800,
+        h: 899,
+        title: image.name,
+      }));
+
+      new PhotoSwipe(this.$refs.pswp, PhotoSwipeUI_Default, images, {
+        index,
+        closeOnScroll: false,
+        history: false,
+      }).init();
+    },
+  },
+};
 </script>
 
 <style>
