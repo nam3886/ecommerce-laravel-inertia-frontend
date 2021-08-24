@@ -60,7 +60,6 @@ abstract class CheckoutService
             $carts                          =   $item->get('items');
             $subOrder->items_count          =   $carts->count();
             $subOrder->shop_id              =   $item->get('shop')->id;
-            $subOrder->delivery_method_id   =   $this->params->get('delivery_method_id');
             $subOrder->updated_by           =   auth()->id();
             $subOrder                       =   $order->subOrders()->save($subOrder);
 

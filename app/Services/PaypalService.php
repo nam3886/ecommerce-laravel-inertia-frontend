@@ -15,12 +15,14 @@ class PaypalService
 
     public function __construct()
     {
-        $this->currencyCode = 'USD';
-        $environment = new SandboxEnvironment(
+        $this->currencyCode =   'USD';
+
+        $environment        =   new SandboxEnvironment(
             config('settings.paypal_client_id'),
             config('settings.paypal_secret_id')
         );
-        $this->client = new PayPalHttpClient($environment);
+
+        $this->client       =   new PayPalHttpClient($environment);
     }
 
     public function createOrder($orderId)
@@ -49,8 +51,8 @@ class PaypalService
         $checkoutData                  =   [
             'intent'                   =>  'CAPTURE',
             'application_context'      =>  [
-                'return_url'           =>  route('paypal.success', $order->order_code),
-                'cancel_url'           =>  route('paypal.cancel', $order->order_code),
+                'return_url'           =>  route('checkout.paypal.success', $order->order_code),
+                'cancel_url'           =>  route('checkout.paypal.cancel', $order->order_code),
                 'brand_name'           =>  config('app.name'),
                 'locale'               =>  'en-US',
                 'landing_page'         =>  'BILLING',
@@ -59,11 +61,11 @@ class PaypalService
             ],
             'purchase_units'           =>  [
                 [
-                    'reference_id'     =>  Str::snake(uniqid(config('app.name') . '_')),
+                    'reference_id'     =>  Str::snake(get_uniqid_code(config('app.name') . '_')),
                     'description'      =>  Str::title(config('app.name') . ' order'),
-                    'custom_id'        =>  'CUST-HighFashions',
-                    'soft_descriptor'  =>  'HighFashions',
-                    // 'items'            =>  $items,
+                    'custom_id'        =>  config('settings.site_name'),
+                    'soft_descriptor'  =>  config('settings.site_title'),
+                    'items'            =>  $items,
                     'shipping'         =>  $shippingInformation,
                     'amount'           =>  $purchaseAmount,
 
@@ -76,17 +78,17 @@ class PaypalService
 
     private function paypalOrderDetails(Order $order): array
     {
-        return $order->items->map(function ($item) use ($order) {
+        return $order->items->map(function ($item) {
             return [
                 'name'              =>  $item->name,
                 'quantity'          =>  $item->pivot->quantity,
                 'unit_amount'       =>  [
                     'currency_code' =>  $this->currencyCode,
-                    'value'         =>  $this->exChangeMoney($item->pivot->price, $order)
+                    'value'         =>  $item->pivot->price
                 ],
                 'tax'               =>  [
                     'currency_code' =>  $this->currencyCode,
-                    'value'         =>  '0',
+                    'value'         =>  0,
                 ],
             ];
         })->toArray();
@@ -95,13 +97,13 @@ class PaypalService
     private function paypalShippingInformation(Order $order): array
     {
         return [
-            'method'                =>  'Giao hang nhanh',
-            'name'                  =>  ['full_name' => $order->name],
-            'phone'                 =>  $order->phone,
+            'method'                =>  $order->billingAddress->deliveryMethod->name,
+            'name'                  =>  ['full_name' => $order->billingAddress->name],
+            'phone'                 =>  $order->billingAddress->phone,
             'address'               =>  [
-                'address_line_1'    =>  $order->address,
-                'admin_area_2'      =>  $order->api_address->ghn->district,
-                'admin_area_1'      =>  $order->api_address->ghn->ward,
+                'address_line_1'    =>  $order->billingAddress->address,
+                'admin_area_2'      =>  $order->billingAddress->ghn_address->district_id,
+                'admin_area_1'      =>  $order->billingAddress->ghn_address->ward_code,
                 'postal_code'       =>  '100000',
                 'country_code'      =>  'VN',
             ],
@@ -112,43 +114,37 @@ class PaypalService
     {
         return [
             'currency_code'         =>  $this->currencyCode,
-            'value'                 =>  $this->exChangeMoney($order->order_total, $order),
-            // 'breakdown'             =>  [
-            //     'item_total'        =>  [
-            //         'currency_code' =>  $this->currencyCode,
-            //         'value'         =>  $this->exChangeMoney($order->sub_total, $order),
-            //     ],
-            //     'shipping'          =>  [
-            //         'currency_code' =>  $this->currencyCode,
-            //         'value'         =>  $this->exChangeMoney($order->delivery_fee, $order),
-            //     ],
-            //     'handling'          =>  [
-            //         'currency_code' =>  $this->currencyCode,
-            //         'value'         =>  '0',
-            //     ],
-            //     'tax_total'         =>  [
-            //         'currency_code' =>  $this->currencyCode,
-            //         'value'         =>  $this->exChangeMoney($order->tax_price, $order),
-            //     ],
-            //     'insurance'         =>  [
-            //         'currency_code' =>  $this->currencyCode,
-            //         'value'         =>  '0',
-            //     ],
-            //     'shipping_discount' =>  [
-            //         'currency_code' =>  $this->currencyCode,
-            //         'value'         =>  '0',
-            //     ],
-            //     'discount'          =>  [
-            //         'currency_code' =>  $this->currencyCode,
-            //         'value'         =>  $this->exChangeMoney($order->discount_price, $order),
-            //     ],
-            // ],
+            'value'                 =>  $order->order_total,
+            'breakdown'             =>  [
+                'item_total'        =>  [
+                    'currency_code' =>  $this->currencyCode,
+                    'value'         =>  $order->sub_total,
+                ],
+                'shipping'          =>  [
+                    'currency_code' =>  $this->currencyCode,
+                    'value'         =>  $order->delivery_fee,
+                ],
+                'handling'          =>  [
+                    'currency_code' =>  $this->currencyCode,
+                    'value'         =>  0,
+                ],
+                'tax_total'         =>  [
+                    'currency_code' =>  $this->currencyCode,
+                    'value'         =>  $order->tax_price,
+                ],
+                'insurance'         =>  [
+                    'currency_code' =>  $this->currencyCode,
+                    'value'         =>  0,
+                ],
+                'shipping_discount' =>  [
+                    'currency_code' =>  $this->currencyCode,
+                    'value'         =>  0,
+                ],
+                'discount'          =>  [
+                    'currency_code' =>  $this->currencyCode,
+                    'value'         =>  $order->discount_price,
+                ],
+            ],
         ];
-    }
-
-    private function exChangeMoney(int $money, Order $order)
-    {
-        $money *= $order->exchange_rate;
-        return round($money, 2);
     }
 }

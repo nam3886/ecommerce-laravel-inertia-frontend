@@ -24,6 +24,11 @@ class BillingAddress extends Model
         'ghn_address' => 'object',
     ];
 
+    public function deliveryMethod(): BelongsTo
+    {
+        return $this->belongsTo(DeliveryMethod::class);
+    }
+
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);

@@ -27,6 +27,6 @@ class NotEmptyCart
             return $next($request);
         }
 
-        return redirect()->route('empty_cart');
+        return redirect()->route('cart.empty');
     }
 }

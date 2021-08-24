@@ -18,7 +18,8 @@ class CreateSubOrdersTable extends Migration
             $table->foreignId('voucher_id')->nullable()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('order_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('shop_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('delivery_method_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            // một đơn hàng chỉ có 1 phương thức vận chuyễn => sub order không cần delivery_method_id
+            // $table->foreignId('delivery_method_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('delivery_order_code')->unique()->index()->nullable();
 
             $table->enum('required_note', ['CHOTHUHANG', 'CHOXEMHANGKHONGTHU', 'KHONGCHOXEMHANG'])->default('KHONGCHOXEMHANG');

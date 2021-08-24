@@ -16,7 +16,6 @@ class SubOrder extends Model
         'voucher_id',
         'order_id',
         'shop_id',
-        'delivery_method_id',
         'delivery_order_code',
         'required_note',
         // thanh toan/dat hang thanh cong => dat van chuyen => có tiền thu hộ
@@ -44,11 +43,6 @@ class SubOrder extends Model
     public function shop(): BelongsTo
     {
         return $this->belongsTo(Shop::class);
-    }
-
-    public function deliveryMethod(): BelongsTo
-    {
-        return $this->belongsTo(DeliveryMethod::class);
     }
 
     public function voucher(): BelongsTo

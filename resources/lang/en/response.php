@@ -104,21 +104,14 @@ return [
         ],
     ],
 
-    'order' => [
+    'checkout' => [
         'error' => [
-            'store' => 'Error occurred while creating order.',
-            'update' => 'Error occurred while updating order.',
-            'destroy' => 'Error occurred while deleting order.',
-            'restore' => 'Error occurred while restoring order.',
-            'toggle_active' => 'Error occurred while toggling active order.',
+            'store' => 'Payment UnSuccessful! Something went wrong.',
         ],
         'success' => [
             'store' => 'Order added successfully.',
-            'update' => 'Order updated successfully.',
-            'destroy' => 'Order deleted successfully.',
-            'restore' => 'Order restored successfully.',
-            'toggle_active' => 'Order toggled active successfully.',
         ],
+        'cancel' => 'Payment canceled.',
     ],
 
     'user' => [

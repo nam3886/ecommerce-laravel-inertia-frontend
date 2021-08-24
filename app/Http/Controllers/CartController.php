@@ -28,7 +28,7 @@ class CartController extends BaseController
     public function index()
     {
         $cartGroupByShop = $this->cartRepository->listCartsGroupByShop();
-        
+
         return Inertia::render('Cart', compact('cartGroupByShop'));
     }
 
@@ -115,5 +115,15 @@ class CartController extends BaseController
             return $this->responseRedirectBack(trans('response.cart.error.destroy'), 'error');
         }
         return $this->responseRedirectBack(trans('response.cart.success.destroy'), 'success');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showEmptyCart()
+    {
+        return 'khong co item trong gio hang!';
     }
 }

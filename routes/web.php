@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ShippingController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\Checkout\PayPalController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
@@ -34,29 +35,64 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
 
-
+/*
+|--------------------------------------------------------------------------
+| HOME
+|--------------------------------------------------------------------------
+*/
 Route::redirect('/', '/home', 301);
 Route::get('home', [HomeController::class, 'index'])->name('home');
+/*
+|--------------------------------------------------------------------------
+| WISHLIST
+|--------------------------------------------------------------------------
+*/
 Route::get('wishlist', [HomeController::class, 'wishlist']);
-
+/*
+|--------------------------------------------------------------------------
+| PRODUCT
+|--------------------------------------------------------------------------
+*/
 Route::get('product/{product:slug}', [ProductController::class, 'show'])->name('product.show');
-
+/*
+|--------------------------------------------------------------------------
+| CART
+|--------------------------------------------------------------------------
+*/
 Route::resource('cart', CartController::class);
-
-Route::get('empty-cart', fn () => 'deo co hang OK')->name('empty_cart');
-
-Route::middleware('auth')->group(function () {
-
-    Route::put('auth/update-address', [UserController::class, 'updateAddress'])->name('user.update_address');
-
-    Route::get('order/{order}', [CheckoutController::class, 'show'])->name('checkout.show');
+Route::get('cart/empty', [CartController::class, 'showEmptyCart'])->name('cart.empty');
+/*
+|--------------------------------------------------------------------------
+| SHIPPING
+|--------------------------------------------------------------------------
+*/
+Route::get('calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee'])
+    ->middleware('auth', 'cart_not_empty')
+    ->name('calculate_shipping_fee');
+/*
+|--------------------------------------------------------------------------
+| AUTH
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->prefix('auth')->as('user.')->group(function () {
+    Route::put('update-address', [UserController::class, 'updateAddress'])->name('update_address');
 });
+/*
+|--------------------------------------------------------------------------
+| CHECKOUT
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->prefix('checkout')->as('checkout.')->group(function () {
+    Route::middleware('cart_not_empty')->group(function () {
+        Route::get('/', [CheckoutController::class, 'create'])->name('index');
+        Route::post('/', [CheckoutController::class, 'store'])->name('store');
+    });
 
-Route::middleware('auth', 'not_empty_cart')->group(function () {
+    Route::get('order/{order}', [CheckoutController::class, 'show'])->name('show');
 
-    Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout.index');
-    Route::post('checkout', [CheckoutController::class, 'store'])->name('checkout.store');
-
-    Route::get('calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee'])
-        ->name('calculate_shipping_fee');
+    Route::prefix('paypal')->as('paypal.')->group(function () {
+        Route::get('create/{order:order_code}', [PayPalController::class, 'expressCheckout'])->name('create');
+        Route::get('success/{order:order_code}', [PayPalController::class, 'expressCheckoutSuccess'])->name('success');
+        Route::get('cancel/{order:order_code}', [PayPalController::class, 'cancelCheckout'])->name('cancel');
+    });
 });
