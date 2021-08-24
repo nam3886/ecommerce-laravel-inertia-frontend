@@ -49,6 +49,16 @@
             {{ cart.grandtotal_format }}
           </td>
         </tr>
+        <tr class="summary-subtotal border-no">
+          <td colspan="2">
+            <input
+              v-model="modelValue[cart.shop.id]"
+              placeholder="Lưu ý cho người bán . . ."
+              type="text"
+              class="form-control"
+            />
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -58,7 +68,7 @@
 import LinkSlug from "@/Shared/ProductElement/LinkSlug.vue";
 
 export default {
-  props: ["carts"],
+  props: ["carts", "modelValue"],
 
   components: { LinkSlug },
 };

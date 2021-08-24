@@ -56,10 +56,12 @@ abstract class CheckoutService
         // Store SubOrder
         $this->params->get('items')->each(function ($item) use ($order) {
             $item                           =   collect($item);
+            $shopId                         =   $item->get('shop')->id;
             $subOrder                       =   new SubOrder($item->all());
             $carts                          =   $item->get('items');
             $subOrder->items_count          =   $carts->count();
-            $subOrder->shop_id              =   $item->get('shop')->id;
+            $subOrder->shop_id              =   $shopId;
+            $subOrder->note                 =   $this->params->get('notes')[$shopId] ?? null;
             $subOrder->updated_by           =   auth()->id();
             $subOrder                       =   $order->subOrders()->save($subOrder);
 
@@ -77,8 +79,6 @@ abstract class CheckoutService
             }, []);
 
             $subOrder->items()->sync($items);
-
-            // todo note, status, cod_amount
         });
 
         $this->order = $order;

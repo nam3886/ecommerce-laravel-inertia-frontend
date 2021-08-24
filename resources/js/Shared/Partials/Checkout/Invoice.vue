@@ -155,6 +155,7 @@ export default {
   },
 
   props: [
+    "notes",
     "user",
     "cart",
     "deliveryMethods",
@@ -193,9 +194,14 @@ export default {
 
   methods: {
     checkout() {
-      this.form.post(this.route("checkout.store"), {
-        preserveScroll: true,
-      });
+      this.form
+        .transform((data) => ({
+          ...data,
+          notes: this.notes,
+        }))
+        .post(this.route("checkout.store"), {
+          preserveScroll: true,
+        });
     },
   },
 };

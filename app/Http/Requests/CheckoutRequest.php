@@ -28,6 +28,7 @@ class CheckoutRequest extends FormRequest
             'delivery_method_id'    =>  'required|integer|exists:App\Models\DeliveryMethod,id',
             'payment_method_id'     =>  'required|integer|exists:App\Models\PaymentMethod,id',
             'stripe_token'          =>  'required_if:payment_method_id,1|string|min:3|max:255',
+            'notes.*'               =>  'nullable|string|min:3|max:255',
         ];
     }
 }

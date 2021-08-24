@@ -40,9 +40,10 @@
             <h3 class="title title-simple text-left text-uppercase">
               Sản phẩm
             </h3>
-            <cart-list :carts="cartGroupByShop.items" />
+            <cart-list v-model="notes" :carts="cartGroupByShop.items" />
           </div>
           <invoice
+            :notes="notes"
             :user="user"
             :cart="cartGroupByShop"
             :deliveryMethods="deliveryMethods"
@@ -69,6 +70,8 @@ import "@r/css/style.css";
 export default {
   layout: Layout,
 
+  components: { Head, CheckoutBreadcrumb, Invoice, CartList, FlashMessage },
+
   props: [
     "cartGroupByShop",
     "user",
@@ -77,6 +80,10 @@ export default {
     "stripePublishableKey",
   ],
 
-  components: { Head, CheckoutBreadcrumb, Invoice, CartList, FlashMessage },
+  data() {
+    return {
+      notes: {},
+    };
+  },
 };
 </script>
