@@ -138,7 +138,7 @@
 </template>
 
 <script>
-import { wait, scrollToAlert } from "@/helpers.js";
+import { wait } from "@/helpers.js";
 import DeliveryMethod from "@/Shared/Partials/Checkout/DeliveryMethod.vue";
 import PaymentMethod from "@/Shared/Partials/Checkout/PaymentMethod.vue";
 import Stripe from "@/Shared/Partials/Checkout/Stripe.vue";
@@ -190,6 +190,10 @@ export default {
     if (this.user.address) return Object.assign(this.form, this.user.address);
     // wait popup mounted
     wait().then(() => this.$EMITTER.emit("show-popup:user-info"));
+
+    this.$EMITTER.on("hide-popup:user-info", () => {
+      !this.user.address && history.back();
+    });
   },
 
   methods: {

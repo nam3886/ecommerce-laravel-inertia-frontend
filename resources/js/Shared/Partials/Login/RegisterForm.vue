@@ -60,22 +60,25 @@
         {{ form.errors.terms }}
       </div>
     </div>
-    <button
+    <button-spinner
+      v-model="form.processing"
       :disabled="form.processing"
-      :class="{ 'opacity-65': form.processing }"
-      class="btn btn-dark btn-block btn-rounded"
+      :class="{ 'not-allowed': form.processing }"
+      as="button"
       type="submit"
+      class="btn btn-dark btn-block btn-rounded"
     >
-      Register
-    </button>
+      Đăng ký
+    </button-spinner>
   </form>
 </template>
 
 <script>
 import Group from "@/Shared/Inputs/Group.vue";
+import ButtonSpinner from "@/Shared/Buttons/Spinner.vue";
 
 export default {
-  components: { Group },
+  components: { Group, ButtonSpinner },
 
   data() {
     return {

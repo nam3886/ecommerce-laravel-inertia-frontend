@@ -2,7 +2,7 @@
   <component
     :is="as"
     ref="button"
-    :style="{ height: `${height}px`, width: `${width}px` }"
+    :style="{ height: `${height}px` }"
     :class="{ 'loading load-more-overlay': modelValue }"
   >
     <slot v-if="!modelValue" />
@@ -16,13 +16,11 @@ export default {
   data() {
     return {
       height: null,
-      width: null,
     };
   },
 
   mounted() {
     this.height = $(this.$refs.button).outerHeight(true);
-    this.width = $(this.$refs.button).outerWidth(true);
   },
 };
 </script>

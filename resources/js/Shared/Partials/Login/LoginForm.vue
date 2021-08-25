@@ -55,22 +55,25 @@
         Lost your password?
       </a>
     </div>
-    <button
+    <button-spinner
+      v-model="form.processing"
       :disabled="form.processing"
-      :class="{ 'opacity-65': form.processing }"
-      class="btn btn-dark btn-block btn-rounded"
+      :class="{ 'not-allowed': form.processing }"
+      as="button"
       type="submit"
+      class="btn btn-dark btn-block btn-rounded"
     >
-      Login
-    </button>
+      Đăng nhập
+    </button-spinner>
   </form>
 </template>
 
 <script>
 import Group from "@/Shared/Inputs/Group.vue";
+import ButtonSpinner from "@/Shared/Buttons/Spinner.vue";
 
 export default {
-  components: { Group },
+  components: { Group, ButtonSpinner },
 
   data() {
     return {

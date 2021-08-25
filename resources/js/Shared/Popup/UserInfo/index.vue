@@ -53,7 +53,7 @@
                       <user-info v-model="form" />
                       <div class="d-flex">
                         <button
-                          @click="show = false"
+                          @click="handleCancel"
                           :disabled="form.processing"
                           :class="{ 'opacity-65 not-allowed': form.processing }"
                           type="button"
@@ -70,14 +70,17 @@
                         >
                           Trở lại
                         </button>
-                        <button
+
+                        <button-spinner
+                          v-model="form.processing"
+                          :class="{ 'not-allowed': form.processing }"
                           :disabled="form.processing"
-                          :class="{ 'opacity-65 not-allowed': form.processing }"
-                          class="btn btn-dark btn-block btn-rounded ml-4"
+                          as="button"
                           type="submit"
+                          class="btn btn-dark btn-block btn-rounded ml-4"
                         >
                           Thay đổi
-                        </button>
+                        </button-spinner>
                       </div>
                     </form>
                   </div>
@@ -85,7 +88,7 @@
               </div>
             </div>
             <button
-              @click="show = false"
+              @click="handleCancel"
               title="Close (Esc)"
               type="button"
               class="mfp-close"
@@ -101,13 +104,14 @@
 
 <script>
 import InteractsWithPopup from "@/Mixins/InteractsWithPopup.vue";
+import ButtonSpinner from "@/Shared/Buttons/Spinner.vue";
 import UserInfo from "@/Shared/Popup/UserInfo/UserInfo.vue";
 import Group from "@/Shared/Inputs/Group.vue";
 
 export default {
   mixins: [InteractsWithPopup],
 
-  components: { UserInfo, Group },
+  components: { UserInfo, Group, ButtonSpinner },
 
   data() {
     return {
@@ -141,6 +145,11 @@ export default {
         preserveState: false,
         preserveScroll: true,
       });
+    },
+
+    handleCancel() {
+      this.show = false;
+      this.$EMITTER.emit("hide-popup:user-info");
     },
   },
 };
