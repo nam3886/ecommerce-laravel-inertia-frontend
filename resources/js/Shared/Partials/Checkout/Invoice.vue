@@ -192,7 +192,7 @@ export default {
     wait().then(() => this.$EMITTER.emit("show-popup:user-info"));
 
     this.$EMITTER.on("hide-popup:user-info", () => {
-      !this.user.address && history.back();
+      !this.user.address && this.$inertia.visit(this.route("cart.index"));
     });
   },
 

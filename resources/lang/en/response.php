@@ -107,6 +107,7 @@ return [
     'checkout' => [
         'error' => [
             'store' => 'Payment UnSuccessful! Something went wrong.',
+            'no_address' => 'User\'s address has not been created.',
         ],
         'success' => [
             'store' => 'Order added successfully.',
