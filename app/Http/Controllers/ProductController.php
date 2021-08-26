@@ -12,6 +12,21 @@ use Inertia\Inertia;
 class ProductController extends BaseController
 {
     /**
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $products = Product::with('discount', 'gallery', 'brand')
+            ->active()
+            ->inStock()
+            ->withCount('variants')
+            ->paginate(15);
+
+        return Inertia::render('Shop')
+            ->with('products', ProductResource::collection($products));
+    }
+
+    /**
      * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */

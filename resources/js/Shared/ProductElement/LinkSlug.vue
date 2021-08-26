@@ -1,5 +1,5 @@
 <template>
-  <Link :href="route('product.show', slug)">
+  <Link :href="route('products.show', slug)">
     <slot />
   </Link>
 </template>
