@@ -65,7 +65,7 @@
       </div>
       <!-- End of Cart Total -->
       <div class="cart-action">
-        <Link :href="route('cart.index')" class="btn btn-dark btn-link">
+        <Link :href="route('carts.index')" class="btn btn-dark btn-link">
           View Cart
         </Link>
         <Link :href="route('checkout.index')" class="btn btn-dark">

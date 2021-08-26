@@ -72,7 +72,7 @@ export default {
 
   methods: {
     async getAttributesByProductId(id) {
-      const url = this.route("api.attribute.show", id);
+      const url = this.route("api.attributes.show", id);
 
       try {
         const response = await axios.get(url);
@@ -86,7 +86,7 @@ export default {
     },
 
     async getVariantsByProductId(id) {
-      const url = this.route("api.variant.index", id);
+      const url = this.route("api.variants.index", id);
 
       try {
         const response = await axios.get(url);
@@ -100,7 +100,7 @@ export default {
     },
 
     async getVariantByCombination(combination) {
-      const url = this.route("api.variant.show", combination);
+      const url = this.route("api.variants.show", combination);
 
       try {
         const response = await axios.get(url);

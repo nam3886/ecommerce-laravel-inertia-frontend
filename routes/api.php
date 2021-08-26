@@ -22,13 +22,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::as('api.')->group(function () {
-    Route::get('variant/list/{productId}', [VariantController::class, 'index'])->name('variant.index');
-    Route::get('variant/{variant:combination}', [VariantController::class, 'show'])->name('variant.show');
+    Route::get('variants/list/{productId}', [VariantController::class, 'index'])->name('variants.index');
+    Route::get('variants/{variant:combination}', [VariantController::class, 'show'])->name('variants.show');
 
-    Route::get('attribute/{productId}', [ProductController::class, 'showAttributes'])->name('attribute.show');
+    Route::get('attributes/{productId}', [ProductController::class, 'showAttributes'])->name('attributes.show');
 
     Route::prefix('location')->as('location.')->group(function () {
-        Route::get('district', [LocationController::class, 'getDistricts'])->name('district');
-        Route::get('ward/{districtId}', [LocationController::class, 'getWards'])->name('ward');
+        Route::get('districts', [LocationController::class, 'getDistricts'])->name('districts');
+        Route::get('wards/{districtId}', [LocationController::class, 'getWards'])->name('wards');
     });
 });

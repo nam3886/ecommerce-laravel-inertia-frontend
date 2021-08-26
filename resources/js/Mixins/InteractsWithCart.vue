@@ -39,7 +39,7 @@ export default {
 
       this.$EMITTER.emit("processing");
 
-      this.form.post(this.route("cart.store"), {
+      this.form.post(this.route("carts.store"), {
         preserveScroll: true,
         onError: this.handleCartError,
         onFinish: () => this.$EMITTER.emit("processed"),
@@ -55,7 +55,7 @@ export default {
 
       this.$EMITTER.emit("processing");
 
-      this.form.put(this.route("cart.update", rowId), {
+      this.form.put(this.route("carts.update", rowId), {
         preserveScroll: true,
         onError: this.handleCartError,
         onFinish: () => this.$EMITTER.emit("processed"),
@@ -69,7 +69,7 @@ export default {
     destroy(rowId, callback) {
       this.$EMITTER.emit("processing");
 
-      this.form.delete(this.route("cart.destroy", rowId), {
+      this.form.delete(this.route("carts.destroy", rowId), {
         preserveScroll: true,
         onError: this.handleCartError,
         onFinish: () => this.$EMITTER.emit("processed"),

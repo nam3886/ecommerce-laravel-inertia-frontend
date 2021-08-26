@@ -26,7 +26,7 @@
     </div>
     <div class="action-group d-flex">
       <Link
-        :href="route('cart.index')"
+        :href="route('carts.index')"
         class="btn btn-sm btn-outline btn-primary btn-rounded"
       >
         View Cart

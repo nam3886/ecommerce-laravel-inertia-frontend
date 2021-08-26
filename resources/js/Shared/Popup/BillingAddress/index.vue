@@ -156,7 +156,7 @@ export default {
       this.$EMITTER.emit("hide-popup:user-info");
 
       this.$page.props.user.address ||
-        this.$inertia.visit(this.route("cart.index"));
+        this.$inertia.visit(this.route("carts.index"));
     },
   },
 };

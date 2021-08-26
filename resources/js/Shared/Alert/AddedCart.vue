@@ -3,7 +3,7 @@
     v-if="cartItem"
     class="alert alert-simple alert-btn cart-added-alert show"
   >
-    <Link :href="route('cart.index')" class="btn btn-success btn-md">
+    <Link :href="route('carts.index')" class="btn btn-success btn-md">
       View Cart
     </Link>
     <span>

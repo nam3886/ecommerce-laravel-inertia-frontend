@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       list: [
-        { id: 1, text: "Shopping Cart", route: "cart.index" },
+        { id: 1, text: "Shopping Cart", route: "carts.index" },
         { id: 2, text: "Checkout", route: "checkout.index" },
       ],
     };

@@ -77,7 +77,7 @@ export default {
   async created() {
     this.$emit("loading");
     // call api get location
-    const response = await axios.get(this.route("api.location.district"));
+    const response = await axios.get(this.route("api.location.districts"));
     this.districts = response.data.data;
 
     this.$emit("loaded");
@@ -94,7 +94,7 @@ export default {
     async getWards(districtId) {
       this.$emit("loading");
 
-      const url = this.route("api.location.ward", districtId);
+      const url = this.route("api.location.wards", districtId);
       const response = await axios.get(url);
 
       this.$emit("loaded");

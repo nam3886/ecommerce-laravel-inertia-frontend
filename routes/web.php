@@ -55,14 +55,14 @@ Route::get('wishlist', [HomeController::class, 'wishlist']);
 | PRODUCT
 |--------------------------------------------------------------------------
 */
-Route::get('product/{product:slug}', [ProductController::class, 'show'])->name('product.show');
+Route::get('products/{product:slug}', [ProductController::class, 'show'])->name('product.show');
 /*
 |--------------------------------------------------------------------------
 | CART
 |--------------------------------------------------------------------------
 */
-Route::resource('cart', CartController::class);
-Route::get('cart/empty', [CartController::class, 'showEmptyCart'])->name('cart.empty');
+Route::resource('carts', CartController::class);
+Route::get('carts/empty', [CartController::class, 'showEmptyCart'])->name('carts.empty');
 /*
 |--------------------------------------------------------------------------
 | SHIPPING
