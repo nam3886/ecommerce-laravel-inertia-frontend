@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="cart">
     <p class="minipopup-title">Successfully Added</p>
     <div class="product product-purchased product-cart mb-0">
       <figure class="product-media">

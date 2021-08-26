@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import isEmpty from "lodash-es/isEmpty";
 import InteractsWithProduct from "@/Mixins/InteractsWithProduct.vue";
 
 export default {
@@ -23,16 +24,23 @@ export default {
   methods: {
     preAddCart() {
       if (this._product.has_variants) {
-        this.$EMITTER.emit("show-popup:quickview", this._product);
-      } else {
-        this.product = this._product;
+        return this.$EMITTER.emit("show-popup:quickview", this._product);
+      }
 
-        this.addCart(1, () => {
-          // on added cart
-          const cart = this.getBySku(this.product.sku);
+      this.product = this._product;
 
-          this.showMiniPopupAddedCart(cart, 1);
-        });
+      this.addCart(1, () => {
+        // on added cart
+        const cart = this.getBySku(this.product.sku);
+
+        this.showMiniPopupAddedCart(cart, 1);
+      });
+
+      const messages = this.$page.props.flash.warning;
+
+      if (!isEmpty(messages)) {
+        this.$EMITTER.emit("show-popup:message", messages.join("; "));
+        this.$page.props.flash.warning = [];
       }
     },
   },

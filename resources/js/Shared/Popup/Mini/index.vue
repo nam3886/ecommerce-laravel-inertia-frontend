@@ -5,14 +5,15 @@
       @mouseup="close"
       @mouseleave="resume"
       @mouseenter="pause"
+      :class="{ 'p-0': component == 'MinipopupFlashMessage' }"
       class="minipopup-box"
     >
-      <minipopup-purchased v-if="isPurchased" />
-      <minipopup-added-cart
-        v-if="cart && !isPurchased"
+      <component
+        :is="component"
         :cart="cart"
         :quantity="quantity"
-      />
+        :message="message"
+      ></component>
     </div>
   </div>
 </template>
@@ -21,63 +22,52 @@
 import { wait } from "@/helpers.js";
 import MinipopupAddedCart from "@/Shared/Popup/Mini/AddedCart.vue";
 import MinipopupPurchased from "@/Shared/Popup/Mini/Purchased.vue";
+import MinipopupFlashMessage from "@/Shared/Popup/Mini/FlashMessage.vue";
 
 export default {
-  components: { MinipopupAddedCart, MinipopupPurchased },
+  components: { MinipopupAddedCart, MinipopupPurchased, MinipopupFlashMessage },
 
   data() {
     return {
       cart: null,
       quantity: 1,
+      message: null,
       timerInterval: 100,
       isPaused: false,
       timerId: null,
       counter: 0,
-      isPurchased: false,
+      component: "MinipopupAddedCart",
     };
   },
 
   mounted() {
     this.$EMITTER.on("show-popup:added-cart", ({ cart, quantity }) => {
-      wait().then(this.close);
-
-      wait(300).then(() => {
-        this.isPurchased = false;
-
-        this.cart = cart;
-
-        this.quantity = quantity;
-
-        wait().then(this.show);
-      });
+      this.listenEvents("MinipopupAddedCart", { cart, quantity });
     });
 
     this.$EMITTER.on("show-popup:purchased", ({ cart }) => {
-      wait().then(this.close);
+      this.listenEvents("MinipopupPurchased", { cart });
+    });
 
-      wait(300).then(() => {
-        this.cart = null;
-
-        this.isPurchased = true;
-
-        wait().then(this.show);
-      });
+    this.$EMITTER.on("show-popup:message", (message) => {
+      this.message = message;
+      this.listenEvents("MinipopupFlashMessage", {});
     });
   },
 
   methods: {
     show() {
-      $(this.$el).find(".minipopup-box").addClass("show");
-
       this.timerId = setInterval(this.timerClock, this.timerInterval);
+
+      $(this.$el).find(".minipopup-box").addClass("show");
     },
 
     close() {
-      $(this.$el).find(".minipopup-box").removeClass("show");
-
       clearInterval(this.timerId);
 
       this.counter = 0;
+
+      $(this.$el).find(".minipopup-box").removeClass("show");
     },
 
     focus() {
@@ -98,6 +88,20 @@ export default {
       this.counter++;
 
       this.counter == this.timerInterval && this.close();
+    },
+
+    listenEvents(component, { cart, quantity }) {
+      wait().then(this.close);
+
+      wait(300).then(() => {
+        this.component = component;
+
+        this.cart = cart;
+
+        this.quantity = quantity;
+
+        wait().then(this.show);
+      });
     },
   },
 };
