@@ -18,9 +18,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr v-if="user.address">
               <td colspan="2" class="product-name text-left">
-                {{ user.name }} {{ user.phone }}
+                {{ user.address.name }} {{ user.address.phone }}
               </td>
             </tr>
             <tr v-if="user.address">
@@ -187,13 +187,11 @@ export default {
   },
 
   mounted() {
-    if (this.user.address) return Object.assign(this.form, this.user.address);
+    if (this.user.address) {
+      return Object.assign(this.form, this.user.address);
+    }
     // wait popup mounted
     wait().then(() => this.$EMITTER.emit("show-popup:user-info"));
-
-    this.$EMITTER.on("hide-popup:user-info", () => {
-      !this.user.address && this.$inertia.visit(this.route("cart.index"));
-    });
   },
 
   methods: {
@@ -201,6 +199,7 @@ export default {
       this.form
         .transform((data) => ({
           ...data,
+          address: this.user.address,
           notes: this.notes,
         }))
         .post(this.route("checkout.store"), {

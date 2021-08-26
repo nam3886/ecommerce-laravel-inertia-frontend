@@ -15,6 +15,8 @@ class UserAddress extends Model
         'user_id',
         'delivery_method_id',
         'payment_method_id',
+        'name',
+        'phone',
         'ghn_address',
         'address',
     ];

@@ -7,7 +7,6 @@ use App\Http\Controllers\BaseController;
 use App\Models\UserAddress;
 use App\Services\GHN\GHNService;
 use App\Traits\SessionShippingFee;
-use Illuminate\Http\Request;
 
 class ShippingController extends BaseController
 {
@@ -43,7 +42,6 @@ class ShippingController extends BaseController
             }, 0);
 
             $this->setTotalShippingFee($shippingFee);
-            // dd(1);
         } catch (\Throwable $th) {
             return $this->responseJson(message: $th->getMessage(), responseCode: $th->getCode());
         }

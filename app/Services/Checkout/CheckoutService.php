@@ -32,11 +32,6 @@ abstract class CheckoutService
      */
     public function createOrder(): void
     {
-        throw_if(empty(auth()->user()->address), new CheckoutException(
-            trans('response.checkout.error.no_address'),
-            403
-        ));
-
         // store Order
         $order                      =   new Order($this->params->all());
         $order->order_code          =   get_uniqid_code('VN');
@@ -85,6 +80,9 @@ abstract class CheckoutService
 
             $subOrder->items()->sync($items);
         });
+
+        // Update UserAddress
+        auth()->user()->address()->update($this->params->only('delivery_method_id', 'payment_method_id')->all());
 
         $this->order = $order;
     }

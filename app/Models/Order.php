@@ -22,6 +22,7 @@ class Order extends Model
         'tax',
         'subtotal',
         'total',
+        'shipping_fee',
         'grandtotal',
         'create_order_success',
         'active',

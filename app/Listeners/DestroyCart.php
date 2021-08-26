@@ -4,11 +4,14 @@ namespace App\Listeners;
 
 use App\Contracts\CartContract;
 use App\Events\OrderCreated;
+use App\Traits\SessionShippingFee;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
 class DestroyCart
 {
+    use SessionShippingFee;
+    
     /**
      * @var \App\Contracts\CartContract
      */
@@ -33,5 +36,6 @@ class DestroyCart
     public function handle(OrderCreated $event)
     {
         $this->cartRepository->destroyCart();
+        $this->addressChangeHandling();
     }
 }

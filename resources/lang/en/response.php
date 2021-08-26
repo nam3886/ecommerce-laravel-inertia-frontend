@@ -108,6 +108,7 @@ return [
         'error' => [
             'store' => 'Payment UnSuccessful! Something went wrong.',
             'no_address' => 'User\'s address has not been created.',
+            'no_phone' => 'User\'s phone has not been created.',
         ],
         'success' => [
             'store' => 'Order added successfully.',
@@ -117,10 +118,10 @@ return [
 
     'user' => [
         'error' => [
-            'update_address' => 'Error occurred while updating address.',
+            'update_billing_address' => 'Error occurred while updating address.',
         ],
         'success' => [
-            'update_address' => 'Address updated successfully.',
+            'update_billing_address' => 'Address updated successfully.',
             'login' => 'Logged in successfully.',
         ],
     ],

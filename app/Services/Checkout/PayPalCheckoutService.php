@@ -6,12 +6,13 @@ use App\Events\OrderCreated;
 use App\Models\Order;
 use App\Services\Checkout\CheckoutService;
 
+
 class PayPalCheckoutService extends CheckoutService
 {
-    public function __construct(array $params = null, Order $order = null)
+    public function __construct(array $params = [], Order $order = null)
     {
         parent::__construct($params);
-        $this->order = $order;
+        $order && $this->order = $order;
     }
 
     public function execute()

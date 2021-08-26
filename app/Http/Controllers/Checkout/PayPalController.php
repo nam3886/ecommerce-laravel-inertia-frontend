@@ -6,6 +6,7 @@ use App\Http\Controllers\BaseController;
 use App\Models\Order;
 use App\Services\Checkout\PayPalCheckoutService;
 use App\Services\PaypalService;
+use Inertia\Inertia;
 
 class PayPalController extends BaseController
 {
@@ -30,10 +31,10 @@ class PayPalController extends BaseController
 
         $order->transaction->transaction_number = $response->result->id;
 
-        $order->save();
+        $order->transaction->save();
 
         foreach ($response->result->links as $link) {
-            if ($link->rel == 'approve') return redirect($link->href);
+            if ($link->rel == 'approve') return Inertia::location($link->href);
         }
     }
 

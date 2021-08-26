@@ -11,6 +11,7 @@ use App\Http\Resources\OrderResource;
 use App\Http\Resources\PaymentMethodResource;
 use App\Models\DeliveryMethod;
 use App\Models\PaymentMethod;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 
 class CheckoutController extends BaseController
@@ -80,6 +81,13 @@ class CheckoutController extends BaseController
             return $this->responseRedirectBack($th->getMessage(), 'error');
         }
 
-        return redirect()->route('checkout.show', $result->id)->with('checkout_success', true);
+        if ($result instanceof RedirectResponse) return $result;
+
+        return $this->responseRedirect(
+            route: 'checkout.show',
+            message: trans('response.checkout.success.store'),
+            type: 'success',
+            routeParams: $result->id
+        )->with('checkout_success', true);
     }
 }

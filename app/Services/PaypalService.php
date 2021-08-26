@@ -18,8 +18,8 @@ class PaypalService
         $this->currencyCode =   'USD';
 
         $environment        =   new SandboxEnvironment(
-            config('settings.paypal_client_id'),
-            config('settings.paypal_secret_id')
+            config('third_party.paypal_client_id'),
+            config('third_party.paypal_secret_id')
         );
 
         $this->client       =   new PayPalHttpClient($environment);
@@ -30,7 +30,7 @@ class PaypalService
         $request                    =   new OrdersCreateRequest;
         $request->headers["prefer"] =   "return=representation";
         $request->body              =   $this->checkoutData($orderId);
-
+        // dd($request->body);
         return $this->client->execute($request);
     }
 
@@ -61,7 +61,7 @@ class PaypalService
             ],
             'purchase_units'           =>  [
                 [
-                    'reference_id'     =>  Str::snake(get_uniqid_code(config('app.name') . '_')),
+                    'reference_id'     =>  strtoupper(get_uniqid_code(config('app.name') . '_')),
                     'description'      =>  Str::title(config('app.name') . ' order'),
                     'custom_id'        =>  config('settings.site_name'),
                     'soft_descriptor'  =>  config('settings.site_title'),
@@ -114,15 +114,15 @@ class PaypalService
     {
         return [
             'currency_code'         =>  $this->currencyCode,
-            'value'                 =>  $order->order_total,
+            'value'                 =>  $order->grandtotal,
             'breakdown'             =>  [
                 'item_total'        =>  [
                     'currency_code' =>  $this->currencyCode,
-                    'value'         =>  $order->sub_total,
+                    'value'         =>  $order->subtotal,
                 ],
                 'shipping'          =>  [
                     'currency_code' =>  $this->currencyCode,
-                    'value'         =>  $order->delivery_fee,
+                    'value'         =>  $order->shipping_fee,
                 ],
                 'handling'          =>  [
                     'currency_code' =>  $this->currencyCode,
@@ -130,7 +130,7 @@ class PaypalService
                 ],
                 'tax_total'         =>  [
                     'currency_code' =>  $this->currencyCode,
-                    'value'         =>  $order->tax_price,
+                    'value'         =>  $order->tax,
                 ],
                 'insurance'         =>  [
                     'currency_code' =>  $this->currencyCode,
@@ -142,7 +142,7 @@ class PaypalService
                 ],
                 'discount'          =>  [
                     'currency_code' =>  $this->currencyCode,
-                    'value'         =>  $order->discount_price,
+                    'value'         =>  $order->discount,
                 ],
             ],
         ];

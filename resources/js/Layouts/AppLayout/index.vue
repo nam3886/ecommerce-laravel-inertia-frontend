@@ -22,7 +22,7 @@
 
     <popup-quickview />
 
-    <popup-user-info />
+    <popup-billing-address v-if="route().current('checkout.index')" />
 
     <popup-loading />
 
@@ -51,7 +51,7 @@ import StickyFooter from "@/Layouts/AppLayout/StickyFooter.vue";
 import Photoshopwipe from "@/Layouts/AppLayout/Photoshopwipe.vue";
 import PopupLogin from "@/Shared/Popup/Login/";
 import PopupQuickview from "@/Shared/Popup/Quickview/";
-import PopupUserInfo from "@/Shared/Popup/UserInfo/";
+import PopupBillingAddress from "@/Shared/Popup/BillingAddress/";
 import PopupLoading from "@/Shared/Popup/Loading.vue";
 import Minipopup from "@/Shared/Popup/Mini/";
 
@@ -67,7 +67,7 @@ export default {
     Photoshopwipe,
     PopupLogin,
     PopupQuickview,
-    PopupUserInfo,
+    PopupBillingAddress,
     PopupLoading,
     Minipopup,
   },

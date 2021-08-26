@@ -23,6 +23,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedInteger('discount');
             $table->unsignedInteger('tax');
             $table->unsignedInteger('subtotal');
+            $table->unsignedInteger('shipping_fee');
             $table->unsignedInteger('total'); // exclude delivery fee
             $table->unsignedInteger('grandtotal'); // include delivery fee
 

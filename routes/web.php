@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ShippingController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Checkout\PayPalController;
+use App\Http\Controllers\Checkout\VnPayController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginSocialController;
@@ -76,9 +77,9 @@ Route::get('calculate-shipping-fee', [ShippingController::class, 'calculateShipp
 |--------------------------------------------------------------------------
 */
 Route::prefix('auth')->as('auth.')->group(function () {
-    Route::put('update-address', [UserController::class, 'updateAddress'])
+    Route::put('update-billing-address', [UserController::class, 'updateBillingAddress'])
         ->middleware('auth')
-        ->name('update_address');
+        ->name('update_billing_address');
 
     Route::middleware('guest')->as('social.')->group(function () {
         Route::get('{provider}', [LoginSocialController::class, 'redirect'])->name('index');
@@ -96,11 +97,19 @@ Route::middleware('auth')->prefix('checkout')->as('checkout.')->group(function (
         Route::post('/', [CheckoutController::class, 'store'])->name('store');
     });
 
-    Route::get('order/{order}', [CheckoutController::class, 'show'])->name('show');
+    Route::get('{order}', [CheckoutController::class, 'show'])->name('show');
+});
 
-    Route::prefix('paypal')->as('paypal.')->group(function () {
-        Route::get('create/{order:order_code}', [PayPalController::class, 'expressCheckout'])->name('create');
-        Route::get('success/{order:order_code}', [PayPalController::class, 'expressCheckoutSuccess'])->name('success');
-        Route::get('cancel/{order:order_code}', [PayPalController::class, 'cancelCheckout'])->name('cancel');
-    });
+Route::prefix('checkout/paypal')->as('checkout.paypal.')->group(function () {
+    Route::get('create/{order:order_code}', [PayPalController::class, 'expressCheckout'])
+        ->middleware('auth', 'cart_not_empty')->name('create');
+    Route::get('success/{order:order_code}', [PayPalController::class, 'expressCheckoutSuccess'])->name('success');
+    Route::get('cancel/{order:order_code}', [PayPalController::class, 'cancelCheckout'])->name('cancel');
+});
+
+Route::prefix('checkout/vnpay')->as('checkout.vnpay.')->group(function () {
+    Route::get('create/{order:order_code}', [VnPayController::class, 'create'])
+        ->middleware('auth', 'cart_not_empty')->name('create');
+    Route::get('return', [VnPayController::class, 'return'])->name('return');
+    Route::get('notification', [VnPayController::class, 'notification'])->name('notification');
 });
