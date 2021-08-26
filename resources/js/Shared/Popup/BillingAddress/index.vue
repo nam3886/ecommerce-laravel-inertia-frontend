@@ -48,7 +48,11 @@
                           placeholder="Số điện thoại"
                         />
                       </group>
-                      <user-address v-model="form" />
+                      <user-address
+                        v-model="form"
+                        @loading="form.processing = true"
+                        @loaded="form.processing = false"
+                      />
                       <div class="d-flex">
                         <button
                           @click="handleCancel"

@@ -33,6 +33,8 @@ import Select2 from "@/Shared/Inputs/Select/Select2.vue";
 export default {
   components: { Group, Select2 },
 
+  emits: ["loading", "loaded"],
+
   props: {
     modelValue: {
       type: Object,
@@ -73,10 +75,12 @@ export default {
   },
 
   async created() {
+    this.$emit("loading");
     // call api get location
     const response = await axios.get(this.route("api.location.district"));
-
     this.districts = response.data.data;
+
+    this.$emit("loaded");
   },
 
   mounted() {
@@ -88,8 +92,12 @@ export default {
 
   methods: {
     async getWards(districtId) {
+      this.$emit("loading");
+
       const url = this.route("api.location.ward", districtId);
       const response = await axios.get(url);
+
+      this.$emit("loaded");
 
       return new Promise((resolve) => resolve(response.data.data));
     },
