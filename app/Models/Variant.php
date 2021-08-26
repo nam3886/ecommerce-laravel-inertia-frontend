@@ -46,4 +46,19 @@ class Variant extends Model
     {
         return $this->belongsToMany(AttributeValue::class, 'attribute_value_variant');
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Scope
+    |--------------------------------------------------------------------------
+    */
+    public function scopeActive($query)
+    {
+        return $query->whereActive(1);
+    }
+
+    public function scopeInStock($query)
+    {
+        return $query->where('quantity', '>=', 1);
+    }
 }

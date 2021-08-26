@@ -17,8 +17,9 @@ class VariantController extends BaseController
     public function index(int $productId)
     {
         $variants = Variant::select('combination', 'quantity')
+            ->active()
+            ->inStock()
             ->whereProductId($productId)
-            ->where('quantity', '>', 0)
             ->get();
 
         return $this->responseJson(data: $variants->pluck('combination'), error: false);
