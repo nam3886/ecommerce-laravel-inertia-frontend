@@ -4,8 +4,10 @@ namespace App\Repositories;
 
 use App\Contracts\OrderContract;
 use App\Models\Order;
+use App\Services\Checkout\CashCheckoutService;
 use App\Services\Checkout\PayPalCheckoutService;
 use App\Services\Checkout\StripeCheckoutService;
+use App\Services\Checkout\VNPayCheckoutService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
@@ -55,8 +57,8 @@ class OrderRepository extends BaseRepository implements OrderContract
         $service = match ($params['payment_method_id']) {
             1 => StripeCheckoutService::class,
             2 => PayPalCheckoutService::class,
-            // 3 => VNPayCheckoutService::class,
-            // 4 => CashCheckoutService::class,
+            3 => VNPayCheckoutService::class,
+            4 => CashCheckoutService::class,
         };
 
         return (new $service($params))->execute();

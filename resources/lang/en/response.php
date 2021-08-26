@@ -121,6 +121,7 @@ return [
         ],
         'success' => [
             'update_address' => 'Address updated successfully.',
+            'login' => 'Logged in successfully.',
         ],
     ],
 

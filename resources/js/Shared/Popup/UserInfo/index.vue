@@ -140,7 +140,7 @@ export default {
 
   methods: {
     updateUserAddress() {
-      this.form.put(this.route("user.update_address"), {
+      this.form.put(this.route("auth.update_address"), {
         onSuccess: () => this.$EMITTER.emit("hide-popup:user-info"),
         preserveState: false,
         preserveScroll: true,

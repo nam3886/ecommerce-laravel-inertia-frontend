@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Contracts\CartContract;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\CartRequest;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CartController extends BaseController

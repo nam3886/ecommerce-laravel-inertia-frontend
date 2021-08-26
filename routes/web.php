@@ -5,6 +5,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\Checkout\PayPalController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LoginSocialController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
@@ -74,8 +75,15 @@ Route::get('calculate-shipping-fee', [ShippingController::class, 'calculateShipp
 | AUTH
 |--------------------------------------------------------------------------
 */
-Route::middleware('auth')->prefix('auth')->as('user.')->group(function () {
-    Route::put('update-address', [UserController::class, 'updateAddress'])->name('update_address');
+Route::prefix('auth')->as('auth.')->group(function () {
+    Route::put('update-address', [UserController::class, 'updateAddress'])
+        ->middleware('auth')
+        ->name('update_address');
+
+    Route::middleware('guest')->as('social.')->group(function () {
+        Route::get('{provider}', [LoginSocialController::class, 'redirect'])->name('index');
+        Route::get('{provider}/callback', [LoginSocialController::class, 'callback'])->name('callback');
+    });
 });
 /*
 |--------------------------------------------------------------------------
