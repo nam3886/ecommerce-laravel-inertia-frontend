@@ -2477,5 +2477,20 @@
   .bg-transparent {
     background-color: transparent !important;
 }
-
+  @media (max-width: 768px) {
+    .product .product-action,
+    .product .product-action-vertical {
+        visibility: visible;
+        opacity: 1;
+    }
+    .product .product-action .btn-cart {
+        color: #fff;
+        background-color: #444;
+        border-color: #444;
+    }
+    .product.product-with-qty .btn-cart {
+        background-color: transparent;
+        color: #222;
+    }
+}
 

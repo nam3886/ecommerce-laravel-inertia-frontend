@@ -90,7 +90,9 @@ export default {
 
   mounted() {
     this.$EMITTER.on("inertia-finish", () => {
-      this.$refs.overlay.click();
+      (this.route().current("checkout.index") ||
+        this.route().current("carts.index")) &&
+        this.$refs.overlay.click();
     });
   },
 };

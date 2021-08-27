@@ -1507,7 +1507,7 @@ Riode.init = function () {
     Riode.sidebar("right-sidebar"); // Initialize right sidebar
     Riode.sidebar("top-sidebar"); // Initialize right sidebar
 
-    Riode.Shop.init(); // Initialize shop
+    // Riode.Shop.init(); // Initialize shop
     // Riode.initProductSinglePage(); // Initialize single product page
     Riode.initNavFilter(".nav-filters .nav-filter"); // Initialize navigation filters for blog, products
     Riode.initShowVendorSearch(".toolbox .form-toggle-btn"); // Initialize show vendor search form

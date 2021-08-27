@@ -12,9 +12,6 @@
         <!-- End Category icon -->
         <tool-box />
         <!-- End Toolbox -->
-        <div class="select-items">
-          <a href="#" class="filter-clean text-primary">Clean All</a>
-        </div>
         <div class="row product-wrapper cols-xl-5 cols-lg-4 cols-md-3 cols-2">
           <div
             v-for="(product, index) in products.data"
@@ -39,7 +36,7 @@ import { Head } from "@inertiajs/inertia-vue3";
 import Breadcrumb from "@/Shared/Breadcrumb.vue";
 import Product from "@/Shared/ProductElement/Default.vue";
 import Pagination from "@/Shared/Partials/Shop/Pagination.vue";
-import ToolBox from "@/Shared/Partials/Shop/ToolBox.vue";
+import ToolBox from "@/Shared/Partials/Shop/ToolBox/Index.vue";
 import Category from "@/Shared/Partials/Shop/Category.vue";
 import Brand from "@/Shared/Partials/Shop/Brand.vue";
 import Banner from "@/Shared/Partials/Shop/Banner.vue";
